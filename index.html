@@ -83,9 +83,9 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .hud-tn{font-family:'Cinzel',serif;font-size:15px;font-weight:700;background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hud-bi{text-align:center}
 .hud-bl{font-size:7px;letter-spacing:2px;color:rgba(200,170,100,.5);text-transform:uppercase}
-.hud-br{display:flex;gap:4px;justify-content:center;margin-top:3px}
-.bip{width:22px;height:16px}.bip svg{width:100%;height:100%;opacity:.18;transition:all .4s}
-.bip.lit svg{opacity:1;filter:drop-shadow(0 0 6px rgba(255,215,0,.9));animation:bflap .5s ease}
+.hud-br{display:flex;gap:6px;justify-content:center;margin-top:3px}
+.bip{width:28px;height:20px;display:flex;align-items:center;justify-content:center;opacity:.2;transition:all .5s;color:#888}
+.bip.lit{opacity:1;color:#ffd700;filter:drop-shadow(0 0 6px rgba(255,215,0,.8));animation:bflap .6s ease}
 @keyframes bflap{0%,100%{transform:scale(1)}50%{transform:scale(1.4) translateY(-3px)}}
 .phase-bar{display:flex;gap:3px;margin-top:8px}
 .ph{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:all .3s}
@@ -167,7 +167,7 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .at-bg{position:absolute;inset:0}
 .at-frame{position:absolute;inset:0;border-radius:10px;box-shadow:inset 0 0 0 2px rgba(200,145,10,.45),inset 0 0 0 4px rgba(200,145,10,.08);pointer-events:none}
 .at-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;gap:4px}
-.at-art{font-size:36px}
+.at-art{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
 .at-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .at-desc{font-size:9px;text-align:center;line-height:1.3;opacity:.65;font-style:italic}
 .act-rest .at-bg{background:linear-gradient(160deg,#1a2030,#0a1020)}.act-rest .at-name{color:#8090c0}
@@ -256,6 +256,19 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid var(--g2);border-radius:8px;padding:10px 22px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1px;color:var(--p);z-index:200;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.7);animation:tp .3s ease,tf .3s ease 2.5s forwards}
 @keyframes tp{from{opacity:0;transform:translateX(-50%) scale(.7) translateY(-14px)}to{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}}
 @keyframes tf{to{opacity:0;transform:translateX(-50%) translateY(-14px)}}
+
+/* Secret cards row */
+.sec-cards-row{display:flex;gap:8px;margin-top:8px}
+.sec-card{flex:1;padding:8px 10px;border-radius:8px;border:1px solid;display:flex;flex-direction:column;gap:2px}
+.sec-card-love{background:rgba(120,0,50,.4);border-color:rgba(220,60,110,.35)}
+.sec-card-hate{background:rgba(90,0,0,.4);border-color:rgba(200,40,40,.35)}
+.sec-card-label{font-family:'Cinzel',serif;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.sec-card-love .sec-card-label{color:#ff80a0;opacity:.8}
+.sec-card-hate .sec-card-label{color:#ff7070;opacity:.8}
+.sec-card-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--p)}
+.sec-card-pts{font-size:9px;font-style:italic;opacity:.55;color:var(--p2);line-height:1.3}
+.sec-card-love .sec-card-pts{color:#ffb0c8}
+.sec-card-hate .sec-card-pts{color:#ffb0b0}
 </style>
 </head>
 <body>
@@ -298,7 +311,15 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 <!-- PASS PHONE -->
 <div id="s-pass" class="screen">
 <div class="pass-wrap">
-  <div class="pass-icon">📱</div>
+  <div class="pass-icon">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+      <rect x="20" y="8" width="40" height="64" rx="6" fill="#1a1a2e" stroke="#c8920a" stroke-width="2"/>
+      <rect x="24" y="16" width="32" height="44" rx="2" fill="#0d1a10"/>
+      <circle cx="40" cy="66" r="3" fill="#c8920a"/>
+      <path d="M32,36 L40,28 L48,36 M40,28 L40,52" stroke="#e4a820" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M28,44 L52,44" stroke="rgba(200,145,10,.3)" stroke-width="1" stroke-dasharray="3 3"/>
+    </svg>
+  </div>
   <div class="pass-title">ПЕРЕДАЙ ТЕЛЕФОН</div>
   <div class="pass-to" id="pass-to">—</div>
   <div class="pass-sub" id="pass-sub">Не смотри на экран, пока телефон передают!</div>
@@ -313,10 +334,13 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
     <div class="hud-row">
       <div class="hud-day"><div class="hud-day-n" id="hud-day">1</div><div class="hud-day-l">ДЕНЬ</div></div>
       <div class="hud-c"><div class="hud-tl">ХОД ИГРОКА</div><div class="hud-tn" id="hud-player">—</div></div>
-      <div class="hud-bi"><div class="hud-bl">ПТИЦЫ</div><div class="hud-br" id="hud-birds"></div></div>
+      <div class="hud-bi"><div class="hud-bl">ПТИЦЫ ДО БЕРЕГА</div><div class="hud-br" id="hud-birds"></div></div>
     </div>
     <div class="phase-bar"><div class="ph act" id="ph0"></div><div class="ph" id="ph1"></div><div class="ph" id="ph2"></div></div>
     <div class="hud-pn" id="hud-phase">КВАРТИРМЕЙСТЕР</div>
+  </div>
+  <div style="width:100%;max-width:480px;display:flex;justify-content:flex-end;padding:4px 12px 0">
+    <button onclick="if(confirm('Выйти из игры?'))showScr('s-title')" style="background:transparent;border:none;color:rgba(200,170,100,0.35);font-size:11px;cursor:pointer;font-family:Cinzel,serif;letter-spacing:1px;padding:2px 6px">✕ выйти</button>
   </div>
 
   <!-- QM Phase -->
@@ -345,10 +369,10 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
   <div class="act-zone" id="act-zone">
     <div class="zone-hdr" style="margin-bottom:10px"><div class="zone-t">⚡ Выбери действие</div></div>
     <div class="act-grid">
-      <div class="act-tile act-rest" onclick="doAct('nothing')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">😴</div><div class="at-name">НИЧЕГО</div><div class="at-desc">Спокойно сидеть</div></div></div>
-      <div class="act-tile act-row" onclick="doAct('row')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🚣</div><div class="at-name">ГРЕСТИ</div><div class="at-desc">Изучить навигационную карту</div></div></div>
-      <div class="act-tile act-seat" onclick="doAct('seat')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🔀</div><div class="at-name">ПЕРЕСЕСТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
-      <div class="act-tile act-mug" onclick="doAct('mug')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🤜</div><div class="at-name">ОГРАБИТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
+      <div class="act-tile act-rest" onclick="doAct('nothing')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-rest"></div><div class="at-name">НИЧЕГО</div><div class="at-desc">Спокойно сидеть</div></div></div>
+      <div class="act-tile act-row" onclick="doAct('row')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-row"></div><div class="at-name">ГРЕСТИ</div><div class="at-desc">Изучить навигационную карту</div></div></div>
+      <div class="act-tile act-seat" onclick="doAct('seat')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-seat"></div><div class="at-name">ПЕРЕСЕСТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
+      <div class="act-tile act-mug" onclick="doAct('mug')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-mug"></div><div class="at-name">ОГРАБИТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
     </div>
   </div>
 
@@ -375,7 +399,16 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 
 <!-- SCORE -->
 <div id="s-score" class="screen">
-  <div class="score-hdr"><span class="score-icon">🏝</span><div class="score-ttl">ЗЕМЛЯ!</div><div class="score-sub">Берег достигнут — итоги путешествия</div></div>
+  <div class="score-hdr"><span class="score-icon"><svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" width="80" height="60">
+  <ellipse cx="40" cy="48" rx="28" ry="8" fill="#1a3a1a"/>
+  <path d="M20,48 Q22,32 40,28 Q58,32 60,48Z" fill="#2a5a1a"/>
+  <path d="M38,28 L36,10 Q40,4 44,10 L42,28Z" fill="#3a7a20"/>
+  <path d="M36,10 Q28,14 30,22 Q36,18 38,28Z" fill="#4a9a28"/>
+  <path d="M44,10 Q52,14 50,22 Q44,18 42,28Z" fill="#4a9a28"/>
+  <circle cx="20" cy="42" r="6" fill="#c8920a" opacity=".6"/>
+  <circle cx="60" cy="44" r="4" fill="#c8920a" opacity=".4"/>
+  <path d="M5,38 Q15,34 25,38 Q35,42 45,38 Q55,34 75,36" stroke="rgba(100,160,220,.5)" stroke-width="2" fill="none"/>
+</svg></span><div class="score-ttl">ЗЕМЛЯ!</div><div class="score-sub">Берег достигнут — итоги путешествия</div></div>
   <div class="score-div"></div>
   <div class="score-list" id="score-list"></div>
   <button class="btn btn-g" style="margin-top:16px" onclick="showScr('s-title')"><div class="shine"></div>⚓ &nbsp;НОВАЯ ИГРА</button>
@@ -472,6 +505,380 @@ const NAV_DECK=[
   {bird:0,ob:null,th:['kid'],row:1,fig:0},{bird:0,ob:'frenchy',th:['stephen','captain'],row:0,fig:1},
 ];
 
+
+// ══════════════════════════════════════════════
+//  GORILLAZ-STYLE SVG ART FUNCTIONS
+// ══════════════════════════════════════════════
+
+function gorillazHead(id, w, h) {
+  const hs = Math.round(h * 0.52); // head area height
+  const cx = w / 2;
+  const heads = {
+    lauren: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <!-- neck -->
+        <rect x="-7" y="${hs-8}" width="14" height="14" rx="2" fill="#c4855a"/>
+        <!-- head -->
+        <ellipse cx="0" cy="${hs*0.45}" rx="${hs*0.38}" ry="${hs*0.44}" fill="#d4956a"/>
+        <!-- big empty gorillaz eyes - left -->
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.38}" rx="${hs*0.1}" ry="${hs*0.12}" fill="#0a0a0a"/>
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.38}" rx="${hs*0.04}" ry="${hs*0.05}" fill="#1a1a3a"/>
+        <circle cx="${-hs*0.11}" cy="${hs*0.35}" r="${hs*0.025}" fill="rgba(255,255,255,0.6)"/>
+        <!-- right eye -->
+        <ellipse cx="${hs*0.14}" cy="${hs*0.38}" rx="${hs*0.1}" ry="${hs*0.12}" fill="#0a0a0a"/>
+        <ellipse cx="${hs*0.14}" cy="${hs*0.38}" rx="${hs*0.04}" ry="${hs*0.05}" fill="#1a1a3a"/>
+        <circle cx="${hs*0.17}" cy="${hs*0.35}" r="${hs*0.025}" fill="rgba(255,255,255,0.6)"/>
+        <!-- flat nose -->
+        <ellipse cx="0" cy="${hs*0.52}" rx="${hs*0.07}" ry="${hs*0.04}" fill="#b07050" opacity=".6"/>
+        <!-- thin lips -->
+        <path d="M${-hs*0.12},${hs*0.63} Q0,${hs*0.68} ${hs*0.12},${hs*0.63}" stroke="#8a4a30" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- wild hair -->
+        <path d="M${-hs*0.38},${hs*0.3} Q${-hs*0.5},${-hs*0.1} ${-hs*0.2},${-hs*0.08} Q${-hs*0.35},${-hs*0.25} 0,${-hs*0.3} Q${hs*0.35},${-hs*0.25} ${hs*0.2},${-hs*0.08} Q${hs*0.5},${-hs*0.1} ${hs*0.38},${hs*0.3}" fill="#1a0808" stroke="#1a0808" stroke-width="1"/>
+        <!-- cheek blush -->
+        <ellipse cx="${-hs*0.28}" cy="${hs*0.52}" rx="${hs*0.08}" ry="${hs*0.05}" fill="#e06080" opacity=".35"/>
+        <ellipse cx="${hs*0.28}" cy="${hs*0.52}" rx="${hs*0.08}" ry="${hs*0.05}" fill="#e06080" opacity=".35"/>
+      </g>`,
+    stephen: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-6" y="${hs-8}" width="12" height="14" rx="2" fill="#c4956a"/>
+        <ellipse cx="0" cy="${hs*0.45}" rx="${hs*0.36}" ry="${hs*0.43}" fill="#d4a57a"/>
+        <!-- monocle frame -->
+        <circle cx="${hs*0.13}" cy="${hs*0.37}" r="${hs*0.13}" fill="none" stroke="#c0a020" stroke-width="${hs*0.025}"/>
+        <!-- left eye normal -->
+        <ellipse cx="${-hs*0.15}" cy="${hs*0.37}" rx="${hs*0.09}" ry="${hs*0.1}" fill="#0a0a0a"/>
+        <circle cx="${-hs*0.12}" cy="${hs*0.34}" r="${hs*0.025}" fill="rgba(255,255,255,0.55)"/>
+        <!-- right eye through monocle - huge -->
+        <ellipse cx="${hs*0.13}" cy="${hs*0.37}" rx="${hs*0.08}" ry="${hs*0.1}" fill="#0a0808"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.37}" rx="${hs*0.035}" ry="${hs*0.05}" fill="#200820"/>
+        <circle cx="${hs*0.16}" cy="${hs*0.34}" r="${hs*0.02}" fill="rgba(255,255,255,0.7)"/>
+        <!-- monocle chain -->
+        <path d="M${hs*0.25},${hs*0.42} Q${hs*0.32},${hs*0.5} ${hs*0.28},${hs*0.6}" stroke="#c0a020" stroke-width="1" fill="none"/>
+        <!-- thin mustache -->
+        <path d="M${-hs*0.15},${hs*0.59} Q${-hs*0.06},${hs*0.56} 0,${hs*0.58}" stroke="#2a1008" stroke-width="${hs*0.035}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.15},${hs*0.59} Q${hs*0.06},${hs*0.56} 0,${hs*0.58}" stroke="#2a1008" stroke-width="${hs*0.035}" fill="none" stroke-linecap="round"/>
+        <!-- flat mouth -->
+        <path d="M${-hs*0.1},${hs*0.67} L${hs*0.1},${hs*0.67}" stroke="#7a4030" stroke-width="1.5" fill="none"/>
+        <!-- slick hair -->
+        <path d="M${-hs*0.36},${hs*0.18} Q${-hs*0.38},${-hs*0.2} 0,${-hs*0.26} Q${hs*0.38},${-hs*0.2} ${hs*0.36},${hs*0.18}" fill="#0a0a12"/>
+        <path d="M${-hs*0.1},${-hs*0.26} Q0,${-hs*0.3} ${hs*0.1},${-hs*0.24}" stroke="#1a1a2a" stroke-width="${hs*0.04}" fill="none"/>
+        <!-- top hat brim -->
+        <rect x="${-hs*0.4}" y="${-hs*0.28}" width="${hs*0.8}" height="${hs*0.06}" rx="${hs*0.02}" fill="#0a0a18"/>
+        <rect x="${-hs*0.28}" y="${-hs*0.28}" width="${hs*0.56}" height="${-hs*0.32}" rx="${hs*0.03}" fill="#0a0a18" transform="translate(0,${hs*0.03})"/>
+      </g>`,
+    captain: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-9" y="${hs-8}" width="18" height="15" rx="3" fill="#b07848"/>
+        <ellipse cx="0" cy="${hs*0.46}" rx="${hs*0.42}" ry="${hs*0.45}" fill="#c08858"/>
+        <!-- deep-set eyes -->
+        <ellipse cx="${-hs*0.15}" cy="${hs*0.35}" rx="${hs*0.12}" ry="${hs*0.1}" fill="#1a0a0a"/>
+        <ellipse cx="${-hs*0.15}" cy="${hs*0.35}" rx="${hs*0.05}" ry="${hs*0.06}" fill="#0a1830"/>
+        <circle cx="${-hs*0.11}" cy="${hs*0.32}" r="${hs*0.025}" fill="rgba(255,255,255,0.5)"/>
+        <ellipse cx="${hs*0.15}" cy="${hs*0.35}" rx="${hs*0.12}" ry="${hs*0.1}" fill="#1a0a0a"/>
+        <ellipse cx="${hs*0.15}" cy="${hs*0.35}" rx="${hs*0.05}" ry="${hs*0.06}" fill="#0a1830"/>
+        <circle cx="${hs*0.19}" cy="${hs*0.32}" r="${hs*0.025}" fill="rgba(255,255,255,0.5)"/>
+        <!-- heavy brows -->
+        <path d="M${-hs*0.28},${hs*0.24} Q${-hs*0.15},${hs*0.21} ${-hs*0.04},${hs*0.25}" stroke="#1a0808" stroke-width="${hs*0.05}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.28},${hs*0.24} Q${hs*0.15},${hs*0.21} ${hs*0.04},${hs*0.25}" stroke="#1a0808" stroke-width="${hs*0.05}" fill="none" stroke-linecap="round"/>
+        <!-- big beard -->
+        <path d="M${-hs*0.38},${hs*0.55} Q${-hs*0.4},${hs*0.85} 0,${hs*0.95} Q${hs*0.4},${hs*0.85} ${hs*0.38},${hs*0.55} Q${hs*0.2},${hs*0.7} 0,${hs*0.72} Q${-hs*0.2},${hs*0.7} ${-hs*0.38},${hs*0.55}" fill="#1a0a08"/>
+        <!-- nose -->
+        <ellipse cx="0" cy="${hs*0.51}" rx="${hs*0.09}" ry="${hs*0.055}" fill="#a06838" opacity=".7"/>
+        <!-- captain hat -->
+        <rect x="${-hs*0.46}" y="${-hs*0.06}" width="${hs*0.92}" height="${hs*0.08}" rx="${hs*0.02}" fill="#06081a"/>
+        <rect x="${-hs*0.32}" y="${-hs*0.06}" width="${hs*0.64}" height="${-hs*0.36}" rx="${hs*0.04}" fill="#06081a" transform="translate(0,${hs*0.04})"/>
+        <!-- anchor badge -->
+        <text x="0" y="${-hs*0.15}" text-anchor="middle" font-size="${hs*0.18}" fill="#c8920a" dominant-baseline="middle">⚓</text>
+      </g>`,
+    mate: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-11" y="${hs-8}" width="22" height="16" rx="3" fill="#b07040"/>
+        <!-- thick neck -->
+        <rect x="-10" y="${hs*0.75}" width="20" height="${hs*0.35}" rx="4" fill="#b07040"/>
+        <ellipse cx="0" cy="${hs*0.44}" rx="${hs*0.45}" ry="${hs*0.46}" fill="#c08050"/>
+        <!-- small beady eyes - tough look -->
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.34}" rx="${hs*0.1}" ry="${hs*0.08}" fill="#0a0808"/>
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.34}" rx="${hs*0.04}" ry="${hs*0.04}" fill="#180808"/>
+        <circle cx="${-hs*0.11}" cy="${hs*0.31}" r="${hs*0.02}" fill="rgba(255,255,255,0.4)"/>
+        <ellipse cx="${hs*0.14}" cy="${hs*0.34}" rx="${hs*0.1}" ry="${hs*0.08}" fill="#0a0808"/>
+        <ellipse cx="${hs*0.14}" cy="${hs*0.34}" rx="${hs*0.04}" ry="${hs*0.04}" fill="#180808"/>
+        <circle cx="${hs*0.17}" cy="${hs*0.31}" r="${hs*0.02}" fill="rgba(255,255,255,0.4)"/>
+        <!-- furrowed brows -->
+        <path d="M${-hs*0.26},${hs*0.24} Q${-hs*0.14},${hs*0.27} ${-hs*0.04},${hs*0.26}" stroke="#1a0808" stroke-width="${hs*0.06}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.26},${hs*0.24} Q${hs*0.14},${hs*0.27} ${hs*0.04},${hs*0.26}" stroke="#1a0808" stroke-width="${hs*0.06}" fill="none" stroke-linecap="round"/>
+        <!-- stubble -->
+        <ellipse cx="0" cy="${hs*0.65}" rx="${hs*0.38}" ry="${hs*0.2}" fill="#8a5030" opacity=".4"/>
+        <!-- grim mouth -->
+        <path d="M${-hs*0.14},${hs*0.64} L${hs*0.14},${hs*0.64}" stroke="#5a2818" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- scar -->
+        <path d="M${hs*0.2},${hs*0.24} Q${hs*0.22},${hs*0.32} ${hs*0.18},${hs*0.42}" stroke="#8a3818" stroke-width="1.5" fill="none" opacity=".7"/>
+        <!-- bandana -->
+        <path d="M${-hs*0.45},${hs*0.15} Q0,${-hs*0.08} ${hs*0.45},${hs*0.15} Q${hs*0.42},${hs*0.22} 0,${hs*0.19} Q${-hs*0.42},${hs*0.22} ${-hs*0.45},${hs*0.15}" fill="#8a1010"/>
+        <path d="M${hs*0.38},${hs*0.18} Q${hs*0.48},${hs*0.28} ${hs*0.42},${hs*0.36}" stroke="#6a0808" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>`,
+    frenchy: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-5" y="${hs-8}" width="10" height="13" rx="2" fill="#c49060"/>
+        <ellipse cx="0" cy="${hs*0.45}" rx="${hs*0.34}" ry="${hs*0.42}" fill="#d4a070"/>
+        <!-- expressive wide eyes -->
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.38}" rx="${hs*0.11}" ry="${hs*0.13}" fill="#0a0808"/>
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.38}" rx="${hs*0.05}" ry="${hs*0.07}" fill="#08081a"/>
+        <circle cx="${-hs*0.09}" cy="${hs*0.34}" r="${hs*0.03}" fill="rgba(255,255,255,0.7)"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.38}" rx="${hs*0.11}" ry="${hs*0.13}" fill="#0a0808"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.38}" rx="${hs*0.05}" ry="${hs*0.07}" fill="#08081a"/>
+        <circle cx="${hs*0.17}" cy="${hs*0.34}" r="${hs*0.03}" fill="rgba(255,255,255,0.7)"/>
+        <!-- raised brows surprised -->
+        <path d="M${-hs*0.24},${hs*0.23} Q${-hs*0.13},${hs*0.18} ${-hs*0.03},${hs*0.22}" stroke="#2a1008" stroke-width="${hs*0.04}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.24},${hs*0.23} Q${hs*0.13},${hs*0.18} ${hs*0.03},${hs*0.22}" stroke="#2a1008" stroke-width="${hs*0.04}" fill="none" stroke-linecap="round"/>
+        <!-- pencil mustache -->
+        <path d="M${-hs*0.13},${hs*0.59} Q0,${hs*0.56} ${hs*0.13},${hs*0.59}" stroke="#1a0a08" stroke-width="${hs*0.028}" fill="none" stroke-linecap="round"/>
+        <!-- smirk -->
+        <path d="M${-hs*0.08},${hs*0.67} Q${hs*0.04},${hs*0.72} ${hs*0.12},${hs*0.65}" stroke="#7a3828" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- large beret -->
+        <ellipse cx="${-hs*0.08}" cy="${hs*0.04}" rx="${hs*0.4}" ry="${hs*0.22}" fill="#18305a"/>
+        <ellipse cx="${-hs*0.1}" cy="${hs*0.03}" rx="${hs*0.34}" ry="${hs*0.16}" fill="#1a3868"/>
+        <circle cx="${-hs*0.2}" cy="${-hs*0.08}" r="${hs*0.06}" fill="#2a4888"/>
+        <!-- beret brim -->
+        <path d="M${-hs*0.38},${hs*0.18} Q${hs*0.1},${hs*0.14} ${hs*0.3},${hs*0.2}" stroke="#18305a" stroke-width="${hs*0.06}" fill="none"/>
+      </g>`,
+    kid: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-5" y="${hs-8}" width="10" height="13" rx="2" fill="#c89860"/>
+        <ellipse cx="0" cy="${hs*0.46}" rx="${hs*0.37}" ry="${hs*0.44}" fill="#d8a870"/>
+        <!-- huge childlike eyes -->
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.4}" rx="${hs*0.13}" ry="${hs*0.14}" fill="#0a0a0a"/>
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.4}" rx="${hs*0.06}" ry="${hs*0.08}" fill="#080820"/>
+        <circle cx="${-hs*0.08}" cy="${hs*0.36}" r="${hs*0.04}" fill="rgba(255,255,255,0.75)"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.4}" rx="${hs*0.13}" ry="${hs*0.14}" fill="#0a0a0a"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.4}" rx="${hs*0.06}" ry="${hs*0.08}" fill="#080820"/>
+        <circle cx="${hs*0.18}" cy="${hs*0.36}" r="${hs*0.04}" fill="rgba(255,255,255,0.75)"/>
+        <!-- chubby cheeks -->
+        <ellipse cx="${-hs*0.28}" cy="${hs*0.52}" rx="${hs*0.1}" ry="${hs*0.07}" fill="#e08858" opacity=".4"/>
+        <ellipse cx="${hs*0.28}" cy="${hs*0.52}" rx="${hs*0.1}" ry="${hs*0.07}" fill="#e08858" opacity=".4"/>
+        <!-- freckles -->
+        <circle cx="${-hs*0.18}" cy="${hs*0.55}" r="${hs*0.02}" fill="#a06030" opacity=".6"/>
+        <circle cx="${-hs*0.1}" cy="${hs*0.57}" r="${hs*0.015}" fill="#a06030" opacity=".6"/>
+        <circle cx="${hs*0.18}" cy="${hs*0.55}" r="${hs*0.02}" fill="#a06030" opacity=".6"/>
+        <circle cx="${hs*0.1}" cy="${hs*0.57}" r="${hs*0.015}" fill="#a06030" opacity=".6"/>
+        <!-- gap-tooth smile -->
+        <path d="M${-hs*0.12},${hs*0.65} Q0,${hs*0.72} ${hs*0.12},${hs*0.65}" stroke="#7a3828" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <rect x="${-hs*0.03}" y="${hs*0.65}" width="${hs*0.06}" height="${hs*0.05}" fill="#c89860"/>
+        <!-- messy spiked hair -->
+        <path d="M${-hs*0.36},${hs*0.22} Q${-hs*0.42},${-hs*0.05} ${-hs*0.25},${-hs*0.14} Q${-hs*0.32},${-hs*0.32} ${-hs*0.08},${-hs*0.3} Q${-hs*0.12},${-hs*0.38} ${hs*0.05},${-hs*0.32} Q${hs*0.18},${-hs*0.4} ${hs*0.22},${-hs*0.26} Q${hs*0.36},${-hs*0.28} ${hs*0.36},${-hs*0.1} Q${hs*0.44},${hs*0.05} ${hs*0.36},${hs*0.22}" fill="#5a3010"/>
+      </g>`,
+  };
+  return heads[id] || heads.kid;
+}
+
+function getCardArt(id, w, h) {
+  const arts = {
+    water: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#051828"/>
+      <path d="M${w*.5},${h*.08} Q${w*.72},${h*.28} ${w*.72},${h*.52} Q${w*.72},${h*.82} ${w*.5},${h*.88} Q${w*.28},${h*.82} ${w*.28},${h*.52} Q${w*.28},${h*.28} ${w*.5},${h*.08}Z" fill="#1a5080" stroke="#2a90c0" stroke-width="1.5"/>
+      <path d="M${w*.5},${h*.08} Q${w*.6},${h*.25} ${w*.62},${h*.42} Q${w*.55},${h*.38} ${w*.5},${h*.08}Z" fill="rgba(100,200,255,0.3)"/>
+      <ellipse cx="${w*.42}" cy="${h*.38}" rx="${w*.07}" ry="${h*.06}" fill="rgba(150,220,255,0.25)" transform="rotate(-20,${w*.42},${h*.38})"/>
+      <path d="M${w*.2},${h*.75} Q${w*.35},${h*.7} ${w*.5},${h*.75} Q${w*.65},${h*.7} ${w*.8},${h*.75}" stroke="rgba(50,160,220,0.4)" stroke-width="1.5" fill="none"/>
+    </svg>`,
+    food: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#0a1008"/>
+      <rect x="${w*.12}" y="${h*.12}" width="${w*.76}" height="${h*.7}" rx="4" fill="#2a1808" stroke="#6a3010" stroke-width="1.5"/>
+      <line x1="${w*.12}" y1="${h*.35}" x2="${w*.88}" y2="${h*.35}" stroke="#3a2010" stroke-width="1"/>
+      <line x1="${w*.12}" y1="${h*.58}" x2="${w*.88}" y2="${h*.58}" stroke="#3a2010" stroke-width="1"/>
+      <line x1="${w*.35}" y1="${h*.12}" x2="${w*.35}" y2="${h*.82}" stroke="#3a2010" stroke-width="1"/>
+      <line x1="${w*.65}" y1="${h*.12}" x2="${w*.65}" y2="${h*.82}" stroke="#3a2010" stroke-width="1"/>
+      <circle cx="${w*.5}" cy="${h*.47}" r="${w*.18}" fill="#1a3010" stroke="#4a8020" stroke-width="1.5"/>
+      <path d="M${w*.38},${h*.47} Q${w*.44},${h*.4} ${w*.5},${h*.44} Q${w*.56},${h*.4} ${w*.62},${h*.47}" stroke="#6ab030" stroke-width="2" fill="none"/>
+    </svg>`,
+    jewels: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#08040e"/>
+      <polygon points="${w*.5},${h*.1} ${w*.78},${h*.32} ${w*.7},${h*.72} ${w*.3},${h*.72} ${w*.22},${h*.32}" fill="#3020608" stroke="#8060d0" stroke-width="1.5"/>
+      <polygon points="${w*.5},${h*.1} ${w*.78},${h*.32} ${w*.7},${h*.72} ${w*.3},${h*.72} ${w*.22},${h*.32}" fill="none" stroke="#c0a0ff" stroke-width=".5" opacity=".5"/>
+      <polygon points="${w*.5},${h*.1} ${w*.64},${h*.32} ${w*.5},${h*.28} ${w*.36},${h*.32}" fill="rgba(200,180,255,0.25)"/>
+      <line x1="${w*.22}" y1="${h*.32}" x2="${w*.78}" y2="${h*.32}" stroke="rgba(180,150,255,0.3)" stroke-width="1"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.06}" fill="rgba(220,200,255,0.5)"/>
+      <circle cx="${w*.26}" cy="${h*.25}" r="${w*.03}" fill="#c0a0ff" opacity=".6"/>
+      <circle cx="${w*.74}" cy="${h*.22}" r="${w*.025}" fill="#e0c0ff" opacity=".5"/>
+    </svg>`,
+    painting: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#0a0806"/>
+      <rect x="${w*.08}" y="${h*.06}" width="${w*.84}" height="${h*.8}" rx="2" fill="#c89030"/>
+      <rect x="${w*.12}" y="${h*.1}" width="${w*.76}" height="${h*.72}" rx="1" fill="#1a3050"/>
+      <ellipse cx="${w*.5}" cy="${h*.46}" rx="${w*.22}" ry="${h*.2}" fill="#c0a020" opacity=".6"/>
+      <path d="M${w*.12},${h*.6} Q${w*.3},${h*.38} ${w*.5},${h*.46} Q${w*.7},${h*.54} ${w*.88},${h*.38}" stroke="#3a6a1a" stroke-width="2.5" fill="none"/>
+      <rect x="${w*.08}" y="${h*.78}" width="${w*.84}" height="${h*.1}" rx="1" fill="#a07020"/>
+      <circle cx="${w*.18}" cy="${h*.12}" r="${w*.04}" fill="#e0b020"/>
+      <circle cx="${w*.82}" cy="${h*.12}" r="${w*.04}" fill="#e0b020"/>
+    </svg>`,
+    cash: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#060a04"/>
+      <ellipse cx="${w*.5}" cy="${h*.62}" rx="${w*.32}" ry="${h*.12}" fill="#b09020" opacity=".5"/>
+      <ellipse cx="${w*.5}" cy="${h*.54}" rx="${w*.32}" ry="${h*.12}" fill="#c0a020" opacity=".6"/>
+      <ellipse cx="${w*.5}" cy="${h*.46}" rx="${w*.32}" ry="${h*.12}" fill="#d0b030"/>
+      <ellipse cx="${w*.5}" cy="${h*.38}" rx="${w*.32}" ry="${h*.12}" fill="#e0c040"/>
+      <ellipse cx="${w*.5}" cy="${h*.38}" rx="${w*.28}" ry="${h*.09}" fill="#f0d050"/>
+      <text x="${w*.5}" y="${h*.42}" text-anchor="middle" dominant-baseline="middle" font-family="monospace" font-size="${w*.22}" font-weight="900" fill="#604008">$</text>
+    </svg>`,
+    flare: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#08040a"/>
+      <rect x="${w*.38}" y="${h*.42}" width="${w*.24}" height="${h*.46}" rx="${w*.06}" fill="#404050"/>
+      <rect x="${w*.34}" y="${h*.54}" width="${w*.32}" height="${h*.12}" rx="${w*.04}" fill="#303040"/>
+      <ellipse cx="${w*.5}" cy="${h*.22}" rx="${w*.22}" ry="${h*.22}" fill="#e04000" opacity=".9"/>
+      <ellipse cx="${w*.5}" cy="${h*.22}" rx="${w*.14}" ry="${h*.14}" fill="#ff8020"/>
+      <ellipse cx="${w*.5}" cy="${h*.22}" rx="${w*.07}" ry="${h*.07}" fill="#ffe060"/>
+      <path d="M${w*.5},${h*.04} L${w*.46},${h*.12} M${w*.5},${h*.04} L${w*.54},${h*.12}" stroke="#ff6010" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${w*.72},${h*.12} L${w*.82},${h*.08} M${w*.28},${h*.12} L${w*.18},${h*.08}" stroke="#ff6010" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M${w*.78},${h*.3} L${w*.88},${h*.32} M${w*.22},${h*.3} L${w*.12},${h*.32}" stroke="#ff8020" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+    </svg>`,
+    oar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#060804"/>
+      <g transform="rotate(18,${w*.5},${h*.5})">
+        <rect x="${w*.46}" y="${h*.04}" width="${w*.08}" height="${h*.62}" rx="${w*.03}" fill="#6a3a10"/>
+        <rect x="${w*.47}" y="${h*.04}" width="${w*.03}" height="${h*.62}" rx="${w*.015}" fill="rgba(255,180,60,0.2)"/>
+        <ellipse cx="${w*.5}" cy="${h*.76}" rx="${w*.22}" ry="${h*.1}" fill="#5a2e0c"/>
+        <ellipse cx="${w*.5}" cy="${h*.76}" rx="${w*.18}" ry="${h*.07}" fill="#7a4015" stroke="#4a2008" stroke-width="1"/>
+      </g>
+    </svg>`,
+    knife: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#080808"/>
+      <g transform="rotate(12,${w*.5},${h*.5})">
+        <rect x="${w*.44}" y="${h*.6}" width="${w*.12}" height="${h*.3}" rx="${w*.04}" fill="#5a3010"/>
+        <rect x="${w*.42}" y="${h*.56}" width="${w*.16}" height="${h*.06}" rx="${w*.02}" fill="#808020"/>
+        <path d="M${w*.44},${h*.1} L${w*.56},${h*.1} L${w*.56},${h*.56} L${w*.44},${h*.56}Z" fill="#a0a8b0"/>
+        <path d="M${w*.56},${h*.1} L${w*.56},${h*.56} L${w*.5},${h*.56}Z" fill="#c8d0d8"/>
+        <path d="M${w*.56},${h*.1} L${w*.5},${h*.12}" stroke="rgba(220,230,240,0.6)" stroke-width="1.5" fill="none"/>
+      </g>
+    </svg>`,
+    parasol: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#08040e"/>
+      <path d="M${w*.1},${h*.44} Q${w*.5},${h*.06} ${w*.9},${h*.44}Z" fill="#c03060"/>
+      <path d="M${w*.1},${h*.44} Q${w*.5},${h*.08} ${w*.9},${h*.44}" fill="none" stroke="#e04070" stroke-width="1.5"/>
+      <line x1="${w*.5}" y1="${h*.1}" x2="${w*.5}" y2="${h*.44}" stroke="#d04060" stroke-width=".8"/>
+      <line x1="${w*.3}" y1="${h*.16}" x2="${w*.5}" y2="${h*.44}" stroke="#d04060" stroke-width=".8"/>
+      <line x1="${w*.7}" y1="${h*.16}" x2="${w*.5}" y2="${h*.44}" stroke="#d04060" stroke-width=".8"/>
+      <path d="M${w*.1},${h*.44} Q${w*.2},${h*.52} ${w*.3},${h*.44} Q${w*.4},${h*.52} ${w*.5},${h*.44} Q${w*.6},${h*.52} ${w*.7},${h*.44} Q${w*.8},${h*.52} ${w*.9},${h*.44}" fill="none" stroke="#e04070" stroke-width="2.5"/>
+      <rect x="${w*.47}" y="${h*.44}" width="${w*.06}" height="${h*.42}" rx="${w*.02}" fill="#8a4020"/>
+      <path d="M${w*.53},${h*.86} Q${w*.66},${h*.84} ${w*.64},${h*.92}" stroke="#8a4020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </svg>`,
+    life: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#040810"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.36}" fill="none" stroke="#c02010" stroke-width="${w*.12}"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.36}" fill="none" stroke="white" stroke-width="${w*.12}" stroke-dasharray="${w*.22} ${w*.115}"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.18}" fill="#040810"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.15}" fill="none" stroke="rgba(200,200,200,0.15)" stroke-width="1"/>
+      <line x1="${w*.5}" y1="${h*.12}" x2="${w*.5}" y2="${h*.32}" stroke="#c8a020" stroke-width="1.5"/>
+      <line x1="${w*.5}" y1="${h*.68}" x2="${w*.5}" y2="${h*.88}" stroke="#c8a020" stroke-width="1.5"/>
+      <line x1="${w*.12}" y1="${h*.5}" x2="${w*.32}" y2="${h*.5}" stroke="#c8a020" stroke-width="1.5"/>
+      <line x1="${w*.68}" y1="${h*.5}" x2="${w*.88}" y2="${h*.5}" stroke="#c8a020" stroke-width="1.5"/>
+    </svg>`,
+    medkit: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#080404"/>
+      <rect x="${w*.1}" y="${h*.22}" width="${w*.8}" height="${h*.6}" rx="${w*.06}" fill="#8a0808"/>
+      <rect x="${w*.1}" y="${h*.22}" width="${w*.8}" height="${h*.14}" rx="${w*.06}" fill="#aa1010"/>
+      <rect x="${w*.38}" y="${h*.1}" width="${w*.24}" height="${h*.18}" rx="${w*.06}" fill="#6a0606" stroke="#8a0808" stroke-width="1"/>
+      <rect x="${w*.34}" y="${h*.4}" width="${w*.32}" height="${h*.1}" rx="${w*.04}" fill="rgba(255,255,255,0.9)"/>
+      <rect x="${w*.44}" y="${h*.3}" width="${w*.12}" height="${h*.28}" rx="${w*.04}" fill="rgba(255,255,255,0.9)"/>
+    </svg>`,
+    rope: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#06080a"/>
+      <path d="M${w*.2},${h*.18} Q${w*.5},${h*.1} ${w*.78},${h*.24} Q${w*.88},${h*.48} ${w*.74},${h*.72} Q${w*.54},${h*.9} ${w*.3},${h*.8} Q${w*.1},${h*.6} ${w*.2},${h*.38} Q${w*.28},${h*.22} ${w*.5},${h*.22}" fill="none" stroke="#8a6018" stroke-width="${w*.1}" stroke-linecap="round"/>
+      <path d="M${w*.2},${h*.18} Q${w*.5},${h*.1} ${w*.78},${h*.24} Q${w*.88},${h*.48} ${w*.74},${h*.72} Q${w*.54},${h*.9} ${w*.3},${h*.8} Q${w*.1},${h*.6} ${w*.2},${h*.38} Q${w*.28},${h*.22} ${w*.5},${h*.22}" fill="none" stroke="#c09030" stroke-width="${w*.04}" stroke-linecap="round" stroke-dasharray="${w*.06} ${w*.04}" opacity=".6"/>
+    </svg>`,
+    compass: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#060810"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.38}" fill="#0a1020" stroke="#8a6010" stroke-width="2"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.32}" fill="none" stroke="rgba(180,140,20,0.3)" stroke-width="1"/>
+      <line x1="${w*.5}" y1="${h*.16}" x2="${w*.5}" y2="${h*.84}" stroke="rgba(180,140,20,0.25)" stroke-width="1"/>
+      <line x1="${w*.16}" y1="${h*.5}" x2="${w*.84}" y2="${h*.5}" stroke="rgba(180,140,20,0.25)" stroke-width="1"/>
+      <polygon points="${w*.5},${h*.22} ${w*.53},${h*.5} ${w*.5},${h*.46} ${w*.47},${h*.5}" fill="#aa1010"/>
+      <polygon points="${w*.5},${h*.78} ${w*.53},${h*.5} ${w*.5},${h*.54} ${w*.47},${h*.5}" fill="#c8c8d0"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.05}" fill="#c8a020"/>
+      <text x="${w*.5}" y="${h*.2}" text-anchor="middle" font-family="monospace" font-size="${w*.13}" fill="#8a2010" font-weight="900">N</text>
+    </svg>`,
+  };
+  return arts[id] || arts.rope;
+}
+
+// ══ ACTION TILE SVG ICONS ══
+function renderActionIcons() {
+  const icons = {
+    'ico-rest': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <ellipse cx="24" cy="28" rx="16" ry="12" fill="#0a1828"/>
+      <ellipse cx="24" cy="22" rx="14" ry="11" fill="#1a2838"/>
+      <!-- head shape gorillaz style -->
+      <ellipse cx="24" cy="21" rx="10" ry="11" fill="#c09060"/>
+      <!-- closed eyes zzz -->
+      <path d="M18,20 Q20,22 22,20" stroke="#0a0808" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M26,20 Q28,22 30,20" stroke="#0a0808" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- mouth open snoring -->
+      <ellipse cx="24" cy="26" rx="3" ry="2" fill="#0a0808"/>
+      <!-- zzz -->
+      <text x="34" y="14" font-family="monospace" font-size="7" fill="rgba(100,160,220,0.7)" font-weight="bold">Z</text>
+      <text x="37" y="10" font-family="monospace" font-size="5" fill="rgba(100,160,220,0.5)" font-weight="bold">z</text>
+      <text x="39" y="7" font-family="monospace" font-size="4" fill="rgba(100,160,220,0.35)" font-weight="bold">z</text>
+      <!-- pillow -->
+      <ellipse cx="24" cy="34" rx="16" ry="5" fill="#1a3040" stroke="#2a5060" stroke-width="1"/>
+    </svg>`,
+    'ico-row': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <!-- water -->
+      <path d="M2,36 Q12,30 24,36 Q36,30 46,36 L46,46 L2,46Z" fill="#0a2038"/>
+      <!-- figure rowing -->
+      <ellipse cx="24" cy="20" rx="8" ry="9" fill="#c09060"/>
+      <!-- gorillaz eyes -->
+      <ellipse cx="21" cy="19" rx="2.5" ry="2.5" fill="#080808"/>
+      <ellipse cx="27" cy="19" rx="2.5" ry="2.5" fill="#080808"/>
+      <circle cx="22" cy="18" r="1" fill="rgba(255,255,255,0.5)"/>
+      <circle cx="28" cy="18" r="1" fill="rgba(255,255,255,0.5)"/>
+      <!-- body + arms holding oar -->
+      <rect x="20" y="28" width="8" height="10" rx="3" fill="#2a4060"/>
+      <!-- oar -->
+      <line x1="4" y1="30" x2="44" y2="26" stroke="#7a4010" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="6" cy="30.5" rx="5" ry="2.5" fill="#6a3810" transform="rotate(-5,6,30)"/>
+    </svg>`,
+    'ico-seat': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <!-- two figures swapping -->
+      <!-- figure left -->
+      <ellipse cx="13" cy="16" rx="7" ry="7" fill="#c09060"/>
+      <ellipse cx="11" cy="15" rx="2" ry="2" fill="#080808"/>
+      <ellipse cx="15" cy="15" rx="2" ry="2" fill="#080808"/>
+      <path d="M11,20 Q13,22 15,20" stroke="#5a2818" stroke-width="1.5" fill="none"/>
+      <rect x="9" y="22" width="8" height="8" rx="3" fill="#3a1a50"/>
+      <!-- figure right -->
+      <ellipse cx="35" cy="16" rx="7" ry="7" fill="#b08858"/>
+      <ellipse cx="33" cy="15" rx="2" ry="2" fill="#080808"/>
+      <ellipse cx="37" cy="15" rx="2" ry="2" fill="#080808"/>
+      <path d="M33,20 Q35,22 37,20" stroke="#5a2818" stroke-width="1.5" fill="none"/>
+      <rect x="31" y="22" width="8" height="8" rx="3" fill="#1a3050"/>
+      <!-- swap arrows -->
+      <path d="M20,12 Q24,8 28,12" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr)"/>
+      <path d="M28,20 Q24,24 20,20" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <polygon points="19,11 22,14 18,15" fill="#c8a020"/>
+      <polygon points="29,21 26,18 30,17" fill="#c8a020"/>
+    </svg>`,
+    'ico-mug': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <!-- attacker figure -->
+      <ellipse cx="30" cy="16" rx="8" ry="8" fill="#c07050"/>
+      <!-- angry gorillaz eyes -->
+      <ellipse cx="27" cy="14" rx="2.5" ry="2" fill="#080808"/>
+      <ellipse cx="33" cy="14" rx="2.5" ry="2" fill="#080808"/>
+      <!-- angry brows -->
+      <path d="M25,11 Q27,10 29,12" stroke="#1a0808" stroke-width="2" fill="none"/>
+      <path d="M31,12 Q33,10 35,11" stroke="#1a0808" stroke-width="2" fill="none"/>
+      <!-- grin -->
+      <path d="M26,19 Q30,22 34,19" stroke="#5a1808" stroke-width="1.5" fill="none"/>
+      <!-- fist coming forward -->
+      <ellipse cx="14" cy="26" rx="8" ry="7" fill="#b07040"/>
+      <line x1="10" y1="30" x2="26" y2="22" stroke="#904020" stroke-width="3" stroke-linecap="round"/>
+      <!-- impact lines -->
+      <line x1="8" y1="20" x2="4" y2="16" stroke="#c8a020" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+      <line x1="6" y1="24" x2="2" y2="22" stroke="#c8a020" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="9" y1="18" x2="6" y2="13" stroke="#c8a020" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+    </svg>`,
+  };
+  Object.entries(icons).forEach(([id, svg]) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = svg;
+  });
+}
+
 // ── HELPERS ──
 const shuf=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
 
@@ -503,7 +910,7 @@ function charCardSVG(ch,w,h,wounds,isAct){
     <defs><linearGradient id="cg${ch.id}${w}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${ch.col2}"/><stop offset="50%" stop-color="${ch.col0}"/><stop offset="100%" stop-color="${ch.col1}"/></linearGradient></defs>
     <rect width="${w}" height="${h}" fill="url(#cg${ch.id}${w})" rx="2"/>
     <ellipse cx="${w/2}" cy="${h*.3}" rx="${w*.6}" ry="${h*.4}" fill="rgba(255,255,255,.07)"/>
-    <text x="${w/2}" y="${h*.6}" text-anchor="middle" font-size="${w*.5}" dominant-baseline="middle">${ch.emoji}</text>
+    ${gorillazHead(ch.id, w, h)}
     <rect x="0" y="${h*.72}" width="${w}" height="${h*.28}" fill="rgba(0,0,0,.78)"/>
     <text x="${w/2}" y="${h*.83}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.12}" font-weight="700" fill="#f8d040">${ch.name.split(' ')[0]}</text>
     <rect x="1" y="1" width="${w*.33}" height="${h*.17}" rx="2" fill="rgba(0,0,0,.65)"/>
@@ -519,7 +926,7 @@ function charCardSVG(ch,w,h,wounds,isAct){
 function provCardSVG(card,w,h){
   const catBg={provision:'#206020',weapon:'#602020',treasure:'#604000',protection:'#204060'}[card.cat]||'#303030';
   const catCol={provision:'#80e080',weapon:'#ff8080',treasure:'#f8d040',protection:'#40e0a0'}[card.cat]||'#aaa';
-  const artE={water:'💧',food:'🍞',jewels:'💎',painting:'🖼️',cash:'💰',flare:'🚀',oar:'🛶',knife:'🗡️',parasol:'☂️',life:'🔵',medkit:'💊',rope:'🪢',compass:'🧭'}[card.id]||'📦';
+  const artE=getCardArt(card.id, Math.round(w*.88), Math.round(h*.42));
   return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
     <defs><linearGradient id="pg${card.id}${w}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${card.col2||'#404040'}"/><stop offset="100%" stop-color="${card.col1||'#101010'}"/></linearGradient></defs>
     <rect width="${w}" height="${h}" fill="url(#pg${card.id}${w})" rx="2"/>
@@ -527,7 +934,7 @@ function provCardSVG(card,w,h){
     <rect x="0" y="${h*.16}" width="${w}" height="${h*.02}" fill="rgba(0,0,0,.3)"/>
     <text x="${w/2}" y="${h*.1}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.11}" font-weight="700" fill="${catCol}" dominant-baseline="middle">${card.type.toUpperCase()}</text>
     <rect x="${w*.06}" y="${h*.2}" width="${w*.88}" height="${h*.42}" fill="rgba(0,0,0,.35)" rx="2"/>
-    <text x="${w/2}" y="${h*.43}" text-anchor="middle" font-size="${w*.45}" dominant-baseline="middle">${artE}</text>
+    <image x="${w*.06}" y="${h*.2}" width="${w*.88}" height="${h*.42}" href="data:image/svg+xml;charset=utf-8,${encodeURIComponent(artE)}" />
     <rect x="0" y="${h*.63}" width="${w}" height="${h*.13}" fill="rgba(0,0,0,.72)"/>
     <text x="${w/2}" y="${h*.71}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.125}" font-weight="700" fill="#f8e0a0" dominant-baseline="middle">${card.n}</text>
     <rect x="0" y="${h*.77}" width="${w}" height="${h*.23}" fill="rgba(240,225,180,.92)"/>
@@ -600,7 +1007,7 @@ function renderGame(){
   document.getElementById('hud-day').textContent=G.day;
   document.getElementById('hud-player').textContent=cp.name;
   const br=document.getElementById('hud-birds');br.innerHTML='';
-  for(let i=0;i<4;i++){const lit=i<G.birds;br.innerHTML+=`<div class="bip ${lit?'lit':''}"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><path d="M1,10 Q6,4 11,8 Q16,4 21,10" stroke="${lit?'#ffd700':'#555'}" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></div>`;}
+  for(let i=0;i<4;i++){const lit=i<G.birds;br.innerHTML+=`<div class="bip ${lit?'lit':''}"><svg viewBox="0 0 28 20" xmlns="http://www.w3.org/2000/svg" width="28" height="20"><path d="M2,14 Q7,4 14,8 Q21,4 26,14" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="14" cy="8" r="1.5" fill="currentColor"/><path d="M14,8 Q16,6 18,7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>`;}
   for(let i=0;i<3;i++){const p=document.getElementById(`ph${i}`);p.className='ph'+(i===G.phase?' act':i<G.phase?' dn':'');}
   document.getElementById('hud-phase').textContent=['КВАРТИРМЕЙСТЕР','ДЕЙСТВИЯ','НАВИГАЦИЯ'][G.phase]||'';
   renderPlayers();renderHand();renderLog();
@@ -614,7 +1021,19 @@ function renderPlayers(){
     if(p.hand.length)chips.push(`<span class="chip chip-c">🃏 ${p.hand.length}</span>`);
     if(p.rowed)chips.push(`<span class="chip chip-r">🚣 ГРЕБЁТ</span>`);
     const pips=Array.from({length:p.char.size},(_,j)=>`<div class="pp ${j<p.wounds?p.alive?'w':'l':'ok'}"></div>`).join('');
-    const secs=isc?`<div class="p-sec"><span class="sb sb-l">❤ ${G.players[p.love]?.name||'?'}</span><span class="sb sb-h">💀 ${G.players[p.hate]?.name||'?'}</span></div>`:'';
+    const lv=G.players[p.love],ht=G.players[p.hate];
+    const secs=isc?('<div class="sec-cards-row">'
+      +'<div class="sec-card sec-card-love">'
+        +'<div class="sec-card-label">ДРУГ</div>'
+        +'<div class="sec-card-name">'+(lv?.name||'?')+'</div>'
+        +'<div class="sec-card-pts">+' +(lv?.char?.sv||0)+' очков если выживет</div>'
+      +'</div>'
+      +'<div class="sec-card sec-card-hate">'
+        +'<div class="sec-card-label">ВРАГ</div>'
+        +'<div class="sec-card-name">'+(ht?.name||'?')+'</div>'
+        +'<div class="sec-card-pts">+' +(ht?.char?.size||0)+' очков если погибнет</div>'
+      +'</div>'
+    +'</div>'):'';
     z.innerHTML+=`<div class="prow ${isc?'act-p':''} ${!p.alive?'dead-p':''}">
       <div class="char-mini ${isc?'act-c':''} ${!p.alive?'dead-c':''} ${!p.conscious&&p.alive?'unc-c':''}">
         ${charCardSVG(p.char,58,84,p.wounds,isc)}
@@ -691,12 +1110,15 @@ function startQM(){
 
   document.getElementById('qm-sub').textContent=`${qmDrawn.length} карт раздаётся живым игрокам`;
   const row=document.getElementById('qm-row');row.innerHTML='';
+  const qmAlive=G.players.filter(p=>p.alive&&p.conscious);
   qmDrawn.forEach((card,i)=>{
     setTimeout(()=>{
+      const owner=qmAlive[i];
       const el=document.createElement('div');
-      el.style.cssText=`min-width:70px;height:102px;border-radius:8px;overflow:hidden;flex-shrink:0;box-shadow:3px 5px 14px rgba(0,0,0,.7)`;
-      el.innerHTML=provCardSVG(card,70,102);
-      el.classList.add('dealing');
+      el.style.cssText='display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0';
+      el.innerHTML='<div style="min-width:70px;height:102px;border-radius:8px;overflow:hidden;box-shadow:3px 5px 14px rgba(0,0,0,.7)" class="dealing">'+provCardSVG(card,70,102)+'</div>'
+        +(owner?('<div style="font-family:Cinzel,serif;font-size:9px;font-weight:700;color:var(--g2);letter-spacing:1px;text-align:center;max-width:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+owner.name+'</div>'):'');
+      el.querySelector('div').classList.add('dealing');
       row.appendChild(el);
     },i*240);
   });
@@ -782,8 +1204,9 @@ function doAct(type){
   if(type==='nothing'){addLog(`${cp.name} отдыхает.`);advTurn();}
   else if(type==='row'){
     cp.rowed=1;
-    const hasCompass=cp.hand.some(c=>c.id==='compass');
-    if(hasCompass){
+    const compassIdx=cp.hand.findIndex(c=>c.id==='compass');
+    if(compassIdx>=0){
+      cp.hand.splice(compassIdx,1);
       useCompass(cp);
     } else {
       if(G.nav.length>=2){const c1=G.nav.pop(),c2=G.nav.pop();G.rowStack.push(c1);G.nav.unshift(c2);}
@@ -812,10 +1235,10 @@ function doAct(type){
 function resistModal(attacker,target,action){
   const isSeat=action==='seat';
   openModal(
-    isSeat?`🔀 ${attacker.name} предлагает поменяться`:`🤜 ${attacker.name} хочет тебя ограбить`,
+    isSeat?`🔀 ${attacker.name} предлагает поменяться`:`⚔ ${attacker.name} хочет тебя ограбить`,
     `<div style="display:flex;gap:14px;justify-content:center;margin-bottom:14px">
       <div style="text-align:center"><div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.7)">${charCardSVG(attacker.char,80,116,attacker.wounds,false)}</div><div style="font-family:Cinzel,serif;font-size:11px;color:var(--g2);margin-top:4px">${attacker.name}</div></div>
-      <div style="font-size:30px;align-self:center">${isSeat?'🔀':'🤜'}</div>
+      <div style="align-self:center;padding-bottom:50px">${isSeat?'<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><path d="M6,10 Q16,4 26,10" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/><polygon points="5,9 9,12 5,13" fill="#c8a020"/><path d="M26,22 Q16,28 6,22" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/><polygon points="27,23 23,20 27,19" fill="#c8a020"/></svg>':'<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><ellipse cx="17" cy="17" rx="10" ry="9" fill="#b07040"/><rect x="10" y="13" width="14" height="8" rx="3" fill="#c08050"/><line x1="12" y1="13" x2="12" y2="21" stroke="#a06030" stroke-width="1"/><line x1="16" y1="13" x2="16" y2="21" stroke="#a06030" stroke-width="1"/><line x1="20" y1="13" x2="20" y2="21" stroke="#a06030" stroke-width="1"/><path d="M4,14 L2,10 M3,17 L0,15" stroke="#c8a020" stroke-width="1.5" stroke-linecap="round" opacity=".7"/></svg>'}</div>
       <div style="text-align:center"><div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.7)">${charCardSVG(target.char,80,116,target.wounds,false)}</div><div style="font-family:Cinzel,serif;font-size:11px;color:var(--g2);margin-top:4px">ТЫ</div></div>
     </div>
     <div style="font-size:13px;color:rgba(200,185,155,.8);margin-bottom:4px">${isSeat?'Поменяться местами?':'Отдать карту?'}</div>`,
@@ -901,8 +1324,8 @@ function advTurn(){
   for(let i=G.ct+1;i<G.players.length;i++){
     if(G.players[i].alive&&G.players[i].conscious&&!G.done.includes(i)){nx=i;break;}
   }
-  // Log skipped unconscious players
-  for(let i=G.ct+1;nx===-1?i<G.players.length:i<nx;i++){
+  // Log skipped unconscious players between current and next
+  for(let i=G.ct+1;i<(nx===-1?G.players.length:nx);i++){
     if(G.players[i].alive&&!G.players[i].conscious&&!G.done.includes(i)){
       G.done.push(i);addLog(`${G.players[i].name} без сознания — пропускает ход.`,'dan');
     }
@@ -943,6 +1366,7 @@ function endDay(){
     if(p.wounds<p.char.size){p.conscious=1;addLog(`${p.name} приходит в себя.`,'suc');}
   });
   G.day++;addLog(`═══ ДЕНЬ ${G.day} ═══`,'imp');
+  if(G.day>30){addLog('30 дней в море — игра завершается!','dan');endGame();return;}
   if(G.players.filter(p=>p.alive).length<=1){endGame();return;}
   G.ct=fnext(0);
   passPhone('НОВЫЙ ДЕНЬ',`День ${G.day} начинается — передавайте телефон по очереди.`,`Фаза Квартирмейстера`,()=>{startQM();renderGame();});
@@ -958,7 +1382,12 @@ function endGame(){
     return{p,pts,parts};
   }).sort((a,b)=>b.pts-a.pts);
   const medals=['🥇','🥈','🥉'];
-  document.getElementById('score-list').innerHTML=scores.map((s,i)=>`
+  // Reveal all secrets banner
+  const secretsReveal='<div style="background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center"><div style="font-family:Cinzel,serif;font-size:12px;color:var(--g2);letter-spacing:3px;margin-bottom:8px">🔓 СЕКРЕТЫ РАСКРЫТЫ</div>'+
+    G.players.map(p=>'<div style="font-size:12px;color:rgba(200,185,155,.7);margin-bottom:4px;font-style:italic">'+p.name+
+    ' — ❤ любил <b style=\'color:#ff80a0\'>'+G.players[p.love]?.name+'</b>, 💀 ненавидел <b style=\'color:#ff6060\'>'+G.players[p.hate]?.name+'</b></div>').join('')+
+    '</div>';
+  document.getElementById('score-list').innerHTML=secretsReveal+scores.map((s,i)=>`
     <div class="se">
       <div class="se-rank">${medals[i]||`${i+1}`}</div>
       <div class="se-cw">${charCardSVG(s.p.char,56,80,s.p.wounds,false)}</div>
@@ -1013,7 +1442,7 @@ Object.assign(window, {
 });
 
 // ── INIT ──
-renderPL();renderFan();
+renderPL();renderFan();renderActionIcons();
 </script>
 </body>
 </html>
