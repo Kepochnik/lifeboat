@@ -6,27 +6,149 @@
 <title>Lifeboat — За Бортом</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700&family=IM+Fell+English:ital@0;1&display=swap');
-:root{
-  --p:#f5e9c4;--p2:#e8d49a;--p3:#c8aa60;
-  --g:#c8920a;--g2:#e4a820;--g3:#f8d040;
-  --rust:#7a2008;--rust2:#b03010;
-  --w1:#2e1408;--w2:#5a2e10;--w3:#8a4a1a;
-  --sea:#0d2638;--sea2:#1a4060;
-  --love:#c03060;--hate:#980808;
+
+/* ═══════════════════════════════
+   DARK THEME — Deep Ocean Night
+═══════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg:         #0a0c0f;
+  --bg2:        #0f1318;
+  --bg3:        #141a22;
+  --surface:    #161c24;
+  --surface2:   #1c2530;
+  --surface3:   #222e3c;
+
+  /* Borders */
+  --bdr:        rgba(180,140,60,.15);
+  --bdr2:       rgba(180,140,60,.28);
+  --bdr3:       rgba(180,140,60,.45);
+
+  /* Text */
+  --txt:        #e8dfc8;
+  --txt2:       #a89870;
+  --txt3:       #5a5040;
+
+  /* Accent — aged brass / gold */
+  --gold:       #c8920a;
+  --gold2:      #e4a820;
+  --gold3:      #f0c040;
+
+  /* Status */
+  --hp-ok:      #3acc7a;
+  --hp-w:       #cc3a3a;
+
+  /* Semantic */
+  --love-bg:    rgba(140,20,60,.4);
+  --love-bdr:   rgba(200,50,100,.3);
+  --hate-bg:    rgba(120,10,10,.4);
+  --hate-bdr:   rgba(180,20,20,.3);
+
+  /* Shadows */
+  --shadow:     rgba(0,0,0,.7);
+  --shadow2:    rgba(0,0,0,.4);
+
+  /* Screen backgrounds */
+  --scr-title:  radial-gradient(ellipse at 50% 25%, #0d1f2d 0%, #060a0f 100%);
+  --scr-game:   radial-gradient(ellipse at 50% 30%, #0a1520 0%, #060a0f 100%);
+  --scr-setup:  radial-gradient(ellipse at 50% 30%, #0d1f2d 0%, #060a0f 100%);
+  --scr-pass:   radial-gradient(ellipse at 50% 50%, #0d1a12 0%, #040808 100%);
+  --scr-score:  radial-gradient(ellipse at 50% 20%, #10180d 0%, #060a0f 100%);
+  --scr-rules:  radial-gradient(ellipse at 50% 30%, #0d1f2d 0%, #060a0f 100%);
+
+  /* HUD */
+  --hud-bg:     #080c10;
+  --hud-bdr:    rgba(180,140,60,.2);
+
+  /* Cards / rows */
+  --card-bg:    #161c24;
+  --card-act:   #1e2c1a;
+  --inp-bg:     rgba(255,255,255,.04);
+
+  /* Modal */
+  --modal-bg:   #0f1318;
+  --modal-bdr:  rgba(180,140,60,.3);
 }
+
+/* ═══════════════════════════════
+   LIGHT THEME — Sun & Salt Air
+═══════════════════════════════ */
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg:         #f2ede0;
+  --bg2:        #ece5d4;
+  --bg3:        #e4dcc8;
+  --surface:    #faf6ec;
+  --surface2:   #f2ebe0;
+  --surface3:   #e8e0d0;
+
+  /* Borders */
+  --bdr:        rgba(80,55,20,.12);
+  --bdr2:       rgba(80,55,20,.22);
+  --bdr3:       rgba(80,55,20,.38);
+
+  /* Text */
+  --txt:        #1a1208;
+  --txt2:       #4a3820;
+  --txt3:       #8a7050;
+
+  /* Accent */
+  --gold:       #8a5e00;
+  --gold2:      #b07a00;
+  --gold3:      #d09000;
+
+  /* Status */
+  --hp-ok:      #1a8040;
+  --hp-w:       #b02020;
+
+  /* Semantic */
+  --love-bg:    rgba(160,20,60,.1);
+  --love-bdr:   rgba(180,40,80,.25);
+  --hate-bg:    rgba(140,10,10,.1);
+  --hate-bdr:   rgba(160,20,20,.25);
+
+  /* Shadows */
+  --shadow:     rgba(20,12,0,.18);
+  --shadow2:    rgba(20,12,0,.1);
+
+  /* Screen backgrounds */
+  --scr-title:  linear-gradient(160deg, #e8dfc8 0%, #d4c8a8 100%);
+  --scr-game:   linear-gradient(160deg, #eae2cc 0%, #d8cfb8 100%);
+  --scr-setup:  linear-gradient(160deg, #e8dfc8 0%, #d4c8a8 100%);
+  --scr-pass:   linear-gradient(160deg, #1a2d40 0%, #0d1a28 100%);
+  --scr-score:  linear-gradient(160deg, #e8dfc8 0%, #d4c8a8 100%);
+  --scr-rules:  linear-gradient(160deg, #e8dfc8 0%, #d4c8a8 100%);
+
+  /* HUD — always dark for readability */
+  --hud-bg:     #0f1a24;
+  --hud-bdr:    rgba(180,140,60,.25);
+
+  /* Cards / rows */
+  --card-bg:    #faf6ec;
+  --card-act:   #eef5e8;
+  --inp-bg:     rgba(255,255,255,.8);
+
+  /* Modal */
+  --modal-bg:   #f8f4e8;
+  --modal-bdr:  rgba(80,55,20,.25);
+}
+
+
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,serif;background:#030810;color:var(--p)}
+html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,serif;background:var(--bg);color:var(--txt)}
 #cvs{position:fixed;inset:0;z-index:0}
 .screen{position:fixed;inset:0;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column;align-items:center}
 .screen.act{display:flex}
 
 /* ── BUTTONS ── */
-.btn{display:block;width:calc(100% - 40px);max-width:300px;margin:8px auto;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:2px;color:var(--p);transition:all .15s;position:relative;overflow:hidden}
+.btn{display:block;width:calc(100% - 40px);max-width:300px;margin:8px auto;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:2px;color:var(--txt);transition:all .15s;position:relative;overflow:hidden}
 .btn:active{transform:translateY(2px) scale(.97)}
 .btn-g{background:linear-gradient(160deg,var(--w3),var(--w1));box-shadow:0 5px 16px rgba(0,0,0,.6),inset 0 1px 0 rgba(220,170,60,.2);text-shadow:1px 1px 3px rgba(0,0,0,.7)}
 .btn-g::before{content:'';position:absolute;inset:2px 3px;border:1px solid rgba(220,170,60,.22);border-radius:7px;pointer-events:none}
 .btn-o{background:transparent;border:1px solid rgba(200,145,10,.3);color:rgba(200,185,150,.6);font-size:14px;font-style:italic;font-family:'IM Fell English',serif;box-shadow:none;padding:10px 20px}
-.btn-o:active{border-color:rgba(200,145,10,.7);color:var(--p2)}
+.btn-o:active{border-color:rgba(200,145,10,.7);color:var(--txt2)}
 .btn-sm{padding:9px 14px;font-size:12px;border-radius:8px;width:auto;margin:0}
 .btn-red{background:linear-gradient(160deg,#6a0808,#3a0404)}
 .btn-grn{background:linear-gradient(160deg,#0a4a1a,#062010)}
@@ -34,68 +156,68 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 @keyframes sh{0%{left:-60%}100%{left:160%}}
 
 /* ── TITLE ── */
-#s-title{background:radial-gradient(ellipse at 50% 30%,#0d2218,#020508)}
+#s-title{background:var(--scr-title)}
 .tw{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding-bottom:40px}
-.logo-d{font-size:10px;letter-spacing:6px;color:var(--g);opacity:.5;text-transform:uppercase;margin:32px 0 8px}
+.logo-d{font-size:10px;letter-spacing:6px;color:var(--gold);opacity:.5;text-transform:uppercase;margin:32px 0 8px}
 .logo-m{font-family:'Cinzel Decorative',serif;font-size:58px;line-height:.9;background:linear-gradient(180deg,#f8e080,#e4a820 40%,#a06010 80%,#e4a820);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 4px 12px rgba(200,145,10,.5));letter-spacing:4px}
 .logo-s{font-family:'Cinzel',serif;font-size:18px;color:rgba(200,170,100,.5);letter-spacing:10px;margin-top:4px}
-.logo-hr{display:flex;align-items:center;gap:12px;margin:14px auto;max-width:260px;color:var(--g);opacity:.5}
+.logo-hr{display:flex;align-items:center;gap:12px;margin:14px auto;max-width:260px;color:var(--gold);opacity:.5}
 .logo-hr::before,.logo-hr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent)}
 .fan-w{position:relative;width:100%;height:210px;overflow:hidden;margin:10px 0}
 .fan-i{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:340px;height:210px}
 .tagline{font-style:italic;font-size:13px;color:rgba(200,185,150,.5);text-align:center;line-height:1.7;max-width:300px;margin:0 auto 24px;padding:0 20px}
 
 /* ── SETUP ── */
-#s-setup{background:radial-gradient(ellipse at 50% 30%,#0d1a10,#080f0a);padding-bottom:80px}
-.setup-hdr{width:100%;max-width:480px;background:linear-gradient(180deg,#0f0804,#1a1004);border-bottom:2px solid rgba(200,145,10,.3);padding:20px;text-align:center}
+#s-setup{background:var(--scr-setup);padding-bottom:80px}
+.setup-hdr{width:100%;max-width:480px;background:var(--hud-bg);border-bottom:1px solid var(--hud-bdr);padding:20px;text-align:center}
 .setup-hdr-t{font-family:'Cinzel Decorative',serif;font-size:20px;background:linear-gradient(180deg,var(--g3),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px}
-.setup-card{width:calc(100% - 28px);max-width:440px;margin:18px auto 0;background:rgba(0,0,0,.5);border-radius:10px;border:1px solid rgba(200,145,10,.22);padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.5)}
-.sec-lbl{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--g);letter-spacing:3px;margin-bottom:12px;display:flex;align-items:center;gap:10px;opacity:.8}
+.setup-card{width:calc(100% - 28px);max-width:440px;margin:18px auto 0;background:var(--surface);border-radius:10px;border:1px solid var(--bdr);padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.sec-lbl{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:3px;margin-bottom:12px;display:flex;align-items:center;gap:10px;opacity:.8}
 .sec-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(200,145,10,.5),transparent)}
 .cnt-row{display:flex;gap:10px;justify-content:center;margin-bottom:4px}
 .cnt-btn{width:54px;height:54px;border-radius:10px;background:rgba(40,25,8,.9);border:2px solid rgba(200,145,10,.22);font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:rgba(200,170,100,.5);cursor:pointer;transition:all .2s}
-.cnt-btn.on{background:rgba(60,30,0,.9);border-color:var(--g2);color:var(--g3);box-shadow:0 0 16px rgba(220,165,30,.4);transform:scale(1.08)}
+.cnt-btn.on{background:rgba(60,30,0,.9);border-color:var(--gold2);color:var(--gold3);box-shadow:0 0 16px rgba(220,165,30,.4);transform:scale(1.08)}
 .player-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid rgba(200,145,10,.1)}
-.player-ico{width:36px;height:36px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--sea2),var(--sea));border:1px solid rgba(200,145,10,.35);display:flex;align-items:center;justify-content:center;font-size:18px}
-.player-inp{flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.18);border-radius:6px;color:var(--p2);font-family:'IM Fell English',serif;font-size:16px;padding:7px 10px;outline:none}
-.player-inp:focus{border-color:var(--g2)}
+.player-ico{width:36px;height:36px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--sea2),var(--sea));border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.player-inp{flex:1;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:6px;color:var(--txt2);font-family:'IM Fell English',serif;font-size:16px;padding:7px 10px;outline:none}
+.player-inp:focus{border-color:var(--gold2)}
 
 /* ── PASS PHONE SCREEN ── */
-#s-pass{background:radial-gradient(ellipse at 50% 50%,#1a0a04,#040208)}
+#s-pass{background:var(--scr-pass)}
 .pass-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;width:100%;max-width:480px;padding:40px 24px;text-align:center}
 .pass-icon{font-size:80px;margin-bottom:20px;animation:pa 2s ease-in-out infinite}
 @keyframes pa{0%,100%{transform:translateX(0) rotate(-5deg)}50%{transform:translateX(20px) rotate(5deg)}}
 .pass-title{font-family:'Cinzel Decorative',serif;font-size:24px;background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:10px}
-.pass-to{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:var(--g3);margin-bottom:8px}
+.pass-to{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:var(--gold3);margin-bottom:8px}
 .pass-sub{font-size:14px;color:rgba(200,185,150,.55);font-style:italic;margin-bottom:32px;line-height:1.6;max-width:280px}
 .pass-info{font-size:11px;color:rgba(200,185,150,.3);margin-top:16px;font-style:italic}
 
 /* ── HUD ── */
-#s-game{background:radial-gradient(ellipse at 50% 40%,#0d1a10,#040808);padding-bottom:90px}
-.hud{width:100%;max-width:480px;background:linear-gradient(180deg,#0f0804,#1a1004);border-bottom:2px solid rgba(200,145,10,.28);padding:10px 14px 12px;position:sticky;top:0;z-index:30;box-shadow:0 4px 20px rgba(0,0,0,.8)}
+#s-game{background:var(--scr-game);padding-bottom:90px}
+.hud{width:100%;max-width:480px;background:var(--hud-bg);border-bottom:2px solid rgba(200,145,10,.28);padding:10px 14px 12px;position:sticky;top:0;z-index:30;box-shadow:0 4px 20px var(--shadow)}
 .hud::after{content:'';position:absolute;bottom:-7px;left:0;right:0;height:7px;background:radial-gradient(circle at 8% 0%,#1a1004 7px,transparent 8px),radial-gradient(circle at 22% 0%,#1a1004 5px,transparent 6px),radial-gradient(circle at 36% 0%,#1a1004 8px,transparent 9px),radial-gradient(circle at 50% 0%,#1a1004 5px,transparent 6px),radial-gradient(circle at 64% 0%,#1a1004 7px,transparent 8px),radial-gradient(circle at 78% 0%,#1a1004 5px,transparent 6px),radial-gradient(circle at 92% 0%,#1a1004 8px,transparent 9px)}
 .hud-row{display:flex;align-items:center;gap:8px}
 .hud-day{background:radial-gradient(var(--w2),var(--w1));border:1px solid rgba(200,145,10,.38);border-radius:8px;padding:4px 10px;text-align:center;min-width:52px}
-.hud-day-n{font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--g3);line-height:1}
-.hud-day-l{font-size:7px;letter-spacing:3px;color:var(--g);opacity:.6;text-transform:uppercase}
+.hud-day-n{font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--gold3);line-height:1}
+.hud-day-l{font-size:7px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase}
 .hud-c{flex:1;text-align:center}
 .hud-tl{font-size:8px;letter-spacing:3px;color:rgba(200,170,100,.5);text-transform:uppercase}
-.hud-tn{font-family:'Cinzel',serif;font-size:15px;font-weight:700;background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hud-tn{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold3)}
 .hud-bi{text-align:center}
 .hud-bl{font-size:7px;letter-spacing:2px;color:rgba(200,170,100,.5);text-transform:uppercase}
-.hud-br{display:flex;gap:6px;justify-content:center;margin-top:3px}
-.bip{width:28px;height:20px;display:flex;align-items:center;justify-content:center;opacity:.2;transition:all .5s;color:#888}
-.bip.lit{opacity:1;color:#ffd700;filter:drop-shadow(0 0 6px rgba(255,215,0,.8));animation:bflap .6s ease}
+.hud-br{display:flex;gap:4px;justify-content:center;margin-top:3px}
+.bip{width:22px;height:16px}.bip svg{width:100%;height:100%;opacity:.18;transition:all .4s}
+.bip.lit svg{opacity:1;filter:drop-shadow(0 0 6px rgba(255,215,0,.9));animation:bflap .5s ease}
 @keyframes bflap{0%,100%{transform:scale(1)}50%{transform:scale(1.4) translateY(-3px)}}
 .phase-bar{display:flex;gap:3px;margin-top:8px}
 .ph{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:all .3s}
 .ph.act{background:var(--g3);box-shadow:0 0 8px var(--g3)}
 .ph.dn{background:rgba(220,160,30,.35)}
-.hud-pn{text-align:center;font-size:8px;letter-spacing:4px;color:var(--g2);opacity:.8;margin-top:4px;text-transform:uppercase}
+.hud-pn{text-align:center;font-size:8px;letter-spacing:4px;color:var(--gold2);opacity:.8;margin-top:4px;text-transform:uppercase}
 
 /* ── QM PHASE ── */
 .qm-zone{width:100%;max-width:480px;padding:14px 12px}
-.qm-hdr{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--g2);letter-spacing:2px;text-align:center;margin-bottom:4px}
+.qm-hdr{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold2);letter-spacing:2px;text-align:center;margin-bottom:4px}
 .qm-sub{font-size:12px;color:rgba(200,185,150,.55);text-align:center;font-style:italic;margin-bottom:14px;line-height:1.5}
 .qm-row{display:flex;gap:10px;overflow-x:auto;padding:8px 0 12px;scrollbar-width:none;justify-content:center;min-height:130px;align-items:center}
 .qm-row::-webkit-scrollbar{display:none}
@@ -104,11 +226,11 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .qm-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px}
 
 /* Dispute panel */
-.dispute-panel{background:rgba(0,0,0,.5);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-top:10px;display:none}
-.dispute-t{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--g2);letter-spacing:2px;margin-bottom:8px;text-align:center}
+.dispute-panel{background:var(--surface);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-top:10px;display:none}
+.dispute-t{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--gold2);letter-spacing:2px;margin-bottom:8px;text-align:center}
 .dispute-votes{display:flex;flex-direction:column;gap:6px}
 .vote-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(0,0,0,.3);border-radius:6px;border:1px solid rgba(200,145,10,.1)}
-.vote-name{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--p)}
+.vote-name{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--txt)}
 .vote-btns{display:flex;gap:6px}
 .vbtn{padding:4px 10px;border-radius:5px;border:1px solid;font-family:'Cinzel',serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
 .vbtn-yes{background:rgba(8,50,20,.8);border-color:rgba(40,180,60,.4);color:#60d070}
@@ -118,24 +240,24 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 
 /* ── PLAYERS ── */
 .players-zone{width:100%;max-width:480px;padding:14px 12px 4px;display:flex;flex-direction:column;gap:8px}
-.prow{display:flex;align-items:stretch;gap:8px;background:rgba(0,0,0,.35);border-radius:10px;border:1px solid rgba(200,145,10,.1);padding:8px;transition:all .2s;position:relative;overflow:hidden}
+.prow{display:flex;align-items:stretch;gap:8px;background:var(--surface);border-radius:10px;border:1px solid rgba(200,145,10,.1);padding:8px;transition:all .2s;position:relative;overflow:hidden}
 .prow.act-p{border-color:rgba(255,215,0,.42);background:rgba(50,30,0,.45);box-shadow:0 0 20px rgba(255,215,0,.1)}
 .prow.dead-p{opacity:.4;filter:grayscale(.7)}
 .prow.act-p::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.05),transparent);animation:rg 2s ease-in-out infinite;pointer-events:none}
 @keyframes rg{0%,100%{opacity:0}50%{opacity:1}}
 .char-mini{width:58px;flex-shrink:0;border-radius:8px;overflow:hidden;border:1.5px solid rgba(200,145,10,.45);box-shadow:0 4px 10px rgba(0,0,0,.6);position:relative}
-.char-mini.act-c{border-color:var(--g3);box-shadow:0 0 14px rgba(255,215,0,.5)}
+.char-mini.act-c{border-color:var(--gold3);box-shadow:0 0 14px rgba(255,215,0,.5)}
 .char-mini.dead-c{filter:grayscale(1) brightness(.4)}
 .char-mini.unc-c{filter:brightness(.5) saturate(.3)}
 .c-badge{position:absolute;bottom:2px;right:2px;font-size:13px}
 .p-info{flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
-.pname{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--p);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pname{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pname.act-n{background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .char-sm{font-size:10px;color:rgba(200,170,100,.5);font-style:italic}
 .hp-track{display:flex;gap:2px;flex-wrap:wrap;align-items:center;margin-top:3px}
 .pp{width:7px;height:7px;border-radius:2px;transition:all .3s}
-.pp.ok{background:#2add6a;box-shadow:0 0 5px rgba(42,221,106,.6)}
-.pp.w{background:#dd2a2a;box-shadow:0 0 5px rgba(221,42,42,.6)}
+.pp.ok{background:var(--hp-ok);box-shadow:0 0 5px rgba(42,221,106,.6)}
+.pp.w{background:var(--hp-w);box-shadow:0 0 5px rgba(221,42,42,.6)}
 .pp.l{background:rgba(255,255,255,.08)}
 .hp-lbl{font-size:8px;color:rgba(200,170,100,.5);margin-left:4px;font-family:'Cinzel',serif}
 .p-chips{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
@@ -153,7 +275,7 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 /* ── HAND ── */
 .hand-zone{width:100%;max-width:480px;padding:12px 12px 0}
 .zone-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.zone-t{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--g2);letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.zone-t{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:2px;display:flex;align-items:center;gap:8px}
 .zone-t::before{content:'';width:20px;height:1px;background:linear-gradient(90deg,transparent,var(--g))}
 .zone-c{font-size:11px;color:rgba(200,170,100,.5);font-style:italic}
 .hand-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none}
@@ -167,7 +289,7 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .at-bg{position:absolute;inset:0}
 .at-frame{position:absolute;inset:0;border-radius:10px;box-shadow:inset 0 0 0 2px rgba(200,145,10,.45),inset 0 0 0 4px rgba(200,145,10,.08);pointer-events:none}
 .at-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;gap:4px}
-.at-art{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.at-art{font-size:36px}
 .at-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .at-desc{font-size:9px;text-align:center;line-height:1.3;opacity:.65;font-style:italic}
 .act-rest .at-bg{background:linear-gradient(160deg,#1a2030,#0a1020)}.act-rest .at-name{color:#8090c0}
@@ -177,37 +299,37 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 
 /* ── CHAT ── */
 .chat-zone{width:100%;max-width:480px;padding:0 12px;margin-top:10px}
-.chat-card{background:rgba(0,0,0,.5);border:1px solid rgba(200,145,10,.18);border-radius:10px;overflow:hidden}
-.chat-hdr{background:linear-gradient(90deg,#0f0804,#1a1004);padding:7px 14px;border-bottom:1px solid rgba(200,145,10,.12);font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--g);letter-spacing:3px}
+.chat-card{background:var(--surface);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+.chat-hdr{background:linear-gradient(90deg,#0f0804,#1a1004);padding:7px 14px;border-bottom:1px solid rgba(200,145,10,.12);font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:3px}
 .chat-msgs{padding:8px 12px;max-height:130px;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:4px}
 .chat-msgs::-webkit-scrollbar{display:none}
 .chat-msg{display:flex;gap:6px;align-items:baseline}
-.chat-msg-n{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--g2);flex-shrink:0;min-width:56px}
+.chat-msg-n{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold2);flex-shrink:0;min-width:56px}
 .chat-msg-t{font-size:12px;color:rgba(200,185,155,.8);line-height:1.4;font-style:italic;word-break:break-word}
 .chat-msg.sys .chat-msg-n{color:rgba(200,145,10,.6)}
 .chat-msg.sys .chat-msg-t{color:rgba(200,145,10,.65);font-size:11px}
 .chat-inp-row{display:flex;gap:8px;padding:8px 10px;border-top:1px solid rgba(200,145,10,.1)}
-.chat-inp{flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.18);border-radius:6px;color:var(--p);font-family:'IM Fell English',serif;font-size:14px;padding:6px 10px;outline:none}
-.chat-inp:focus{border-color:var(--g2)}
-.chat-send{width:36px;height:36px;border-radius:6px;background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid rgba(200,145,10,.3);cursor:pointer;font-size:16px;color:var(--p);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.chat-inp{flex:1;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:6px;color:var(--txt);font-family:'IM Fell English',serif;font-size:14px;padding:6px 10px;outline:none}
+.chat-inp:focus{border-color:var(--gold2)}
+.chat-send{width:36px;height:36px;border-radius:6px;background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid rgba(200,145,10,.3);cursor:pointer;font-size:16px;color:var(--txt);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
 .chat-send:active{transform:scale(.9)}
 
 /* ── LOG ── */
 .log-zone{width:100%;max-width:480px;padding:0 12px;margin-top:10px}
-.log-card{background:rgba(0,0,0,.5);border:1px solid rgba(200,145,10,.15);border-radius:10px;overflow:hidden}
-.log-hdr{background:linear-gradient(90deg,#0f0804,#1a1004);padding:7px 14px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--g);letter-spacing:3px;border-bottom:1px solid rgba(200,145,10,.1)}
+.log-card{background:var(--surface);border:1px solid rgba(200,145,10,.15);border-radius:10px;overflow:hidden}
+.log-hdr{background:linear-gradient(90deg,#0f0804,#1a1004);padding:7px 14px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:3px;border-bottom:1px solid rgba(200,145,10,.1)}
 .log-body{padding:10px 12px;max-height:100px;overflow-y:auto;scrollbar-width:none}
 .log-body::-webkit-scrollbar{display:none}
 .log-line{font-style:italic;font-size:12px;color:rgba(200,185,155,.6);line-height:1.65;padding-left:12px;position:relative}
 .log-line::before{content:'›';position:absolute;left:0;opacity:.5}
-.log-line.imp{color:var(--g2);font-style:normal;font-weight:600;opacity:1}
+.log-line.imp{color:var(--gold2);font-style:normal;font-weight:600;opacity:1}
 .log-line.suc{color:#60c060;opacity:1;font-style:normal}
 .log-line.dan{color:#e05050;opacity:1}
 
 /* ── MODAL ── */
 .mv{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
 .mv.open{display:flex}
-.ms{background:linear-gradient(175deg,#1a1206,#0d0a04);border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:0 0 44px;overflow:hidden;box-shadow:0 -12px 56px rgba(0,0,0,.9),inset 0 1px 0 rgba(220,165,30,.18);animation:sup .35s cubic-bezier(.34,1.56,.64,1);border-top:2px solid rgba(200,145,10,.35)}
+.ms{background:var(--modal-bg);border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:0 0 44px;overflow:hidden;box-shadow:0 -12px 56px rgba(0,0,0,.9),inset 0 1px 0 rgba(220,165,30,.18);animation:sup .35s cubic-bezier(.34,1.56,.64,1);border-top:1px solid var(--modal-bdr)}
 @keyframes sup{from{transform:translateY(140px);opacity:0}to{transform:translateY(0);opacity:1}}
 .ms-handle{width:40px;height:4px;background:rgba(200,145,10,.38);border-radius:2px;margin:12px auto 16px}
 .ms-bi{padding:0 20px}
@@ -215,7 +337,7 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .ms-div{height:1px;background:linear-gradient(90deg,transparent,rgba(200,145,10,.45),transparent);margin:0 0 14px}
 .ms-cnt{font-size:14px;line-height:1.75;color:rgba(200,185,155,.88);text-align:center;margin-bottom:16px}
 .ms-btns{display:flex;gap:10px;flex-wrap:wrap}
-.ms-btn{flex:1;min-width:110px;padding:13px 16px;background:linear-gradient(160deg,var(--w3),var(--w1));border:1px solid rgba(200,145,10,.28);border-radius:8px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--p);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:all .15s}
+.ms-btn{flex:1;min-width:110px;padding:13px 16px;background:linear-gradient(160deg,var(--w3),var(--w1));border:1px solid rgba(200,145,10,.28);border-radius:8px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--txt);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:all .15s}
 .ms-btn:active{transform:translateY(1px)}
 .ms-btn.red{background:linear-gradient(160deg,#6a0808,#3a0404)}
 .ms-btn.grn{background:linear-gradient(160deg,#0a4a1a,#062010)}
@@ -226,18 +348,18 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 @keyframes cardflip{from{transform:rotateY(-90deg);opacity:0}to{transform:rotateY(0);opacity:1}}
 
 /* ── SCORE ── */
-#s-score{background:radial-gradient(ellipse at 50% 30%,#1a1206,#050302);padding-bottom:60px}
+#s-score{background:var(--scr-score);padding-bottom:60px}
 .score-hdr{width:100%;max-width:480px;padding:28px 20px 20px;text-align:center}
 .score-icon{font-size:52px;display:block;margin-bottom:12px}
 .score-ttl{font-family:'Cinzel Decorative',serif;font-size:30px;background:linear-gradient(180deg,var(--g3),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px}
 .score-sub{font-style:italic;font-size:13px;color:rgba(200,185,155,.5);margin-top:6px}
 .score-div{width:100%;max-width:440px;margin:16px auto;height:1px;background:linear-gradient(90deg,transparent,rgba(200,145,10,.5),transparent)}
 .score-list{width:100%;max-width:440px;padding:0 14px}
-.se{display:flex;align-items:stretch;gap:10px;margin-bottom:12px;background:rgba(0,0,0,.4);border-radius:10px;border:1px solid rgba(200,145,10,.18);overflow:hidden}
+.se{display:flex;align-items:stretch;gap:10px;margin-bottom:12px;background:var(--inp-bg);border-radius:10px;border:1px solid var(--bdr);overflow:hidden}
 .se-rank{width:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(0,0,0,.3);border-right:1px solid rgba(200,145,10,.1)}
 .se-cw{width:56px;flex-shrink:0;overflow:hidden}
 .se-info{flex:1;padding:10px 8px 10px 0;min-width:0}
-.se-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--p)}
+.se-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--txt)}
 .se-bd{font-size:10px;color:rgba(200,170,100,.5);font-style:italic;line-height:1.5;margin-top:2px}
 .se-sec{font-size:10px;color:rgba(200,170,100,.4);margin-top:3px}
 .se-pts-w{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 14px;background:rgba(0,0,0,.3);border-left:1px solid rgba(200,145,10,.1)}
@@ -245,34 +367,200 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 .se-pts-l{font-size:8px;letter-spacing:2px;color:rgba(200,145,10,.6);text-transform:uppercase}
 
 /* ── RULES ── */
-#s-rules{background:radial-gradient(ellipse at 50% 30%,#0d1a10,#040808);padding-bottom:60px}
-.rules-hdr{width:100%;max-width:480px;padding:22px 20px 18px;background:linear-gradient(180deg,#0f0804,#1a1004);border-bottom:2px solid rgba(200,145,10,.25);text-align:center}
+#s-rules{background:var(--scr-rules);padding-bottom:60px}
+.rules-hdr{width:100%;max-width:480px;padding:22px 20px 18px;background:var(--hud-bg);border-bottom:2px solid rgba(200,145,10,.25);text-align:center}
 .rules-ttl{font-family:'Cinzel Decorative',serif;font-size:22px;background:linear-gradient(90deg,var(--g),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px}
-.rb{width:calc(100% - 24px);max-width:440px;margin:14px auto 0;background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.18);border-radius:10px;padding:14px}
-.rb-t{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--g2);letter-spacing:2px;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid rgba(200,145,10,.12)}
+.rb{width:calc(100% - 24px);max-width:440px;margin:14px auto 0;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:10px;padding:14px}
+.rb-t{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:2px;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid rgba(200,145,10,.12)}
 .rb-x{font-size:13px;line-height:1.8;color:rgba(200,185,155,.82)}
 
 /* Toast */
-.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid var(--g2);border-radius:8px;padding:10px 22px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1px;color:var(--p);z-index:200;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.7);animation:tp .3s ease,tf .3s ease 2.5s forwards}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid var(--g2);border-radius:8px;padding:10px 22px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1px;color:var(--txt);z-index:200;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.7);animation:tp .3s ease,tf .3s ease 2.5s forwards}
 @keyframes tp{from{opacity:0;transform:translateX(-50%) scale(.7) translateY(-14px)}to{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}}
 @keyframes tf{to{opacity:0;transform:translateX(-50%) translateY(-14px)}}
 
-/* Secret cards row */
-.sec-cards-row{display:flex;gap:8px;margin-top:8px}
-.sec-card{flex:1;padding:8px 10px;border-radius:8px;border:1px solid;display:flex;flex-direction:column;gap:2px}
-.sec-card-love{background:rgba(120,0,50,.4);border-color:rgba(220,60,110,.35)}
-.sec-card-hate{background:rgba(90,0,0,.4);border-color:rgba(200,40,40,.35)}
-.sec-card-label{font-family:'Cinzel',serif;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
-.sec-card-love .sec-card-label{color:#ff80a0;opacity:.8}
-.sec-card-hate .sec-card-label{color:#ff7070;opacity:.8}
-.sec-card-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--p)}
-.sec-card-pts{font-size:9px;font-style:italic;opacity:.55;color:var(--p2);line-height:1.3}
-.sec-card-love .sec-card-pts{color:#ffb0c8}
-.sec-card-hate .sec-card-pts{color:#ffb0b0}
+.prow{display:flex;align-items:stretch;background:var(--surface);border-radius:12px;border:1px solid rgba(200,145,10,.12);margin-bottom:8px;overflow:hidden;transition:all .2s}
+.prow.act-p{border-color:rgba(255,215,0,.45);background:rgba(50,30,0,.45);box-shadow:0 0 0 1px rgba(255,215,0,.2),0 4px 16px rgba(200,145,10,.15)}
+.prow.dead-p{opacity:.42;filter:grayscale(.6)}
+.prow-portrait{width:52px;flex-shrink:0;position:relative;overflow:hidden}
+.prow-portrait-act{box-shadow:inset 0 0 0 2px rgba(255,215,0,.6)}
+.prow-portrait-dead{filter:grayscale(1) brightness(.45)}
+.prow-portrait-unc{filter:brightness(.5) saturate(.3)}
+.prow-status-badge{position:absolute;bottom:3px;right:3px;font-size:12px}
+.prow-info{flex:1;padding:9px 11px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.prow-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.prow-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow-name-act{background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.prow-status{font-size:10px;font-weight:600;flex-shrink:0}
+.prow-charname{font-size:10px;color:rgba(200,170,100,.5)}
+.prow-hp-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.prow-tag{font-size:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:1px 5px;color:rgba(200,185,155,.7)}
+.hp-track{display:flex;gap:2px}
+.pp,.hpdot{width:10px;height:10px;border-radius:50%;transition:all .3s;flex-shrink:0}
+.pp.ok,.hpdot.ok{background:var(--hp-ok);box-shadow:0 0 5px rgba(58,204,122,.6)}
+.pp.w,.hpdot.w{background:var(--hp-w);box-shadow:0 0 5px rgba(204,58,58,.6)}
+.pp.l,.hpdot.l{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.hp-lbl{font-size:9px;color:rgba(200,170,100,.5);font-family:'Cinzel',serif}
+.inline-secrets{display:flex;gap:6px;margin-top:3px}
+.isec{flex:1;display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;border:1px solid}
+.isec-love{background:var(--love-bg);border-color:var(--love-bdr)}
+.isec-hate{background:var(--hate-bg);border-color:var(--hate-bdr)}
+.isec-icon{font-size:16px;flex-shrink:0}
+.isec-body{min-width:0}
+.isec-role{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.6}
+.isec-love .isec-role{color:#ff80a0}
+.isec-hate .isec-role{color:#ff7070}
+.isec-name{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--txt);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.isec-pts{font-size:9px;color:rgba(200,185,155,.55);margin-top:1px}
+[data-theme=light] body{background:#e8dcc8 !important;color:#1a0c04 !important}
+[data-theme=light] #s-title{background:linear-gradient(180deg,#e8dcc8,#d4c090) !important}
+[data-theme=light] #s-setup{background:linear-gradient(180deg,#e8dcc8,#d4c090) !important}
+[data-theme=light] #s-game{background:linear-gradient(180deg,#e0d4b8,#ccc090) !important}
+[data-theme=light] #s-rules{background:linear-gradient(180deg,#e8dcc8,#d4c090) !important}
+[data-theme=light] #s-score{background:linear-gradient(180deg,#e8dcc8,#d4c090) !important}
+[data-theme=light] #s-pass{background:linear-gradient(160deg,#5a3a10,#3a2008) !important}
+[data-theme=light] .pass-title{-webkit-text-fill-color:#f8e0a0 !important;color:#f8e0a0 !important}
+[data-theme=light] .pass-to{color:#f8d040 !important}
+[data-theme=light] .pass-sub{color:rgba(240,220,180,.8) !important}
+[data-theme=light] .setup-card{background:rgba(255,255,255,.75) !important;border-color:rgba(140,90,20,.3) !important}
+[data-theme=light] .player-inp{background:#fff !important;color:#1a0c04 !important}
+[data-theme=light] .prow{background:rgba(255,255,255,.7) !important;border-color:rgba(140,90,20,.2) !important}
+[data-theme=light] .prow.act-p{background:rgba(255,230,160,.5) !important}
+[data-theme=light] .prow-name{color:#1a0c04 !important}
+[data-theme=light] .log-card,[data-theme=light] .chat-card{background:rgba(255,255,255,.7) !important}
+[data-theme=light] .log-line{color:#3a2010 !important}
+[data-theme=light] .act-tile{background:rgba(255,255,255,.75) !important;border-color:rgba(140,90,20,.22) !important}
+[data-theme=light] .modal-sheet{background:linear-gradient(180deg,#f5ecd8,#e8d8b0) !important}
+[data-theme=light] .modal-title{color:#3a1808 !important}
+[data-theme=light] .modal-content{color:#3a2010 !important}
+
+/* ── ELEMENT THEME OVERRIDES ── */
+/* Pass screen text always light (bg is dark) */
+.pass-title{font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--gold3);letter-spacing:3px;margin-bottom:10px}
+.pass-to{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:#f8e0a0;margin-bottom:8px}
+.pass-sub{font-size:14px;color:rgba(240,220,180,.65);font-style:italic;margin-bottom:32px;line-height:1.6;max-width:280px}
+
+/* Log lines use CSS var for text */
+.log-line,.lline{color:var(--txt2);opacity:.8}
+.log-line.imp,.lline.imp{color:var(--gold2);opacity:1;font-weight:600}
+.log-line.suc,.lline.suc{color:var(--hp-ok);opacity:1}
+.log-line.dan,.lline.dan{color:var(--hp-w);opacity:1}
+
+/* Section titles */
+.zone-t,.sec-lbl,.block-label,.section-title{color:var(--gold)}
+
+/* Setup */
+.setup-card,.setup-block{background:var(--surface);border:1px solid var(--bdr);box-shadow:0 4px 16px var(--shadow2)}
+.player-row{background:var(--surface2);border:1px solid var(--bdr)}
+.player-inp{background:var(--inp-bg);color:var(--txt);border:1px solid var(--bdr)}
+.player-inp::placeholder{color:var(--txt3)}
+.player-inp:focus{border-color:var(--gold2)}
+
+/* Player rows */
+.prow{background:var(--surface);border:1px solid var(--bdr)}
+.prow.act-p{background:var(--card-act);border-color:rgba(180,140,60,.45)}
+.prow-name{color:var(--txt)}
+.prow-charname{color:var(--txt3)}
+.hp-lbl{color:var(--txt3)}
+.prow-tag{color:var(--txt2);background:var(--surface2);border-color:var(--bdr)}
+
+/* Actions */
+.act-zone .zone-t{color:var(--gold)}
+.act-tile{border:1px solid var(--bdr);background:var(--surface)}
+.at-hint{color:var(--txt3)}
+
+/* Log / chat */
+.log-card,.chat-card,.log-box,.chat-box{background:var(--surface);border:1px solid var(--bdr)}
+.log-hdr,.chat-hdr,.log-header,.chat-header{background:var(--hud-bg);color:var(--gold);border-bottom:1px solid var(--bdr)}
+.chat-inp{background:var(--inp-bg);color:var(--txt);border-color:var(--bdr)}
+.chat-inp::placeholder{color:var(--txt3)}
+.cmsg-who{color:var(--gold)}
+.cmsg-text{color:var(--txt2)}
+
+/* QM */
+.qm-hdr{color:var(--txt)}
+.qm-sub{color:var(--txt2)}
+.dispute-panel{background:var(--surface);border:1px solid var(--bdr2)}
+.vote-item{background:var(--surface2);border-color:var(--bdr)}
+.vote-name{color:var(--txt)}
+.vote-result{color:var(--txt2)}
+
+/* Secrets */
+.isec-love{background:var(--love-bg);border-color:var(--love-bdr)}
+.isec-hate{background:var(--hate-bg);border-color:var(--hate-bdr)}
+.isec-name{color:var(--txt)}
+.isec-pts{color:var(--txt2)}
+
+/* Modal */
+.ms,.modal-sheet,.modal-veil .ms{background:var(--modal-bg)}
+.ms-ttl,.modal-title{color:var(--txt)}
+.ms-cnt,.modal-content{color:var(--txt2)}
+.mv{background:rgba(0,0,0,.88)}
+
+/* Score */
+.score-entry,.se{background:var(--surface);border-color:var(--bdr)}
+.se-rank{background:var(--surface2);border-color:var(--bdr)}
+.se-name,.score-pname{color:var(--txt)}
+.se-cname,.score-breakdown{color:var(--txt2)}
+.se-pts-wrap{background:var(--surface2);border-color:var(--bdr)}
+
+/* Rules */
+.rule-blk,.rb{background:var(--surface);border-color:var(--bdr)}
+.rule-t,.rb-t{color:var(--gold2)}
+.rule-x,.rb-x{color:var(--txt2)}
+
+/* Misc text */
+.tagline,.title-tagline{color:var(--txt2)}
+.logo-s,.logo-sub{color:var(--txt2)}
+.logo-d,.logo-deco{color:var(--gold)}
+
+/* Buttons */
+.btn-o{border-color:var(--bdr2);color:var(--txt2)}
+.cnt-btn{background:var(--surface2);border-color:var(--bdr);color:var(--txt2)}
+.cnt-btn.on{border-color:var(--gold2);color:var(--gold3)}
+
+.hp-track{display:flex;gap:3px;align-items:center;flex-wrap:wrap}
+.hp-lbl{font-size:9px;color:var(--txt3);font-family:'Cinzel',serif;margin-left:3px;letter-spacing:.5px}
+
+/* ── More prominent player names ── */
+.prow-name {
+  font-family: 'Cinzel', serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: var(--txt) !important;
+  letter-spacing: .5px;
+}
+.prow-name-act {
+  background: linear-gradient(90deg, var(--gold2), var(--gold3)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-size: 16px !important;
+}
+.prow-charname {
+  font-size: 11px !important;
+  color: var(--txt2) !important;
+  font-style: italic;
+  margin-top: 1px;
+}
+/* Bigger portrait strip */
+.prow-portrait { width: 60px !important; flex-shrink: 0; }
+
+/* HUD player name fix */
+#hud-player, .hud-tn {
+  font-family: 'Cinzel', serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--gold3) !important;
+  -webkit-text-fill-color: var(--gold3) !important;
+  letter-spacing: 1px;
+}
+.hud-tl { font-size: 9px !important; letter-spacing: 3px; color: var(--txt3) !important; text-transform: uppercase; }
 </style>
 </head>
 <body>
 <canvas id="cvs"></canvas>
+<button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Сменить тему" style="position:fixed;top:12px;right:12px;z-index:50;width:38px;height:38px;border-radius:50%;border:1px solid rgba(200,145,10,.4);background:rgba(0,0,0,.4);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.4);">🌙</button>
 
 <!-- TITLE -->
 <div id="s-title" class="screen act">
@@ -311,15 +599,7 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 <!-- PASS PHONE -->
 <div id="s-pass" class="screen">
 <div class="pass-wrap">
-  <div class="pass-icon">
-    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
-      <rect x="20" y="8" width="40" height="64" rx="6" fill="#1a1a2e" stroke="#c8920a" stroke-width="2"/>
-      <rect x="24" y="16" width="32" height="44" rx="2" fill="#0d1a10"/>
-      <circle cx="40" cy="66" r="3" fill="#c8920a"/>
-      <path d="M32,36 L40,28 L48,36 M40,28 L40,52" stroke="#e4a820" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M28,44 L52,44" stroke="rgba(200,145,10,.3)" stroke-width="1" stroke-dasharray="3 3"/>
-    </svg>
-  </div>
+  <div class="pass-icon">📱</div>
   <div class="pass-title">ПЕРЕДАЙ ТЕЛЕФОН</div>
   <div class="pass-to" id="pass-to">—</div>
   <div class="pass-sub" id="pass-sub">Не смотри на экран, пока телефон передают!</div>
@@ -334,14 +614,12 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
     <div class="hud-row">
       <div class="hud-day"><div class="hud-day-n" id="hud-day">1</div><div class="hud-day-l">ДЕНЬ</div></div>
       <div class="hud-c"><div class="hud-tl">ХОД ИГРОКА</div><div class="hud-tn" id="hud-player">—</div></div>
-      <div class="hud-bi"><div class="hud-bl">ПТИЦЫ ДО БЕРЕГА</div><div class="hud-br" id="hud-birds"></div></div>
+      <div class="hud-bi"><div class="hud-bl">ПТИЦЫ</div><div class="hud-br" id="hud-birds"></div></div>
     </div>
     <div class="phase-bar"><div class="ph act" id="ph0"></div><div class="ph" id="ph1"></div><div class="ph" id="ph2"></div></div>
     <div class="hud-pn" id="hud-phase">КВАРТИРМЕЙСТЕР</div>
   </div>
-  <div style="width:100%;max-width:480px;display:flex;justify-content:flex-end;padding:4px 12px 0">
-    <button onclick="if(confirm('Выйти из игры?'))showScr('s-title')" style="background:transparent;border:none;color:rgba(200,170,100,0.35);font-size:11px;cursor:pointer;font-family:Cinzel,serif;letter-spacing:1px;padding:2px 6px">✕ выйти</button>
-  </div>
+  <div style="width:100%;max-width:480px;display:flex;justify-content:flex-end;padding:2px 12px 0"><button onclick="askRestart()" style="background:none;border:none;color:rgba(200,145,10,.4);font-size:11px;cursor:pointer;font-family:Cinzel,serif;letter-spacing:1px;padding:3px 6px">↺ новая игра</button></div>
 
   <!-- QM Phase -->
   <div class="qm-zone" id="qm-zone" style="display:none">
@@ -354,6 +632,35 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
       <div class="dispute-votes" id="dispute-votes"></div>
       <div class="vote-result" id="vote-result"></div>
     </div>
+  </div>
+
+  <div style="width:100%;max-width:480px;margin:16px 0 0;padding:0 12px;position:relative" id="boat-section">
+    <svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.7)">
+      <defs>
+        <linearGradient id="bseag" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0e3a58"/><stop offset="100%" stop-color="#040e18"/></linearGradient>
+        <linearGradient id="bhullg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8a4a1a"/><stop offset="100%" stop-color="#2e1408"/></linearGradient>
+        <filter id="bshad"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity=".7"/></filter>
+      </defs>
+      <rect width="420" height="170" fill="url(#bseag)" rx="12"/>
+      <circle cx="370" cy="22" r="6" fill="rgba(255,245,200,0.35)"/>
+      <circle cx="30" cy="15" r="1" fill="rgba(255,255,255,0.4)"/><circle cx="150" cy="10" r="1.2" fill="rgba(255,255,255,0.5)"/><circle cx="310" cy="12" r="1" fill="rgba(255,255,255,0.4)"/>
+      <path d="M0,92 Q36,87 72,92 Q108,97 144,92 Q180,87 216,92 Q252,97 288,92 Q324,87 360,92 Q396,97 420,90" stroke="rgba(120,190,230,0.18)" stroke-width="2" fill="none"/>
+      <path d="M0,105 Q30,100 60,105 Q90,110 120,105 Q150,100 180,105 Q210,110 240,105 Q270,100 300,105 Q330,110 360,105 Q390,100 420,103" stroke="rgba(100,170,220,0.13)" stroke-width="1.5" fill="none"/>
+      <ellipse cx="210" cy="148" rx="160" ry="14" fill="rgba(0,0,0,0.4)"/>
+      <path d="M28,118 Q38,76 65,72 L355,72 Q382,76 392,118 Q370,140 210,147 Q50,140 28,118Z" fill="url(#bhullg)" filter="url(#bshad)"/>
+      <path d="M42,87 Q210,96 380,87" stroke="rgba(0,0,0,.22)" stroke-width="1.5" fill="none"/>
+      <path d="M33,106 Q210,118 387,106" stroke="rgba(0,0,0,.2)" stroke-width="1.5" fill="none"/>
+      <path d="M65,72 L355,72 Q375,74 385,82 Q210,78 35,82 Q45,74 65,72Z" fill="rgba(255,190,80,0.14)"/>
+      <path d="M65,72 L355,72" stroke="#5a3010" stroke-width="4" fill="none"/>
+      <rect x="85" y="81" width="250" height="7" rx="3" fill="#2a1206" opacity=".65"/>
+      <line x1="52" y1="98" x2="4" y2="134" stroke="#6a3010" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="1" cy="137" rx="11" ry="4.5" fill="#5a2a10" transform="rotate(-30,1,137)"/>
+      <line x1="368" y1="98" x2="416" y2="134" stroke="#6a3010" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="419" cy="137" rx="11" ry="4.5" fill="#5a2a10" transform="rotate(30,419,137)"/>
+      <text x="8" y="80" font-family="Cinzel,serif" font-size="8" fill="rgba(200,160,60,0.45)">НОС</text>
+      <text x="380" y="80" font-family="Cinzel,serif" font-size="8" fill="rgba(200,160,60,0.45)">КОРМА</text>
+    </svg>
+    <div id="pawns-layer" style="position:absolute;top:28%;left:6%;right:6%;bottom:22%;display:flex;align-items:flex-end;justify-content:space-around;pointer-events:none"></div>
   </div>
 
   <!-- Players -->
@@ -369,10 +676,10 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
   <div class="act-zone" id="act-zone">
     <div class="zone-hdr" style="margin-bottom:10px"><div class="zone-t">⚡ Выбери действие</div></div>
     <div class="act-grid">
-      <div class="act-tile act-rest" onclick="doAct('nothing')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-rest"></div><div class="at-name">НИЧЕГО</div><div class="at-desc">Спокойно сидеть</div></div></div>
-      <div class="act-tile act-row" onclick="doAct('row')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-row"></div><div class="at-name">ГРЕСТИ</div><div class="at-desc">Изучить навигационную карту</div></div></div>
-      <div class="act-tile act-seat" onclick="doAct('seat')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-seat"></div><div class="at-name">ПЕРЕСЕСТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
-      <div class="act-tile act-mug" onclick="doAct('mug')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art" id="ico-mug"></div><div class="at-name">ОГРАБИТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
+      <div class="act-tile act-rest" onclick="doAct('nothing')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">😴</div><div class="at-name">НИЧЕГО</div><div class="at-desc">Спокойно сидеть</div></div></div>
+      <div class="act-tile act-row" onclick="doAct('row')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🚣</div><div class="at-name">ГРЕСТИ</div><div class="at-desc">Изучить навигационную карту</div></div></div>
+      <div class="act-tile act-seat" onclick="doAct('seat')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🔀</div><div class="at-name">ПЕРЕСЕСТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
+      <div class="act-tile act-mug" onclick="doAct('mug')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🤜</div><div class="at-name">ОГРАБИТЬ</div><div class="at-desc">Жертва сама решает — или драка!</div></div></div>
     </div>
   </div>
 
@@ -399,16 +706,7 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 
 <!-- SCORE -->
 <div id="s-score" class="screen">
-  <div class="score-hdr"><span class="score-icon"><svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" width="80" height="60">
-  <ellipse cx="40" cy="48" rx="28" ry="8" fill="#1a3a1a"/>
-  <path d="M20,48 Q22,32 40,28 Q58,32 60,48Z" fill="#2a5a1a"/>
-  <path d="M38,28 L36,10 Q40,4 44,10 L42,28Z" fill="#3a7a20"/>
-  <path d="M36,10 Q28,14 30,22 Q36,18 38,28Z" fill="#4a9a28"/>
-  <path d="M44,10 Q52,14 50,22 Q44,18 42,28Z" fill="#4a9a28"/>
-  <circle cx="20" cy="42" r="6" fill="#c8920a" opacity=".6"/>
-  <circle cx="60" cy="44" r="4" fill="#c8920a" opacity=".4"/>
-  <path d="M5,38 Q15,34 25,38 Q35,42 45,38 Q55,34 75,36" stroke="rgba(100,160,220,.5)" stroke-width="2" fill="none"/>
-</svg></span><div class="score-ttl">ЗЕМЛЯ!</div><div class="score-sub">Берег достигнут — итоги путешествия</div></div>
+  <div class="score-hdr"><span class="score-icon">🏝</span><div class="score-ttl">ЗЕМЛЯ!</div><div class="score-sub">Берег достигнут — итоги путешествия</div></div>
   <div class="score-div"></div>
   <div class="score-list" id="score-list"></div>
   <button class="btn btn-g" style="margin-top:16px" onclick="showScr('s-title')"><div class="shine"></div>⚓ &nbsp;НОВАЯ ИГРА</button>
@@ -442,9 +740,11 @@ html,body{height:100%;overflow:hidden;font-family:'IM Fell English',Georgia,seri
 </div>
 
 <script>
+
+
 // ── OCEAN BG ──
 (()=>{
-  const c=document.getElementById('cvs'),ctx=c.getContext('2d');
+  const c=document.getElementById('cvs');if(!c||!c.getContext)return;const ctx=c.getContext('2d');
   let t=0;
   const r=()=>{c.width=innerWidth;c.height=innerHeight};r();window.addEventListener('resize',r);
   (function d(){
@@ -976,17 +1276,32 @@ const DEFS=['Александр','Виктория','Дмитрий','Мария
 function setPC(n,btn){PC=n;document.querySelectorAll('.cnt-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderPL();}
 function renderPL(){
   const l=document.getElementById('plist');l.innerHTML='';
-  for(let i=0;i<PC;i++)l.innerHTML+=`<div class="player-row"><div class="player-ico">${EICONS[i]}</div><input class="player-inp" id="pi${i}" value="${DEFS[i]}" maxlength="12"></div>`;
+  for(let i=0;i<PC;i++)l.innerHTML+=`<div class="player-row"><div class="player-ico">${EICONS[i]}</div><input class="player-inp" id="pi${i}" placeholder="Введите имя игрока" maxlength="12"></div>`;
 }
 
 function startGame(){
-  const names=[];for(let i=0;i<PC;i++){const v=document.getElementById(`pi${i}`).value.trim();names.push(v||`Игрок ${i+1}`);}
-  initGame(names);showScr('s-game');
+  const names=[];
+  for(let i=0;i<PC;i++){
+    const v=(document.getElementById('pi'+i)?.value||'').trim();
+    if(!v){
+      const inp=document.getElementById('pi'+i);
+      if(inp){
+        inp.style.borderColor='#dd2a2a';
+        inp.style.boxShadow='0 0 0 2px rgba(221,42,42,.4)';
+        inp.placeholder='⚠ Введите имя!';
+        setTimeout(()=>{inp.style.borderColor='';inp.style.boxShadow='';inp.placeholder='Введите имя игрока';},2500);
+      }
+      toast('⚠ Введите имена всех игроков!');
+      return;
+    }
+    names.push(v);
+  }
+  initGame(names);
+  showScr('s-game');
   const first=G.players[fnext(0)];
-  passPhone(first.name,'Начинается первый день — смотри только свои секреты!',`День 1, фаза Квартирмейстера`,()=>startQM());
+  passPhone(first.name,'Начинается первый день — смотри только свои секреты!','День 1',()=>startQM());
 }
 
-// ── GAME INIT ──
 function initGame(names){
   const chars=shuf([...CHARS]).slice(0,names.length);
   const prov=shuf(PROV.map(x=>({...x})));
@@ -997,6 +1312,9 @@ function initGame(names){
     do{hate=~~(Math.random()*names.length)}while(hate===i||hate===love);
     return{name,char:chars[i],pos:i,wounds:0,hand:[],alive:1,conscious:1,rowed:0,fought:0,love,hate};
   });
+  // Random seating order (shuffle in-place)
+  for(let i=players.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[players[i],players[j]]=[players[j],players[i]];}
+  players.forEach((p,i)=>p.pos=i);
   G={players,day:1,birds:0,nav,rowStack:[],prov,phase:0,ct:0,done:[],log:[]};
   addLog('Шлюпка отчалила от тонущего корабля...','imp');
 }
@@ -1009,66 +1327,97 @@ function renderGame(){
   const br=document.getElementById('hud-birds');br.innerHTML='';
   for(let i=0;i<4;i++){const lit=i<G.birds;br.innerHTML+=`<div class="bip ${lit?'lit':''}"><svg viewBox="0 0 28 20" xmlns="http://www.w3.org/2000/svg" width="28" height="20"><path d="M2,14 Q7,4 14,8 Q21,4 26,14" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="14" cy="8" r="1.5" fill="currentColor"/><path d="M14,8 Q16,6 18,7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>`;}
   for(let i=0;i<3;i++){const p=document.getElementById(`ph${i}`);p.className='ph'+(i===G.phase?' act':i<G.phase?' dn':'');}
-  document.getElementById('hud-phase').textContent=['КВАРТИРМЕЙСТЕР','ДЕЙСТВИЯ','НАВИГАЦИЯ'][G.phase]||'';
+  ['ph-0','ph-1','ph-2'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.className='phase-step '+(i===G.phase?'ph-act':i<G.phase?'ph-done':'ph-inactive');
+  });
   renderPlayers();renderHand();renderLog();
 }
 
 function renderPlayers(){
   const z=document.getElementById('players-zone');z.innerHTML='';
+  // Update boat pawns
+  const pawnsLayer=document.getElementById('pawns-layer');
+  if(pawnsLayer){
+    pawnsLayer.innerHTML=G.players.map((p,i)=>{
+      const isc=i===G.ct;
+      const dead=!p.alive;
+      const unc=!p.conscious&&p.alive;
+      const op=dead?'opacity:.35;filter:grayscale(1)':unc?'opacity:.55':'';
+      const cardBorder=isc
+        ?'border:2px solid #ffd700;box-shadow:0 0 0 3px rgba(255,215,0,.4),0 0 20px 6px rgba(255,200,0,.5);'
+        :'border:1px solid rgba(200,145,10,.4);';
+      const nameStyle=isc
+        ?'font-weight:700;color:#ffd700;background:rgba(0,0,0,.7);border-radius:3px;padding:1px 4px;'
+        :'color:rgba(220,200,160,.75);';
+      return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;'+op+'">'
+        +'<div style="width:42px;height:52px;border-radius:6px;overflow:hidden;'+cardBorder+'">'
+        +charCardSVG(p.char,42,52,p.wounds,isc)+'</div>'
+        +'<div style="font-size:9px;font-family:Cinzel,serif;'+nameStyle+'text-align:center;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.name+'</div>'
+        +(dead?'<div style="font-size:10px;line-height:1">💀</div>':unc?'<div style="font-size:10px;line-height:1">😵</div>':'')
+        +'</div>';
+    }).join('');
+  }
   G.players.forEach((p,i)=>{
     const isc=i===G.ct;
-    const chips=[`<span class="chip ${!p.alive?'chip-dead':!p.conscious?'chip-unc':'chip-ok'}">${!p.alive?'💀 ПОГИБ':!p.conscious?'😵 БЕЗ СОЗ':'✓ ЖИВ'}</span>`];
-    if(p.hand.length)chips.push(`<span class="chip chip-c">🃏 ${p.hand.length}</span>`);
-    if(p.rowed)chips.push(`<span class="chip chip-r">🚣 ГРЕБЁТ</span>`);
-    const pips=Array.from({length:p.char.size},(_,j)=>`<div class="pp ${j<p.wounds?p.alive?'w':'l':'ok'}"></div>`).join('');
     const lv=G.players[p.love],ht=G.players[p.hate];
-    const secs=isc?('<div class="sec-cards-row">'
-      +'<div class="sec-card sec-card-love">'
-        +'<div class="sec-card-label">ДРУГ</div>'
-        +'<div class="sec-card-name">'+(lv?.name||'?')+'</div>'
-        +'<div class="sec-card-pts">+' +(lv?.char?.sv||0)+' очков если выживет</div>'
+    const sc=p.alive?(!p.conscious?'#c09010':'#2add6a'):'#dd2a2a';
+    const st=!p.alive?'💀 Погиб':(!p.conscious?'😵 Без сознания':'✓ Жив');
+    const pips=Array.from({length:p.char.size},(_,j)=>'<div class="pp '+(j<p.wounds?(p.alive?'w':'l'):'ok')+'"></div>').join('');
+    const cards=p.hand.length?'<span class="prow-tag">🃏 '+p.hand.length+'</span>':'';
+    const rowTag=p.rowed?'<span class="prow-tag">🚣</span>':'';
+    const secs=isc?'<div class="inline-secrets">'
+      +'<div class="isec isec-love"><span class="isec-icon">❤</span><div class="isec-body"><div class="isec-role">ДРУГ</div><div class="isec-name">'+(lv?.name||'?')+'</div><div class="isec-pts">+'+(lv?.char?.sv||0)+' очков если выживет</div></div></div>'
+      +'<div class="isec isec-hate"><span class="isec-icon">💀</span><div class="isec-body"><div class="isec-role">ВРАГ</div><div class="isec-name">'+(ht?.name||'?')+'</div><div class="isec-pts">+'+(ht?.char?.size||0)+' очков если погибнет</div></div></div>'
+      +'</div>':'';
+    z.innerHTML+='<div class="prow '+(isc?'act-p':'')+' '+(!p.alive?'dead-p':'br')+'">'
+      +'<div class="prow-portrait '+(isc?'prow-portrait-act':'')+' '+(!p.alive?'prow-portrait-dead':'')+' '+(!p.conscious&&p.alive?'prow-portrait-unc':'')+'">'
+      +charCardSVG(p.char,60,78,p.wounds,isc)
+      +(!p.alive?'<div class="prow-status-badge">💀</div>':(!p.conscious&&p.alive?'<div class="prow-status-badge">😵</div>':''))
       +'</div>'
-      +'<div class="sec-card sec-card-hate">'
-        +'<div class="sec-card-label">ВРАГ</div>'
-        +'<div class="sec-card-name">'+(ht?.name||'?')+'</div>'
-        +'<div class="sec-card-pts">+' +(ht?.char?.size||0)+' очков если погибнет</div>'
+      +'<div class="prow-info">'
+        +'<div class="prow-top"><div class="prow-name '+(isc?'prow-name-act':'')+'">'+p.name+'</div><div class="prow-status" style="color:'+sc+'">'+st+'</div></div>'
+        +'<div class="prow-charname">'+p.char.name+'</div>'
+        +'<div class="prow-hp-row"><span style="font-size:9px;color:var(--txt3);font-family:Cinzel,serif;margin-right:4px">HP</span><div class="hp-track">'+pips+'</div><span class="hp-lbl">'+p.wounds+'/'+p.char.size+'</span>'+cards+rowTag+'</div>'
+        +secs
       +'</div>'
-    +'</div>'):'';
-    z.innerHTML+=`<div class="prow ${isc?'act-p':''} ${!p.alive?'dead-p':''}">
-      <div class="char-mini ${isc?'act-c':''} ${!p.alive?'dead-c':''} ${!p.conscious&&p.alive?'unc-c':''}">
-        ${charCardSVG(p.char,58,84,p.wounds,isc)}
-        ${!p.alive?'<div class="c-badge">💀</div>':(!p.conscious&&p.alive?'<div class="c-badge">😵</div>':'')}
-      </div>
-      <div class="p-info">
-        <div class="pname ${isc?'act-n':''}">${p.name}</div>
-        <div class="char-sm">${p.char.name}</div>
-        <div class="hp-track">${pips}<span class="hp-lbl">${p.wounds}/${p.char.size}</span></div>
-        <div class="p-chips">${chips.join('')}</div>
-        ${secs}
-      </div>
-    </div>`;
+    +'</div>';
   });
 }
 
 function renderHand(){
-  const cp=G.players[G.ct]||G.players[0];
-  document.getElementById('hand-count').textContent=`${cp.hand.length} карт`;
-  const sc=document.getElementById('hand-scroll');sc.innerHTML='';
-  if(!cp.hand.length){sc.innerHTML=`<div style="color:rgba(200,185,155,.3);font-style:italic;padding:20px 10px;font-size:13px">Нет карт на руке</div>`;return;}
-  cp.hand.forEach((card,idx)=>{
-    const el=document.createElement('div');
-    el.style.cssText=`min-width:80px;height:116px;border-radius:8px;cursor:pointer;flex-shrink:0;overflow:hidden;box-shadow:2px 4px 10px rgba(0,0,0,.6);transition:transform .2s`;
-    el.innerHTML=provCardSVG(card,80,116);
-    el.classList.add('dealing');
-    el.style.animationDelay=`${idx*80}ms`;
-    el.onclick=()=>tapCard(idx);
+  var cp=G.players[G.ct]||G.players[0];
+  var hidden=(cp.hand||[]).filter(function(c){return !c.revealed;}).length;
+  var open=(cp.hand||[]).filter(function(c){return c.revealed;}).length;
+  document.getElementById('hand-count').textContent=cp.hand.length+' карт ('+hidden+' закрытых, '+open+' открытых)';
+  var sc=document.getElementById('hand-scroll'); sc.innerHTML='';
+  if(!cp.hand.length){
+    sc.innerHTML='<div style="color:var(--txt3);font-style:italic;padding:20px 10px;font-size:13px">Нет карт на руке</div>';
+    return;
+  }
+  cp.hand.forEach(function(card,idx){
+    var el=document.createElement('div');
+    el.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0';
+    if(!card.revealed){
+      // Face-down: show back + open button
+      var back='<svg viewBox="0 0 80 116" xmlns="http://www.w3.org/2000/svg" width="80" height="116"><rect width="80" height="116" fill="#1a0e04" rx="8"/><rect x="4" y="4" width="72" height="108" fill="none" stroke="rgba(180,140,60,.4)" stroke-width="1.5" rx="5"/><text x="40" y="62" text-anchor="middle" dominant-baseline="middle" font-size="32" fill="rgba(180,140,60,.3)">☠</text><text x="40" y="88" text-anchor="middle" font-size="8" fill="rgba(180,140,60,.35)" font-family="Cinzel,serif" letter-spacing="2">ЗАКРЫТАЯ</text></svg>';
+      el.innerHTML='<div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:2px 4px 10px var(--shadow)" class="dealing">'+back+'</div>'
+        +'<button onclick="event.stopPropagation();openCard('+idx+')" style="width:80px;padding:5px 0;background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;border-radius:6px;font-family:Cinzel,serif;font-size:9px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:1px">👁 ОТКРЫТЬ</button>';
+    } else {
+      // Face-up: show card
+      el.innerHTML='<div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:2px 4px 10px var(--shadow);border:1.5px solid var(--bdr2)" class="dealing">'+provCardSVG(card,80,116)+'</div>'
+        +'<div style="font-size:8px;font-family:Cinzel,serif;color:var(--txt3);letter-spacing:1px">'+(card.permanent?'⚓ ПОСТОЯННАЯ':'ОТКРЫТАЯ')+'</div>';
+      el.style.cursor='pointer';
+      el.onclick=function(){tapCard(idx);};
+    }
+    el.style.animationDelay=(idx*80)+'ms';
     sc.appendChild(el);
   });
 }
 
 function renderLog(){
   const el=document.getElementById('log-body');
-  el.innerHTML=G.log.slice(-24).map(e=>`<div class="log-line ${e.t||''}">${e.m}</div>`).join('');
+  el.innerHTML=G.log.slice(-24).map(e=>`<div class="lline ${e.t||''}">${e.m}</div>`).join('');
   el.scrollTop=el.scrollHeight;
 }
 function addLog(m,t=''){G.log.push({m,t});if(document.getElementById('log-body'))renderLog();}
@@ -1083,7 +1432,7 @@ function sendChat(){
 function addSysMsg(m){chatLog.push({name:'⚓',text:m,sys:true});renderChat();}
 function renderChat(){
   const el=document.getElementById('chat-msgs');if(!el)return;
-  el.innerHTML=chatLog.slice(-40).map(m=>`<div class="chat-msg ${m.sys?'sys':''}"><div class="chat-msg-n">${m.name}</div><div class="chat-msg-t">${escHtml(m.text)}</div></div>`).join('');
+  el.innerHTML=chatLog.slice(-40).map(m=>`<div class="cmsg ${m.sys?'sys':''}"><div class="cmsg-who">${m.name}</div><div class="cmsg-text">${escHtml(m.text)}</div></div>`).join('');
   el.scrollTop=el.scrollHeight;
 }
 function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1092,44 +1441,170 @@ function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 let qmDrawn=[], qmVotes={};
 
 function startQM(){
-  G.phase=0;renderGame();
+  G.phase=0; renderGame();
   document.getElementById('qm-zone').style.display='block';
   document.getElementById('act-zone').style.display='none';
-  document.getElementById('dispute-panel').style.display='none';
+  var dp=document.getElementById('dispute-panel');
+  if(dp) dp.style.display='none';
 
-  const alive=G.players.filter(p=>p.alive&&p.conscious);
-  qmDrawn=[];
-  for(let i=0;i<alive.length;i++)if(G.prov.length)qmDrawn.push(G.prov.pop());
+  var alive=G.players.filter(function(p){return p.alive&&p.conscious;});
+  if(!alive.length){startActions();return;}
 
-  if(!qmDrawn.length){
-    document.getElementById('qm-sub').textContent='Припасы закончились! Голодать...';
-    document.getElementById('qm-row').innerHTML='<div style="font-size:32px;opacity:.4">📦</div>';
-    document.getElementById('qm-actions').innerHTML=`<button class="btn btn-g btn-sm" onclick="closeQM();startActions()"><div class="shine"></div>Продолжить</button>`;
-    addLog('Припасы закончились!','dan');return;
+  // Draw N cards (one per alive player)
+  var pile=[];
+  for(var i=0;i<alive.length;i++) if(G.prov.length) pile.push(G.prov.pop());
+
+  if(!pile.length){
+    document.getElementById('qm-sub').textContent='Припасы закончились!';
+    document.getElementById('qm-row').innerHTML='<div style="font-size:32px;opacity:.4;width:100%;text-align:center">📦</div>';
+    document.getElementById('qm-actions').innerHTML='<button class="qm-btn qm-btn-accept" onclick="doStartActions()">Продолжить →</button>';
+    addLog('Припасы закончились!','dan');
+    return;
   }
 
-  document.getElementById('qm-sub').textContent=`${qmDrawn.length} карт раздаётся живым игрокам`;
-  const row=document.getElementById('qm-row');row.innerHTML='';
-  const qmAlive=G.players.filter(p=>p.alive&&p.conscious);
-  qmDrawn.forEach((card,i)=>{
-    setTimeout(()=>{
-      const owner=qmAlive[i];
-      const el=document.createElement('div');
-      el.style.cssText='display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0';
-      el.innerHTML='<div style="min-width:70px;height:102px;border-radius:8px;overflow:hidden;box-shadow:3px 5px 14px rgba(0,0,0,.7)" class="dealing">'+provCardSVG(card,70,102)+'</div>'
-        +(owner?('<div style="font-family:Cinzel,serif;font-size:9px;font-weight:700;color:var(--g2);letter-spacing:1px;text-align:center;max-width:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+owner.name+'</div>'):'');
-      el.querySelector('div').classList.add('dealing');
-      row.appendChild(el);
-    },i*240);
+  // Store state
+  window._draft={pile:pile, alive:alive, pickerIdx:0};
+  addLog('Квартирмейстер выложил '+pile.length+' карт.','imp');
+  runDraftRound();
+}
+
+function runDraftRound(){
+  var d=window._draft;
+  // Update HUD to show current picker
+  if(d&&d.pickerIdx<d.alive.length){
+    G.ct=G.players.indexOf(d.alive[d.pickerIdx]);
+    renderGame();
+  }
+  if(!d||d.pickerIdx>=d.alive.length||d.pile.length===0){
+    // Last player gets remainder automatically
+    if(d&&d.pile.length>0){
+      d.alive[d.alive.length-1].hand=d.alive[d.alive.length-1].hand.concat(
+        d.pile.map(function(c){c.revealed=false;return c;})
+      );
+      addLog(d.alive[d.alive.length-1].name+' получает оставшиеся карты.');
+      d.pile=[];
+    }
+    addSysMsg('✓ Снаряжение роздано.');
+    closeQM();
+    var fi=fnext(0);
+    if(fi===-1){startNav();return;}
+    passPhone(G.players[fi].name,'Твой ход!','День '+G.day+' — фаза действий',function(){startActions();});
+    return;
+  }
+
+  var picker=d.alive[d.pickerIdx];
+  document.getElementById('qm-sub').textContent=picker.name+' выбирает карту ('+(d.pickerIdx+1)+'/'+d.alive.length+')';
+  document.getElementById('qm-actions').innerHTML='';
+
+  // Show face-down pile
+  var row=document.getElementById('qm-row'); row.innerHTML='';
+  var back='<svg viewBox="0 0 70 102" xmlns="http://www.w3.org/2000/svg" width="70" height="102"><rect width="70" height="102" fill="#1a0e04" rx="6"/><rect x="3" y="3" width="64" height="96" fill="none" stroke="rgba(180,140,60,.4)" stroke-width="1.5" rx="4"/><text x="35" y="55" text-anchor="middle" dominant-baseline="middle" font-size="26" fill="rgba(180,140,60,.3)">☠</text><text x="35" y="78" text-anchor="middle" font-size="8" fill="rgba(180,140,60,.35)" font-family="Cinzel,serif" letter-spacing="2">ЗАКРЫТАЯ</text></svg>';
+  d.pile.forEach(function(c,i){
+    var el=document.createElement('div');
+    el.style.cssText='flex-shrink:0;cursor:default';
+    el.innerHTML=back;
+    el.classList.add('dealing');
+    el.style.animationDelay=(i*150)+'ms';
+    row.appendChild(el);
   });
 
-  const delay=qmDrawn.length*240+400;
-  setTimeout(()=>{
-    addSysMsg(`⚖️ Квартирмейстер раздаёт ${qmDrawn.length} карт...`);
-    document.getElementById('qm-actions').innerHTML=`
-      <button class="btn btn-grn btn-sm" onclick="acceptQM()">✓ Принять раздачу</button>
-      <button class="btn btn-red btn-sm" onclick="beginDispute()">⚡ Оспорить!</button>`;
-  },delay);
+  // Pass phone to picker, then show cards face-up
+  passPhone(picker.name,
+    'Выбери карту снаряжения!',
+    d.pile.length+' карт — выбери одну, остальные уйдут следующему',
+    function(){showDraftCards(picker);}
+  );
+}
+
+function showDraftCards(picker){
+  var d=window._draft;
+  document.getElementById('qm-sub').textContent=picker.name+' — нажми на карту чтобы взять её';
+  var row=document.getElementById('qm-row'); row.innerHTML='';
+
+  d.pile.forEach(function(card,i){
+    var wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer';
+    var cd=document.createElement('div');
+    cd.style.cssText='width:80px;height:116px;border-radius:9px;overflow:hidden;border:2px solid var(--bdr2);box-shadow:3px 5px 14px var(--shadow);transition:all .15s';
+    cd.innerHTML=provCardSVG(card,80,116);
+    var lbl=document.createElement('div');
+    lbl.style.cssText='font-family:Cinzel,serif;font-size:9px;color:var(--gold);letter-spacing:1px';
+    lbl.textContent='Взять';
+    wrap.appendChild(cd); wrap.appendChild(lbl);
+    wrap.addEventListener('mouseenter',function(){cd.style.borderColor='var(--gold3)';cd.style.boxShadow='0 0 16px rgba(200,145,10,.5)';});
+    wrap.addEventListener('mouseleave',function(){cd.style.borderColor='var(--bdr2)';cd.style.boxShadow='3px 5px 14px var(--shadow)';});
+    wrap.addEventListener('click',function(){pickDraftCard(i);});
+    row.appendChild(wrap);
+  });
+
+  document.getElementById('qm-actions').innerHTML='<div style="font-size:12px;color:var(--txt2);font-style:italic;text-align:center;padding:4px 0">Выбери одну карту — остальные уйдут следующему игроку</div>';
+}
+
+function pickDraftCard(idx){
+  var d=window._draft;
+  var picker=d.alive[d.pickerIdx];
+  var card=d.pile.splice(idx,1)[0];
+  card.revealed=false; // starts face-down
+  picker.hand.push(card);
+  addLog(picker.name+' берёт карту (закрытую).');
+  d.pickerIdx++;
+  runDraftRound();
+}
+
+function doStartActions(){
+  closeQM();startActions();
+}
+
+function doAcceptQM(){
+  const drawn=window._qmDrawn||[];
+  const alive=window._qmAlive||[];
+  alive.forEach((p,i)=>{if(drawn[i]){drawn[i].revealed=false;p.hand.push(drawn[i]);addLog(p.name+' получает карту (закрытую).');}});
+  addSysMsg('✓ Снаряжение роздано.');
+  closeQM();
+  const fi=fnext(0);if(fi===-1){startNav();return;}
+  passPhone(G.players[fi].name,'Твой ход!','День '+G.day,()=>startActions());
+}
+
+function doDisputeQM(){
+  const dp=document.getElementById('dispute-panel');
+  if(dp){dp.style.display='block';}
+  document.getElementById('qm-actions').innerHTML='';
+  const alive=G.players.filter(p=>p.alive);
+  const votes={};
+  document.getElementById('dispute-votes').innerHTML=alive.map((p,i)=>
+    '<div class="vote-item"><div class="vote-name">'+p.name+'</div>'
+    +'<div class="vote-btns">'
+    +'<div class="vote-btns">'
+    +'<button class="vbtn vbtn-yes" onclick="doVoteQM('+i+',1,this)">👍 За</button>'
+    +'<button class="vbtn vbtn-no" onclick="doVoteQM('+i+',0,this)">👎 Против</button>'
+  ).join('');
+  window._qmVotes={};
+  document.getElementById('vote-result').textContent='';
+}
+
+function doVoteQM(idx,vote,btn){
+  if(!window._qmVotes)window._qmVotes={};
+  if(window._qmVotes[idx])return;
+  window._qmVotes[idx]=vote;
+  btn.parentElement.querySelectorAll('.vbtn').forEach(b=>b.classList.add('voted'));
+  const alive=G.players.filter(p=>p.alive);
+  const total=alive.length;
+  const against=Object.values(window._qmVotes).filter(v=>v===0).length;
+  const done=Object.keys(window._qmVotes).length;
+  document.getElementById('vote-result').textContent='Проголосовали: '+done+'/'+total;
+  if(done===total){
+    if(against>total/2){
+      addLog('Большинство против! Карты возвращаются...','dan');
+      G.prov=[...G.prov,...(window._qmDrawn||[])];
+      const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+      G.prov=shuf(G.prov);
+      toast('Раздача оспорена — новая раздача!');
+      setTimeout(()=>{closeQM();startQM();},1200);
+    } else {
+      addLog('Раздача принята.','suc');
+      setTimeout(doAcceptQM,600);
+    }
+  }
 }
 
 function acceptQM(){
@@ -1351,7 +1826,7 @@ function startNav(){
 function resolveNav(card){
   let icon='🌊',title='Спокойная ночь',col0='#102030',col1='#050e18',lines=[];
   if(card.bird){G.birds++;icon='🕊️';title=`Птица! (${G.birds}/4)`;col0='#1a3010';col1='#081404';lines.push('🕊 Птица на горизонте! Земля близко...');addLog(`ПТИЦА! ${G.birds} из 4`,'suc');if(G.birds>=4){showNavModal(icon,title,col0,col1,lines,()=>endGame());return;}}
-  if(card.ob){const v=G.players.find(p=>p.char.id===card.ob&&p.alive);if(v){const ff=v.char.id==='frenchy';lines.push('🌊 '+v.name+' падает за борт!'+(ff?' (Французик — плавает!)':''));if(!ff){v.wounds++;checkP(v);}if(v.hand.length){const l=v.hand.splice(~~(Math.random()*v.hand.length),1)[0];lines.push(`📦 ${v.name} роняет: ${l.n}`);}addLog(`${v.name} за бортом!`,'dan');}}
+  if(card.ob){const v=G.players.find(p=>p.char.id===card.ob&&p.alive);if(v){const ff=v.char.id==='frenchy';lines.push('🌊 '+v.name+' падает за борт!'+(ff?' (Французик — плавает!)':''));if(!ff){v.wounds++;checkP(v);}if(v.hand.length){const l=v.hand.splice(~~(Math.random()*v.hand.length),1)[0];lines.push('📦 '+v.name+' роняет: '+l.n);}addLog(`${v.name} за бортом!`,'dan');}}
   if(card.th)card.th.forEach(cid=>{const p=G.players.find(pl=>pl.char.id===cid&&pl.alive);if(p){const wi=p.hand.findIndex(c=>c.id==='water'),hp=p.hand.some(c=>c.id==='parasol');if(hp)lines.push(`☂️ ${p.name} защищён зонтиком`);else if(wi>=0){p.hand.splice(wi,1);lines.push(`💧 ${p.name} выпивает воду`);}else{p.wounds++;checkP(p);lines.push(`🥵 ${p.name} мучается от жажды!`);addLog(`${p.name} — жажда!`,'dan');}}});
   if(card.row)G.players.filter(p=>p.rowed&&p.alive).forEach(p=>{const wi=p.hand.findIndex(c=>c.id==='water');if(wi>=0)p.hand.splice(wi,1);else{p.wounds++;checkP(p);}});
   if(card.fig)G.players.filter(p=>p.fought&&p.alive).forEach(p=>{const wi=p.hand.findIndex(c=>c.id==='water');if(wi>=0)p.hand.splice(wi,1);else{p.wounds++;checkP(p);}});
@@ -1383,12 +1858,13 @@ function endGame(){
   }).sort((a,b)=>b.pts-a.pts);
   const medals=['🥇','🥈','🥉'];
   // Reveal all secrets banner
-  const secretsReveal='<div style="background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center"><div style="font-family:Cinzel,serif;font-size:12px;color:var(--g2);letter-spacing:3px;margin-bottom:8px">🔓 СЕКРЕТЫ РАСКРЫТЫ</div>'+
+  const _secretsReveal='<div style="background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center"><div style="font-family:Cinzel,serif;font-size:12px;color:var(--g2);letter-spacing:3px;margin-bottom:8px">🔓 СЕКРЕТЫ РАСКРЫТЫ</div>'+
     G.players.map(p=>'<div style="font-size:12px;color:rgba(200,185,155,.7);margin-bottom:4px;font-style:italic">'+p.name+
     ' — ❤ любил <b style=\'color:#ff80a0\'>'+G.players[p.love]?.name+'</b>, 💀 ненавидел <b style=\'color:#ff6060\'>'+G.players[p.hate]?.name+'</b></div>').join('')+
     '</div>';
+  document.getElementById('secrets-reveal').innerHTML=secretsReveal;
   document.getElementById('score-list').innerHTML=secretsReveal+scores.map((s,i)=>`
-    <div class="se">
+    <div class="score-entry">
       <div class="se-rank">${medals[i]||`${i+1}`}</div>
       <div class="se-cw">${charCardSVG(s.p.char,56,80,s.p.wounds,false)}</div>
       <div class="se-info">
@@ -1416,7 +1892,7 @@ function openModal(title,html,btns){
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-content').innerHTML=html;
   const b=document.getElementById('modal-btns');b.innerHTML='';
-  btns.forEach(btn=>{const el=document.createElement('button');el.className=`ms-btn ${btn.cls||''}`;el.textContent=btn.lbl;el.onclick=btn.fn;b.appendChild(el);});
+  btns.forEach(btn=>{const el=document.createElement('button');el.className=`mbn ${btn.cls||''}`;el.textContent=btn.lbl;el.onclick=btn.fn;b.appendChild(el);});
   document.getElementById('modal').classList.add('open');
 }
 function showNavModal(icon,title,col0,col1,lines,cb){
@@ -1434,15 +1910,114 @@ function pickP(title,cb){
 function toast(text){const o=document.querySelector('.toast');if(o)o.remove();const el=document.createElement('div');el.className='toast';el.textContent=text;document.body.appendChild(el);setTimeout(()=>el.remove(),2800);}
 
 // ── EXPORT to window so inline onclick= handlers work ──
-Object.assign(window, {
-  showScr, setPC, startGame, onPassOK,
-  acceptQM, beginDispute, castVote, closeQM,
-  doAct, sendChat, tapCard, closeModal,
-  pickNavByCompass
-});
+
+
+// ── THEME ──
+let theme = localStorage.getItem('lb-theme') || 'dark';
+function applyTheme(t) {
+  theme = t;
+  document.documentElement.setAttribute('data-theme', t);
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = t === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('lb-theme', t);
+}
+function toggleTheme() { applyTheme(theme === 'dark' ? 'light' : 'dark'); }
 
 // ── INIT ──
+applyTheme(theme);
 renderPL();renderFan();renderActionIcons();
+
+
+function pickNavByCompass(idx){
+  closeModal();
+  if(G.nav&&G.nav.length>idx){const card=G.nav.splice(idx,1)[0];G.rowStack.push(card);}
+  addLog(G.players[G.ct].name+' использует компас!','suc');
+  advTurn();renderGame();
+}
+function openCard(idx){
+  var cp=G.players[G.ct]||G.players[0];
+  var card=cp.hand[idx];
+  if(!card||card.revealed) return;
+  openModal('👁 Открыть карту?',
+    '<div style="width:160px;margin:0 auto 14px;border-radius:10px;overflow:hidden;box-shadow:0 8px 28px var(--shadow)">'
+    +provCardSVG(card,160,232)+'</div>'
+    +'<div style="font-size:12px;color:var(--txt2);text-align:center;margin-top:6px">'
+    +(card.permanent?'⚓ Постоянная карта — останется видна всем игрокам':'⚡ Одноразовая — после использования уходит в отбой')
+    +'</div>',
+    [{lbl:'✓ Открыть',fn:function(){
+      card.revealed=true;
+      addLog(cp.name+' открывает: '+card.n+'.','suc');
+      if(card.permanent) addLog(card.n+' теперь видна всем!');
+      closeModal(); renderGame();
+    }},
+    {lbl:'Оставить закрытой',fn:closeModal}]
+  );
+}
+function closeQM(){const el=document.getElementById('qm-zone');if(el)el.style.display='none';}
+function acceptQM(){}
+function beginDispute(){}
+function castVote(){}
+
+window.doStartActions=function(){closeQM();startActions();};
+window.runDraftRound=runDraftRound;
+window.showDraftCards=showDraftCards;
+window.pickDraftCard=pickDraftCard;
+window.doAcceptQM=function(){};
+window.doDisputeQM=doDisputeQM;
+window.doVoteQM=doVoteQM;
+window.askRestart=askRestart;
+function askRestart(){
+  // Collect votes from all alive players via pass-phone
+  const alive=G.players.filter(p=>p.alive);
+  let votes=0;
+  let pidx=0;
+  function collectVote(){
+    if(pidx>=alive.length){
+      // All voted
+      if(votes===alive.length){
+        showScr('s-title');
+        toast('Игра завершена — начните новую!');
+      } else {
+        toast('Не все согласны — игра продолжается.');
+      }
+      return;
+    }
+    const p=alive[pidx];
+    passPhone(p.name,'Начать игру заново?','Нажми «Да» чтобы проголосовать за перезапуск',()=>{
+      openModal('↺ Начать заново?',
+        '<div style="font-size:14px;color:rgba(200,185,155,.8)">'+p.name+', ты хочешь начать игру заново? Нужно согласие всех игроков.</div>',
+        [{lbl:'✓ Да, начать заново',cls:'red',fn:()=>{
+          votes++;pidx++;closeModal();
+          if(pidx<alive.length){
+            collectVote();
+          } else {
+            showScr('s-title');
+            toast('Все согласны — начинайте новую игру!');
+          }
+        }},
+        {lbl:'✗ Нет, продолжаем',fn:()=>{
+          pidx++;closeModal();
+          // Short-circuit — if someone said no, stop asking
+          toast('Игра продолжается.');
+        }}]);
+    });
+  }
+  collectVote();
+}
+
+// ── EXPORTS ──
+window.showScr=showScr;
+window.setPC=setPC;
+window.startGame=startGame;
+window.onPassOK=onPassOK;
+window.doAct=doAct;
+window.sendChat=sendChat;
+window.tapCard=tapCard;
+window.openCard=openCard;
+window.closeModal=closeModal;
+window.toggleTheme=toggleTheme;
+window.pickNavByCompass=pickNavByCompass;
+
 </script>
 </body>
 </html>
