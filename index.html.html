@@ -1,0 +1,2925 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lifeboat — За Бортом</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700&family=IM+Fell+English:ital@0;1&display=swap');
+
+/* ═══════════════════════════════
+   DARK THEME — Deep Ocean Night
+═══════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg:         #0a0c0f;
+  --bg2:        #0f1318;
+  --bg3:        #141a22;
+  --surface:    #161c24;
+  --surface2:   #1c2530;
+  --surface3:   #222e3c;
+
+  /* Borders */
+  --bdr:        rgba(180,140,60,.15);
+  --bdr2:       rgba(180,140,60,.28);
+  --bdr3:       rgba(180,140,60,.45);
+
+  /* Text */
+  --txt:        #e8dfc8;
+  --txt2:       #a89870;
+  --txt3:       #5a5040;
+
+  /* Accent — aged brass / gold */
+  --gold:       #c8920a;
+  --gold2:      #e4a820;
+  --gold3:      #f0c040;
+  --g:          var(--gold);
+  --g2:         var(--gold2);
+  --g3:         var(--gold3);
+  --w1:         #3a2208;
+  --w2:         #6a3a0a;
+  --w3:         #9a6418;
+  --sea:        #123a4a;
+  --sea2:       #1d5a66;
+
+  /* Status */
+  --hp-ok:      #3acc7a;
+  --hp-w:       #cc3a3a;
+
+  /* Semantic */
+  --love-bg:    rgba(140,20,60,.4);
+  --love-bdr:   rgba(200,50,100,.3);
+  --hate-bg:    rgba(120,10,10,.4);
+  --hate-bdr:   rgba(180,20,20,.3);
+
+  /* Shadows */
+  --shadow:     rgba(0,0,0,.7);
+  --shadow2:    rgba(0,0,0,.4);
+
+  /* Screen backgrounds */
+  --scr-title:  radial-gradient(ellipse at 50% 25%, #0d1f2d 0%, #060a0f 100%);
+  --scr-game:   radial-gradient(ellipse at 50% 30%, #0a1520 0%, #060a0f 100%);
+  --scr-setup:  radial-gradient(ellipse at 50% 30%, #0d1f2d 0%, #060a0f 100%);
+  --scr-pass:   radial-gradient(ellipse at 50% 50%, #0d1a12 0%, #040808 100%);
+  --scr-score:  radial-gradient(ellipse at 50% 20%, #10180d 0%, #060a0f 100%);
+  --scr-rules:  radial-gradient(ellipse at 50% 30%, #0d1f2d 0%, #060a0f 100%);
+
+  /* HUD */
+  --hud-bg:     #080c10;
+  --hud-bdr:    rgba(180,140,60,.2);
+
+  /* Cards / rows */
+  --card-bg:    #161c24;
+  --card-act:   #1e2c1a;
+  --inp-bg:     rgba(255,255,255,.04);
+
+  /* Modal */
+  --modal-bg:   #0f1318;
+  --modal-bdr:  rgba(180,140,60,.3);
+}
+
+/* ═══════════════════════════════
+   LIGHT THEME — Sun & Salt Air
+═══════════════════════════════ */
+[data-theme="light"] {
+  /* Backgrounds — clean warm white */
+  --bg:         #f5f1ea;
+  --bg2:        #ede8df;
+  --bg3:        #e5e0d6;
+  --surface:    #ffffff;
+  --surface2:   #f7f4ee;
+  --surface3:   #ede8df;
+
+  /* Borders — visible but soft */
+  --bdr:        rgba(60,45,20,.15);
+  --bdr2:       rgba(60,45,20,.28);
+  --bdr3:       rgba(60,45,20,.45);
+
+  /* Text — high contrast */
+  --txt:        #1a1410;
+  --txt2:       #3d2e1a;
+  --txt3:       #7a6448;
+
+  /* Accent — richer gold for light bg */
+  --gold:       #7a4e00;
+  --gold2:      #a06800;
+  --gold3:      #c88000;
+  --g:          var(--gold);
+  --g2:         var(--gold2);
+  --g3:         var(--gold3);
+  --w1:         #8b5e14;
+  --w2:         #b98522;
+  --w3:         #d6a13a;
+  --sea:        #3f7d8a;
+  --sea2:       #6aa4aa;
+
+  /* Status */
+  --hp-ok:      #1a7a38;
+  --hp-w:       #c01818;
+
+  /* Semantic */
+  --love-bg:    rgba(180,20,60,.08);
+  --love-bdr:   rgba(180,40,80,.3);
+  --hate-bg:    rgba(160,10,10,.08);
+  --hate-bdr:   rgba(160,20,20,.3);
+
+  /* Shadows — more visible */
+  --shadow:     rgba(20,10,0,.22);
+  --shadow2:    rgba(20,10,0,.12);
+
+  /* Screen backgrounds */
+  --scr-title:  linear-gradient(160deg, #e8ddd0 0%, #d6c9b4 100%);
+  --scr-game:   linear-gradient(160deg, #eae5da 0%, #d8d0c0 100%);
+  --scr-setup:  linear-gradient(160deg, #e8ddd0 0%, #d6c9b4 100%);
+  --scr-pass:   linear-gradient(160deg, #1a2d40 0%, #0d1a28 100%);
+  --scr-score:  linear-gradient(160deg, #e8ddd0 0%, #d6c9b4 100%);
+  --scr-rules:  linear-gradient(160deg, #e8ddd0 0%, #d6c9b4 100%);
+
+  /* HUD — dark teal for contrast */
+  --hud-bg:     #1a2a1a;
+  --hud-bdr:    rgba(180,140,60,.3);
+
+  /* Cards / rows */
+  --card-bg:    #ffffff;
+  --card-act:   #f0f8ec;
+  --inp-bg:     #ffffff;
+
+  /* Modal */
+  --modal-bg:   #ffffff;
+  --modal-bdr:  rgba(60,45,20,.2);
+}
+
+/* Light theme text fixes */
+[data-theme="light"] .prow-name,
+[data-theme="light"] .se-name,
+[data-theme="light"] .hud-tn { color: var(--txt) !important; }
+[data-theme="light"] .logo-m { color: var(--gold2) !important; }
+[data-theme="light"] .btn-g { color: #fff !important; }
+[data-theme="light"] .lline { color: var(--txt2) !important; }
+[data-theme="light"] .cmsg-text { color: var(--txt2) !important; }
+
+
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%;overflow:hidden;font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--txt)}
+#cvs{position:fixed;inset:0;z-index:0}
+.screen{position:fixed;inset:0;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column;align-items:center}
+.screen.act{display:flex}
+
+/* ── BUTTONS ── */
+.btn{display:block;width:calc(100% - 40px);max-width:300px;margin:8px auto;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:2px;color:var(--txt);transition:all .15s;position:relative;overflow:hidden}
+.btn:active{transform:translateY(2px) scale(.97)}
+.btn-g{background:linear-gradient(160deg,var(--w3),var(--w1));box-shadow:0 5px 16px rgba(0,0,0,.6),inset 0 1px 0 rgba(220,170,60,.2);text-shadow:1px 1px 3px rgba(0,0,0,.7)}
+.btn-g::before{content:'';position:absolute;inset:2px 3px;border:1px solid rgba(220,170,60,.22);border-radius:7px;pointer-events:none}
+.btn-o{background:transparent;border:1px solid rgba(200,145,10,.3);color:rgba(200,185,150,.6);font-size:14px;font-style:italic;font-family:'Nunito',system-ui,sans-serif;box-shadow:none;padding:10px 20px}
+.btn-o:active{border-color:rgba(200,145,10,.7);color:var(--txt2)}
+.btn-sm{padding:9px 14px;font-size:12px;border-radius:8px;width:auto;margin:0}
+.btn-red{background:linear-gradient(160deg,#6a0808,#3a0404)}
+.btn-grn{background:linear-gradient(160deg,#0a4a1a,#062010)}
+.shine{position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:sh 3s ease-in-out infinite;pointer-events:none}
+@keyframes sh{0%{left:-60%}100%{left:160%}}
+
+/* ── TITLE ── */
+#s-title{background:var(--scr-title)}
+.tw{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding-bottom:40px}
+.logo-d{font-size:10px;letter-spacing:6px;color:var(--gold);opacity:.5;text-transform:uppercase;margin:32px 0 8px}
+.logo-m{font-family:'Cinzel Decorative',serif;font-size:58px;line-height:.9;background:linear-gradient(180deg,#f8e080,#e4a820 40%,#a06010 80%,#e4a820);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 4px 12px rgba(200,145,10,.5));letter-spacing:4px}
+.logo-s{font-family:'Cinzel',serif;font-size:18px;color:rgba(200,170,100,.5);letter-spacing:10px;margin-top:4px}
+.logo-hr{display:flex;align-items:center;gap:12px;margin:14px auto;max-width:260px;color:var(--gold);opacity:.5}
+.logo-hr::before,.logo-hr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent)}
+.fan-w{position:relative;width:100%;height:210px;overflow:hidden;margin:10px 0}
+.fan-i{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:340px;height:210px}
+.tagline{font-style:italic;font-size:13px;color:rgba(200,185,150,.5);text-align:center;line-height:1.7;max-width:300px;margin:0 auto 24px;padding:0 20px}
+
+/* ── SETUP ── */
+#s-setup{background:var(--scr-setup);padding-bottom:150px}
+.setup-hdr{width:100%;max-width:480px;background:var(--hud-bg);border-bottom:1px solid var(--hud-bdr);padding:20px;text-align:center}
+.setup-hdr-t{font-family:'Cinzel Decorative',serif;font-size:20px;background:linear-gradient(180deg,var(--g3),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px}
+.setup-card{width:calc(100% - 28px);max-width:440px;margin:18px auto 0;background:var(--surface);border-radius:10px;border:1px solid var(--bdr);padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.sec-lbl{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:3px;margin-bottom:12px;display:flex;align-items:center;gap:10px;opacity:.8}
+.sec-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(200,145,10,.5),transparent)}
+.cnt-row{display:flex;gap:10px;justify-content:center;margin-bottom:4px}
+.cnt-btn{width:54px;height:54px;border-radius:10px;background:rgba(40,25,8,.9);border:2px solid rgba(200,145,10,.22);font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:rgba(200,170,100,.5);cursor:pointer;transition:all .2s}
+.cnt-btn.on{background:rgba(60,30,0,.9);border-color:var(--gold2);color:var(--gold3);box-shadow:0 0 16px rgba(220,165,30,.4);transform:scale(1.08)}
+.player-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid rgba(200,145,10,.1)}
+.player-ico{width:36px;height:36px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--sea2),var(--sea));border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.player-inp{flex:1;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:6px;color:var(--txt2);font-family:'Nunito',system-ui,sans-serif;font-size:16px;padding:7px 10px;outline:none}
+.player-char{width:142px;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:6px;color:var(--txt);font-family:'Nunito',system-ui,sans-serif;font-size:13px;padding:7px 8px;outline:none}
+.player-inp:focus{border-color:var(--gold2)}
+.player-char:focus{border-color:var(--gold2)}
+.setup-actions{width:calc(100% - 28px);max-width:440px;margin:16px auto 0;padding-bottom:calc(34px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px}
+.setup-actions .btn{width:100%;max-width:none;margin:0 auto}
+.btn-random{background:var(--surface2);border:1px solid var(--bdr2);color:var(--txt);box-shadow:0 4px 12px var(--shadow2)}
+
+/* ── PASS PHONE SCREEN ── */
+#s-pass{background:var(--scr-pass)}
+.pass-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;width:100%;max-width:480px;padding:40px 24px;text-align:center}
+.pass-icon{font-size:80px;margin-bottom:20px;animation:pa 2s ease-in-out infinite}
+@keyframes pa{0%,100%{transform:translateX(0) rotate(-5deg)}50%{transform:translateX(20px) rotate(5deg)}}
+.pass-title{font-family:'Cinzel Decorative',serif;font-size:24px;background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:10px}
+.pass-to{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:var(--gold3);margin-bottom:8px}
+.pass-sub{font-size:14px;color:rgba(200,185,150,.55);font-style:italic;margin-bottom:32px;line-height:1.6;max-width:280px}
+.pass-info{font-size:11px;color:rgba(200,185,150,.3);margin-top:16px;font-style:italic}
+
+/* ── HUD ── */
+#s-game{background:var(--scr-game);padding-bottom:90px}
+.hud{width:100%;max-width:480px;background:var(--hud-bg);border-bottom:2px solid rgba(200,145,10,.28);padding:10px 14px 12px;position:sticky;top:0;z-index:30;box-shadow:0 4px 20px var(--shadow)}
+.hud::after{content:'';position:absolute;bottom:-7px;left:0;right:0;height:7px;background:radial-gradient(circle at 8% 0%,#1a1004 7px,transparent 8px),radial-gradient(circle at 22% 0%,#1a1004 5px,transparent 6px),radial-gradient(circle at 36% 0%,#1a1004 8px,transparent 9px),radial-gradient(circle at 50% 0%,#1a1004 5px,transparent 6px),radial-gradient(circle at 64% 0%,#1a1004 7px,transparent 8px),radial-gradient(circle at 78% 0%,#1a1004 5px,transparent 6px),radial-gradient(circle at 92% 0%,#1a1004 8px,transparent 9px)}
+.hud-row{display:flex;align-items:center;gap:8px}
+.hud-day{background:radial-gradient(var(--w2),var(--w1));border:1px solid rgba(200,145,10,.38);border-radius:8px;padding:4px 10px;text-align:center;min-width:52px}
+.hud-day-n{font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--gold3);line-height:1}
+.hud-day-l{font-size:7px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase}
+.hud-c{flex:1;text-align:center}
+.hud-tl{font-size:8px;letter-spacing:3px;color:rgba(200,170,100,.5);text-transform:uppercase}
+.hud-tn{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold3)}
+.hud-bi{text-align:center}
+.hud-bl{font-size:7px;letter-spacing:2px;color:rgba(200,170,100,.5);text-transform:uppercase}
+.hud-br{display:flex;gap:4px;justify-content:center;margin-top:3px}
+.bip{width:22px;height:16px}.bip svg{width:100%;height:100%;opacity:.18;transition:all .4s}
+.bip.lit svg{opacity:1;filter:drop-shadow(0 0 6px rgba(255,215,0,.9));animation:bflap .5s ease}
+@keyframes bflap{0%,100%{transform:scale(1)}50%{transform:scale(1.4) translateY(-3px)}}
+.phase-bar{display:flex;gap:3px;margin-top:8px}
+.ph{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:all .3s}
+.ph.act{background:var(--g3);box-shadow:0 0 8px var(--g3)}
+.ph.dn{background:rgba(220,160,30,.35)}
+.hud-pn{text-align:center;font-size:8px;letter-spacing:4px;color:var(--gold2);opacity:.8;margin-top:4px;text-transform:uppercase}
+
+/* ── QM PHASE ── */
+.qm-zone{width:100%;max-width:720px;padding:14px 12px}
+.qm-hdr{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold2);letter-spacing:2px;text-align:center;margin-bottom:4px}
+.qm-sub{font-size:12px;color:rgba(200,185,150,.55);text-align:center;font-style:italic;margin-bottom:14px;line-height:1.5}
+.qm-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(76px,86px));gap:12px;overflow:visible;padding:8px 0 12px;scrollbar-width:none;justify-content:center;min-height:130px;align-items:start}
+.qm-row::-webkit-scrollbar{display:none}
+@keyframes deal{0%{transform:translateY(-120px) rotate(-20deg) scale(.6);opacity:0}60%{transform:translateY(8px) rotate(2deg) scale(1.02)}100%{transform:translateY(0) rotate(0) scale(1);opacity:1}}
+.dealing{animation:deal .5s cubic-bezier(.34,1.56,.64,1) both}
+.qm-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+
+/* Dispute panel */
+.dispute-panel{background:var(--surface);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-top:10px;display:none}
+.dispute-t{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:2px;margin-bottom:8px;text-align:center}
+.dispute-votes{display:flex;flex-direction:column;gap:6px}
+.vote-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(0,0,0,.3);border-radius:6px;border:1px solid rgba(200,145,10,.1)}
+.vote-name{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--txt)}
+.vote-btns{display:flex;gap:6px}
+.vbtn{padding:4px 10px;border-radius:5px;border:1px solid;font-family:'Cinzel',serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.vbtn-yes{background:rgba(8,50,20,.8);border-color:rgba(40,180,60,.4);color:#60d070}
+.vbtn-no{background:rgba(50,8,8,.8);border-color:rgba(180,40,40,.4);color:#d06060}
+.vbtn.voted{opacity:.4;pointer-events:none}
+.vote-result{font-size:10px;color:rgba(200,185,150,.5);text-align:center;margin-top:8px;font-style:italic}
+
+/* ── PLAYERS ── */
+.players-zone{width:100%;max-width:480px;padding:14px 12px 4px;display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;align-items:stretch;gap:8px;background:var(--surface);border-radius:10px;border:1px solid rgba(200,145,10,.1);padding:8px;transition:all .2s;position:relative;overflow:hidden}
+.prow.act-p{border-color:rgba(255,215,0,.42);background:rgba(50,30,0,.45);box-shadow:0 0 20px rgba(255,215,0,.1)}
+.prow.dead-p{opacity:.4;filter:grayscale(.7)}
+.prow.act-p::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.05),transparent);animation:rg 2s ease-in-out infinite;pointer-events:none}
+@keyframes rg{0%,100%{opacity:0}50%{opacity:1}}
+.char-mini{width:58px;flex-shrink:0;border-radius:8px;overflow:hidden;border:1.5px solid rgba(200,145,10,.45);box-shadow:0 4px 10px rgba(0,0,0,.6);position:relative}
+.char-mini.act-c{border-color:var(--gold3);box-shadow:0 0 14px rgba(255,215,0,.5)}
+.char-mini.dead-c{filter:grayscale(1) brightness(.4)}
+.char-mini.unc-c{filter:brightness(.5) saturate(.3)}
+.c-badge{position:absolute;bottom:2px;right:2px;font-size:13px}
+.p-info{flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.pname{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pname.act-n{background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.char-sm{font-size:10px;color:rgba(200,170,100,.5);font-style:italic}
+.hp-track{display:flex;gap:2px;flex-wrap:wrap;align-items:center;margin-top:3px}
+.pp{width:7px;height:7px;border-radius:2px;transition:all .3s}
+.pp.ok{background:var(--hp-ok);box-shadow:0 0 5px rgba(42,221,106,.6)}
+.pp.w{background:var(--hp-w);box-shadow:0 0 5px rgba(221,42,42,.6)}
+.pp.l{background:rgba(255,255,255,.08)}
+.hp-lbl{font-size:10px;color:rgba(200,170,100,.6);font-family:'Nunito',sans-serif}
+.p-chips{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.chip{padding:1px 5px;border-radius:4px;font-size:9px;font-family:'Cinzel',serif;font-weight:700;border:1px solid;display:flex;align-items:center;gap:2px}
+.chip-ok{background:rgba(20,60,20,.5);border-color:rgba(40,160,40,.4);color:#60c060}
+.chip-unc{background:rgba(80,60,0,.5);border-color:rgba(160,120,0,.4);color:#c0a020}
+.chip-dead{background:rgba(60,0,0,.5);border-color:rgba(160,0,0,.4);color:#c02020}
+.chip-c{background:rgba(40,60,100,.5);border-color:rgba(80,120,200,.4);color:#80b0ff}
+.chip-r{background:rgba(0,40,60,.5);border-color:rgba(0,100,160,.4);color:#40a0d0}
+.p-sec{display:flex;gap:4px;margin-top:4px}
+.sb{padding:1px 6px;border-radius:4px;font-size:9px;font-family:'Cinzel',serif;font-weight:600;border:1px solid;display:flex;align-items:center;gap:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px}
+.sb-l{background:rgba(100,0,40,.5);border-color:rgba(200,50,100,.4);color:#ff80a0}
+.sb-h{background:rgba(80,0,0,.5);border-color:rgba(180,0,0,.4);color:#ff6060}
+
+/* ── HAND ── */
+.hand-zone{width:100%;max-width:480px;padding:12px 12px 0}
+.zone-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.zone-t{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.zone-t::before{content:'';width:20px;height:1px;background:linear-gradient(90deg,transparent,var(--g))}
+.zone-c{font-size:11px;color:rgba(200,170,100,.5);font-style:italic}
+.hand-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none}
+.hand-scroll::-webkit-scrollbar{display:none}
+
+/* ── ACTIONS ── */
+.act-zone{width:100%;max-width:480px;padding:12px}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.act-tile{height:124px;border-radius:12px;cursor:pointer;position:relative;overflow:hidden;transition:transform .14s ease,box-shadow .14s ease,border-color .14s ease;box-shadow:0 10px 24px rgba(0,0,0,.45);border:1px solid rgba(200,145,10,.28);background:var(--surface)}
+.act-tile::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,230,150,.16),transparent 34%,rgba(0,0,0,.22));pointer-events:none}
+.act-tile::after{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--act-accent,#c8920a);box-shadow:0 0 18px var(--act-glow,rgba(200,145,10,.35))}
+.act-tile:active{transform:scale(.97) translateY(1px)}
+.act-tile:hover{box-shadow:0 14px 28px rgba(0,0,0,.5),0 0 0 1px rgba(230,180,70,.25);border-color:rgba(230,180,70,.5)}
+.at-bg{position:absolute;inset:0;background:radial-gradient(circle at 82% 8%,rgba(255,255,255,.10),transparent 26%),linear-gradient(145deg,var(--act-bg1,#182030),var(--act-bg2,#080c12))}
+.at-frame{position:absolute;inset:5px;border-radius:9px;border:1px solid rgba(255,220,130,.16);box-shadow:inset 0 0 0 1px rgba(0,0,0,.28);pointer-events:none}
+.at-inner{position:absolute;inset:0;display:grid;grid-template-columns:58px minmax(0,1fr);grid-template-rows:auto auto;align-content:center;align-items:center;padding:16px 14px 14px 18px;column-gap:12px;row-gap:6px}
+.at-art{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;background:radial-gradient(circle at 32% 22%,#ffe9a0,#c8920a 56%,#5a3008);box-shadow:0 6px 15px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.45)}
+.at-art{grid-row:1 / span 2}
+.at-name{font-family:'Cinzel',serif;font-size:14px;font-weight:900;letter-spacing:1.4px;text-shadow:0 2px 5px rgba(0,0,0,.7);line-height:1.12;color:#f5d26a;min-width:0;overflow-wrap:anywhere}
+.at-desc{font-size:11px;text-align:left;line-height:1.25;opacity:.86;font-style:italic;color:rgba(235,224,200,.82);margin-top:0;min-width:0;max-width:100%;overflow-wrap:break-word}
+.act-rest{--act-accent:#8d9cc7;--act-glow:rgba(141,156,199,.38);--act-bg1:#202637;--act-bg2:#0d111b}
+.act-row{--act-accent:#4fc3df;--act-glow:rgba(79,195,223,.38);--act-bg1:#0d3448;--act-bg2:#071826}
+.act-seat{--act-accent:#c070dd;--act-glow:rgba(192,112,221,.36);--act-bg1:#2a1438;--act-bg2:#10071b}
+.act-mug{--act-accent:#df705d;--act-glow:rgba(223,112,93,.36);--act-bg1:#401514;--act-bg2:#180706}
+
+/* ── CHAT ── */
+.chat-zone{width:100%;max-width:480px;padding:0 12px;margin-top:10px}
+.chat-card{background:var(--surface);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+.chat-hdr{background:linear-gradient(90deg,#0f0804,#1a1004);padding:7px 14px;border-bottom:1px solid rgba(200,145,10,.12);font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:3px}
+.chat-msgs{padding:8px 12px;max-height:130px;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:4px}
+.chat-msgs::-webkit-scrollbar{display:none}
+.chat-msg{display:flex;gap:6px;align-items:baseline}
+.chat-msg-n{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold2);flex-shrink:0;min-width:56px}
+.chat-msg-t{font-size:12px;color:rgba(200,185,155,.8);line-height:1.4;font-style:italic;word-break:break-word}
+.chat-msg.sys .chat-msg-n{color:rgba(200,145,10,.6)}
+.chat-msg.sys .chat-msg-t{color:rgba(200,145,10,.65);font-size:11px}
+.chat-inp-row{display:flex;gap:8px;padding:8px 10px;border-top:1px solid rgba(200,145,10,.1)}
+.chat-inp{flex:1;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:6px;color:var(--txt);font-family:'Nunito',system-ui,sans-serif;font-size:14px;padding:6px 10px;outline:none}
+.chat-inp:focus{border-color:var(--gold2)}
+.chat-send{width:36px;height:36px;border-radius:6px;background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid rgba(200,145,10,.3);cursor:pointer;font-size:16px;color:var(--txt);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.chat-send:active{transform:scale(.9)}
+
+/* ── LOG ── */
+.log-zone{width:100%;max-width:480px;padding:0 12px;margin-top:10px}
+.log-card{background:var(--surface);border:1px solid rgba(200,145,10,.15);border-radius:10px;overflow:hidden}
+.log-hdr{background:linear-gradient(90deg,#0f0804,#1a1004);padding:7px 14px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:3px;border-bottom:1px solid rgba(200,145,10,.1)}
+.log-body{padding:10px 12px;max-height:100px;overflow-y:auto;scrollbar-width:none}
+.log-body::-webkit-scrollbar{display:none}
+.log-line{font-style:italic;font-size:12px;color:rgba(200,185,155,.6);line-height:1.65;padding-left:12px;position:relative}
+.log-line::before{content:'›';position:absolute;left:0;opacity:.5}
+.log-line.imp{color:var(--gold2);font-style:normal;font-weight:600;opacity:1}
+.log-line.suc{color:#60c060;opacity:1;font-style:normal}
+.log-line.dan{color:#e05050;opacity:1}
+
+/* ── MODAL ── */
+.mv{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.mv.open{display:flex}
+.ms{background:var(--modal-bg);border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:0 0 44px;overflow:hidden;box-shadow:0 -12px 56px rgba(0,0,0,.9),inset 0 1px 0 rgba(220,165,30,.18);animation:sup .35s cubic-bezier(.34,1.56,.64,1);border-top:1px solid var(--modal-bdr)}
+@keyframes sup{from{transform:translateY(140px);opacity:0}to{transform:translateY(0);opacity:1}}
+.ms-handle{width:40px;height:4px;background:rgba(200,145,10,.38);border-radius:2px;margin:12px auto 16px}
+.ms-bi{padding:0 20px}
+.ms-ttl{font-family:'Cinzel Decorative',serif;font-size:20px;background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;letter-spacing:2px;margin-bottom:9px}
+.ms-div{height:1px;background:linear-gradient(90deg,transparent,rgba(200,145,10,.45),transparent);margin:0 0 14px}
+.ms-cnt{font-size:14px;line-height:1.75;color:rgba(200,185,155,.88);text-align:center;margin-bottom:16px}
+.ms-btns{display:flex;gap:10px;flex-wrap:wrap}
+.ms-btn{flex:1;min-width:110px;padding:13px 16px;background:linear-gradient(160deg,var(--w3),var(--w1));border:1px solid rgba(200,145,10,.28);border-radius:8px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--txt);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:all .15s}
+.ms-btn:active{transform:translateY(1px)}
+.ms-btn.red{background:linear-gradient(160deg,#6a0808,#3a0404)}
+.ms-btn.grn{background:linear-gradient(160deg,#0a4a1a,#062010)}
+.ms-btn.blue{background:linear-gradient(160deg,#0a2060,#060a30)}
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pick-card{border-radius:10px;overflow:hidden;cursor:pointer;transition:all .15s;box-shadow:0 4px 10px rgba(0,0,0,.6)}
+.pick-card:active{transform:scale(.93)}
+@keyframes cardflip{from{transform:rotateY(-90deg);opacity:0}to{transform:rotateY(0);opacity:1}}
+
+/* ── SCORE ── */
+#s-score{background:var(--scr-score);padding-bottom:60px}
+.score-hdr{width:100%;max-width:480px;padding:28px 20px 20px;text-align:center}
+.score-icon{font-size:52px;display:block;margin-bottom:12px}
+.score-ttl{font-family:'Cinzel Decorative',serif;font-size:30px;background:linear-gradient(180deg,var(--g3),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px}
+.score-sub{font-style:italic;font-size:13px;color:rgba(200,185,155,.5);margin-top:6px}
+.score-div{width:100%;max-width:440px;margin:16px auto;height:1px;background:linear-gradient(90deg,transparent,rgba(200,145,10,.5),transparent)}
+.score-list{width:100%;max-width:440px;padding:0 14px}
+.se{display:flex;align-items:stretch;gap:10px;margin-bottom:12px;background:var(--inp-bg);border-radius:10px;border:1px solid var(--bdr);overflow:hidden}
+.se-rank{width:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(0,0,0,.3);border-right:1px solid rgba(200,145,10,.1)}
+.se-cw{width:56px;flex-shrink:0;overflow:hidden}
+.se-info{flex:1;padding:10px 8px 10px 0;min-width:0}
+.se-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--txt)}
+.se-bd{font-size:10px;color:rgba(200,170,100,.5);font-style:italic;line-height:1.5;margin-top:2px}
+.se-sec{font-size:10px;color:rgba(200,170,100,.4);margin-top:3px}
+.se-pts-w{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 14px;background:rgba(0,0,0,.3);border-left:1px solid rgba(200,145,10,.1)}
+.se-pts{font-family:'Cinzel Decorative',serif;font-size:28px;background:linear-gradient(180deg,var(--g3),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.se-pts-l{font-size:8px;letter-spacing:2px;color:rgba(200,145,10,.6);text-transform:uppercase}
+
+/* ── RULES ── */
+#s-rules{background:var(--scr-rules);padding-bottom:60px}
+.rules-hdr{width:100%;max-width:480px;padding:22px 20px 18px;background:var(--hud-bg);border-bottom:2px solid rgba(200,145,10,.25);text-align:center}
+.rules-ttl{font-family:'Cinzel Decorative',serif;font-size:22px;background:linear-gradient(90deg,var(--g),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px}
+.rb{width:calc(100% - 24px);max-width:440px;margin:14px auto 0;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:10px;padding:14px}
+.rb-t{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:2px;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid rgba(200,145,10,.12)}
+.rb-x{font-size:13px;line-height:1.8;color:rgba(200,185,155,.82)}
+
+/* Toast */
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--w3),var(--w1));border:1px solid var(--g2);border-radius:8px;padding:10px 22px;font-family:'Nunito',sans-serif;font-size:14px;letter-spacing:1px;color:var(--txt);z-index:200;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.7);animation:tp .3s ease,tf .3s ease 2.5s forwards}
+@keyframes tp{from{opacity:0;transform:translateX(-50%) scale(.7) translateY(-14px)}to{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}}
+@keyframes tf{to{opacity:0;transform:translateX(-50%) translateY(-14px)}}
+
+.prow{display:flex;align-items:stretch;background:var(--surface);border-radius:12px;border:1px solid rgba(200,145,10,.12);margin-bottom:8px;overflow:hidden;transition:all .2s}
+.prow.act-p{border-color:rgba(255,215,0,.45);background:rgba(50,30,0,.45);box-shadow:0 0 0 1px rgba(255,215,0,.2),0 4px 16px rgba(200,145,10,.15)}
+.prow.dead-p{opacity:.42;filter:grayscale(.6)}
+.prow-portrait{width:52px;flex-shrink:0;position:relative;overflow:hidden}
+.prow-portrait-act{box-shadow:inset 0 0 0 2px rgba(255,215,0,.6)}
+.prow-portrait-dead{filter:grayscale(1) brightness(.45)}
+.prow-portrait-unc{filter:brightness(.5) saturate(.3)}
+.prow-status-badge{position:absolute;bottom:3px;right:3px;font-size:12px}
+.prow-info{flex:1;padding:9px 11px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.prow-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.prow-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow-name-act{background:linear-gradient(90deg,var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.prow-status{font-size:11px;font-weight:700;flex-shrink:0;font-family:'Nunito',sans-serif}
+.prow-charname{font-size:11px;color:rgba(200,170,100,.6);font-family:'Nunito',sans-serif}
+.prow-hp-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.prow-tag{font-size:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:1px 5px;color:rgba(200,185,155,.7)}
+.prow-thirst{font-size:10px;font-weight:800;border-radius:6px;padding:2px 6px;color:#ffd3a0;background:rgba(170,54,14,.24);border:1px solid rgba(255,112,40,.42);box-shadow:0 0 10px rgba(255,96,30,.16)}
+.prow-thirst.ok{color:#9fe9ff;background:rgba(20,105,145,.22);border-color:rgba(90,190,230,.38)}
+.prow-thirst.safe{color:#ffe7a0;background:rgba(150,105,10,.22);border-color:rgba(230,185,70,.42)}
+.hp-track{display:flex;gap:2px}
+.pp,.hpdot{width:10px;height:10px;border-radius:50%;transition:all .3s;flex-shrink:0}
+.pp.ok,.hpdot.ok{background:var(--hp-ok);box-shadow:0 0 5px rgba(58,204,122,.6)}
+.pp.w,.hpdot.w{background:var(--hp-w);box-shadow:0 0 5px rgba(204,58,58,.6)}
+.pp.l,.hpdot.l{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.hp-lbl{font-size:9px;color:rgba(200,170,100,.5);font-family:'Cinzel',serif}
+.inline-secrets{display:flex;gap:6px;margin-top:3px}
+.isec{flex:1;display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;border:1px solid}
+.isec-love{background:var(--love-bg);border-color:var(--love-bdr)}
+.isec-hate{background:var(--hate-bg);border-color:var(--hate-bdr)}
+.isec-icon{font-size:16px;flex-shrink:0}
+.isec-body{min-width:0}
+.isec-role{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.6}
+.isec-love .isec-role{color:#ff80a0}
+.isec-hate .isec-role{color:#ff7070}
+.isec-name{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--txt);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.isec-pts{font-size:9px;color:rgba(200,185,155,.55);margin-top:1px}
+[data-theme=light] body{background:#e8dcc8 !important;color:#1a0c04 !important}
+[data-theme=light] .pass-title{-webkit-text-fill-color:#f8e0a0 !important;color:#f8e0a0 !important}
+[data-theme=light] .pass-to{color:#f8d040 !important}
+[data-theme=light] .pass-sub{color:rgba(240,220,180,.8) !important}
+[data-theme=light] .setup-card{background:rgba(255,255,255,.75) !important;border-color:rgba(140,90,20,.3) !important}
+[data-theme=light] .player-inp{background:#fff !important;color:#1a0c04 !important}
+[data-theme=light] .prow{background:rgba(255,255,255,.7) !important;border-color:rgba(140,90,20,.2) !important}
+[data-theme=light] .prow.act-p{background:rgba(255,230,160,.5) !important}
+[data-theme=light] .prow-name{color:#1a0c04 !important}
+[data-theme=light] .log-card,[data-theme=light] .chat-card{background:rgba(255,255,255,.7) !important}
+[data-theme=light] .log-line{color:#3a2010 !important}
+[data-theme=light] .act-tile{background:rgba(255,255,255,.75) !important;border-color:rgba(140,90,20,.22) !important}
+[data-theme=light] .modal-sheet{background:linear-gradient(180deg,#f5ecd8,#e8d8b0) !important}
+[data-theme=light] .modal-title{color:#3a1808 !important}
+[data-theme=light] .modal-content{color:#3a2010 !important}
+
+/* ── ELEMENT THEME OVERRIDES ── */
+/* Pass screen text always light (bg is dark) */
+.pass-title{font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--gold3);letter-spacing:3px;margin-bottom:10px}
+.pass-to{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:#f8e0a0;margin-bottom:8px}
+.pass-sub{font-size:14px;color:rgba(240,220,180,.65);font-style:italic;margin-bottom:32px;line-height:1.6;max-width:280px}
+
+/* Log lines use CSS var for text */
+.log-line,.lline{font-size:12px;color:rgba(200,185,155,.65);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:'Nunito',sans-serif;line-height:1.5}
+.log-line.imp,.lline.imp{color:var(--gold2);opacity:1;font-weight:600}
+.log-line.suc,.lline.suc{color:var(--hp-ok);opacity:1}
+.log-line.dan,.lline.dan{color:var(--hp-w);opacity:1}
+
+/* Section titles */
+.zone-t,.sec-lbl,.block-label,.section-title{color:var(--gold)}
+
+/* Setup */
+.setup-card,.setup-block{background:var(--surface);border:1px solid var(--bdr);box-shadow:0 4px 16px var(--shadow2)}
+.player-row{background:var(--surface2);border:1px solid var(--bdr)}
+.player-inp{background:var(--inp-bg);color:var(--txt);border:1px solid var(--bdr)}
+.player-inp::placeholder{color:var(--txt3)}
+.player-inp:focus{border-color:var(--gold2)}
+
+/* Player rows */
+.prow{background:var(--surface);border:1px solid var(--bdr)}
+.prow.act-p{background:var(--card-act);border-color:rgba(180,140,60,.45)}
+.prow-name{color:var(--txt)}
+.prow-charname{color:var(--txt3)}
+.hp-lbl{color:var(--txt3)}
+.prow-tag{color:var(--txt2);background:var(--surface2);border-color:var(--bdr)}
+
+/* Actions */
+.act-zone .zone-t{color:var(--gold)}
+.act-tile{border:1px solid var(--bdr);background:var(--surface)}
+.at-hint{font-size:11px;color:rgba(200,185,155,.5);margin-top:3px;font-family:'Nunito',sans-serif;line-height:1.4}
+
+/* Log / chat */
+.log-card,.chat-card,.log-box,.chat-box{background:var(--surface);border:1px solid var(--bdr)}
+.log-hdr,.chat-hdr,.log-header,.chat-header{background:var(--hud-bg);color:var(--gold);border-bottom:1px solid var(--bdr)}
+.chat-inp{background:var(--inp-bg);color:var(--txt);border-color:var(--bdr)}
+.chat-inp::placeholder{color:var(--txt3)}
+.cmsg-who{color:var(--gold)}
+.cmsg-text{font-size:13px;color:rgba(200,185,155,.8);font-family:'Nunito',sans-serif;line-height:1.5}
+
+/* QM */
+.qm-hdr{color:var(--txt)}
+.qm-sub{color:var(--txt2)}
+.dispute-panel{background:var(--surface);border:1px solid var(--bdr2)}
+.vote-item{background:var(--surface2);border-color:var(--bdr)}
+.vote-name{color:var(--txt)}
+.vote-result{color:var(--txt2)}
+
+/* Secrets */
+.isec-love{background:var(--love-bg);border-color:var(--love-bdr)}
+.isec-hate{background:var(--hate-bg);border-color:var(--hate-bdr)}
+.isec-name{color:var(--txt)}
+.isec-pts{color:var(--txt2)}
+
+/* Modal */
+.ms,.modal-sheet,.modal-veil .ms{background:var(--modal-bg)}
+.ms-ttl,.modal-title{color:var(--txt)}
+.ms-cnt,.modal-content{color:var(--txt2)}
+.mv{background:rgba(0,0,0,.88)}
+
+/* Score */
+.score-entry,.se{background:var(--surface);border-color:var(--bdr)}
+.se-rank{background:var(--surface2);border-color:var(--bdr)}
+.se-name,.score-pname{color:var(--txt)}
+.se-cname,.score-breakdown{color:var(--txt2)}
+.se-pts-wrap{background:var(--surface2);border-color:var(--bdr)}
+
+/* Rules */
+.rule-blk,.rb{background:var(--surface);border-color:var(--bdr)}
+.rule-t,.rb-t{color:var(--gold2)}
+.rule-x,.rb-x{color:var(--txt2)}
+
+/* Misc text */
+.tagline,.title-tagline{color:var(--txt2)}
+.logo-s,.logo-sub{color:var(--txt2)}
+.logo-d,.logo-deco{color:var(--gold)}
+
+/* Buttons */
+.btn-o{border-color:var(--bdr2);color:var(--txt2)}
+.cnt-btn{background:var(--surface2);border-color:var(--bdr);color:var(--txt2)}
+.cnt-btn.on{border-color:var(--gold2);color:var(--gold3)}
+
+.hp-track{display:flex;gap:3px;align-items:center;flex-wrap:wrap}
+.hp-lbl{font-size:9px;color:var(--txt3);font-family:'Cinzel',serif;margin-left:3px;letter-spacing:.5px}
+
+/* ── More prominent player names ── */
+.prow-name {
+  font-family: 'Cinzel', serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: var(--txt) !important;
+  letter-spacing: .5px;
+}
+.prow-name-act {
+  background: linear-gradient(90deg, var(--gold2), var(--gold3)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-size: 16px !important;
+}
+.prow-charname {
+  font-size: 11px !important;
+  color: var(--txt2) !important;
+  font-style: italic;
+  margin-top: 1px;
+}
+/* Bigger portrait strip */
+.prow-portrait { width: 60px !important; flex-shrink: 0; }
+
+/* HUD player name fix */
+#hud-player, .hud-tn {
+  font-family: 'Cinzel', serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--gold3) !important;
+  -webkit-text-fill-color: var(--gold3) !important;
+  letter-spacing: 1px;
+}
+.hud-tl { font-size: 9px !important; letter-spacing: 3px; color: var(--txt3) !important; text-transform: uppercase; }
+
+/* ── MAIN MENU ── */
+.mn-nav{width:100%;display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.mn-btn-label{flex:1;text-align:left}
+.mn-arr{opacity:.4;font-size:18px;flex-shrink:0}
+.mn-soon{font-size:9px;font-weight:700;letter-spacing:2px;
+  background:var(--surface2);color:var(--txt3);
+  padding:2px 7px;border-radius:4px;border:1px solid var(--bdr);
+  flex-shrink:0;text-transform:uppercase}
+.mn-btn-disabled{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface2) !important;color:var(--txt3) !important;
+  border:1px solid var(--bdr) !important;opacity:.5;cursor:not-allowed}
+.mn-btn-settings{display:flex;align-items:center;gap:12px}
+.mn-btn-rules{display:flex;align-items:center;gap:12px}
+.mn-btn-play{display:flex;align-items:center;gap:12px}
+.btn.mn-btn-play span:first-child,.btn.mn-btn-settings span:first-child,
+.btn.mn-btn-rules span:first-child,.mn-btn-disabled span:first-child{font-size:18px;flex-shrink:0}
+
+/* ── SETTINGS SCREEN ── */
+#s-settings{background:var(--scr-title)}
+.stt-card{
+  width:100%;background:var(--surface);
+  border:1px solid var(--bdr);border-radius:12px;padding:16px}
+.stt-card-dim{opacity:.5}
+.stt-card-lbl{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px}
+.stt-row{display:flex;gap:8px}
+.stt-theme-btn,.stt-lang-btn{
+  flex:1;padding:12px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--bdr);background:var(--surface2);
+  color:var(--txt);font-family:'Cinzel',serif;font-size:12px;
+  font-weight:600;letter-spacing:1px;transition:all .2s}
+.stt-theme-btn:active,.stt-lang-btn:active{transform:scale(.97)}
+.stt-active{border-color:var(--gold2) !important;
+  background:rgba(200,145,10,.15) !important;color:var(--gold2) !important}
+html[data-theme="light"] #cvs{opacity:.55}
+html[data-theme="dark"] #cvs{opacity:1}
+html.theme-light body, body.theme-light{background:#e8dcc8 !important;color:#1a1410 !important}
+html.theme-dark body, body.theme-dark{background:#030810 !important;color:#e8dfc8 !important}
+
+/* ── RULES SCREEN ── */
+#s-rules{background:var(--scr-rules);overflow-y:auto}
+.rules-hdr{width:100%;background:var(--hud-bg);border-bottom:1px solid var(--bdr2);padding:20px;text-align:center;flex-shrink:0}
+.rules-ttl{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold2);letter-spacing:3px}
+.rules-body{width:calc(100% - 20px);max-width:480px;margin:0 auto;padding:12px 0 8px;display:flex;flex-direction:column;gap:10px}
+.rb{background:var(--surface);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px}
+.rb-accent{border-color:var(--bdr2);background:linear-gradient(135deg,rgba(200,145,10,.08),var(--surface))}
+.rb-t{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700}
+.rb-x{font-size:13px;color:var(--txt2);line-height:1.65}
+.rb-phase{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.rb-num{min-width:22px;height:22px;border-radius:50%;background:var(--gold);color:#000;font-family:'Cinzel',serif;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.rb-act{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;padding:8px;background:var(--surface2);border-radius:8px;border:1px solid var(--bdr)}
+.rb-ico{font-size:20px;flex-shrink:0;width:26px;text-align:center}
+.rb-rule{padding:5px 0 5px 12px;border-left:2px solid var(--bdr2);margin-bottom:5px;font-size:12px}
+.rb-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.rb-card-item{display:flex;align-items:flex-start;gap:6px;padding:7px 8px;background:var(--surface2);border-radius:8px;font-size:11px;color:var(--txt2)}
+.rb-card-item>span{font-size:18px;flex-shrink:0}
+.rb-chars{display:flex;flex-direction:column;gap:6px}
+.rb-char{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:8px;font-size:12px}
+.rb-char b{color:var(--txt);font-family:'Cinzel',serif}
+.rb-char span{color:var(--txt3);font-size:10px;text-align:right}
+.rb-score-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.rb-score-row:last-of-type{border-bottom:none}
+/* Light theme enhanced readability */
+[data-theme="light"] .rb-x { color: #2a1e0e; }
+[data-theme="light"] .rb-rule { color: #2a1e0e; border-left-color: var(--gold2); }
+[data-theme="light"] .rb-char span { color: var(--txt3); }
+[data-theme="light"] .rb-card-item { background: var(--surface2); color: var(--txt2); }
+[data-theme="light"] .act-tile { background: #fff; border-color: rgba(130,95,35,.28); box-shadow:0 8px 20px rgba(80,55,20,.18); }
+[data-theme="light"] .at-bg { filter:saturate(.82) brightness(1.14); opacity:.78; }
+[data-theme="light"] .at-name { color: #503410; text-shadow:none; }
+[data-theme="light"] .at-desc { color:#6c5734; opacity:.9; }
+[data-theme="light"] .at-hint { color: var(--txt3); }
+[data-theme="light"] .setup-card { background: #fff !important; }
+[data-theme="light"] .sec-lbl { color: var(--gold) !important; }
+[data-theme="light"] .cnt-btn { background: var(--surface2) !important; color: var(--txt) !important; border-color: var(--bdr2) !important; }
+[data-theme="light"] .cnt-btn.on { background: rgba(120,80,0,.12) !important; color: var(--gold) !important; border-color: var(--gold2) !important; }
+[data-theme="light"] .player-inp,
+[data-theme="light"] .player-char { background: #fff !important; color: var(--txt) !important; border-color: var(--bdr2) !important; }
+[data-theme="light"] .player-inp::placeholder { color: var(--txt3) !important; }
+[data-theme="light"] .prow { background: #fff; border-color: rgba(60,40,10,.12); }
+[data-theme="light"] .prow.act-p { background: rgba(120,80,0,.06); border-color: rgba(120,80,0,.3); }
+[data-theme="light"] .log-card, [data-theme="light"] .chat-card { background: #fff; border-color: var(--bdr2); }
+[data-theme="light"] .log-hdr, [data-theme="light"] .chat-hdr { background: var(--surface2); color: var(--gold); }
+[data-theme="light"] .lline { color: var(--txt2) !important; }
+[data-theme="light"] .lline.imp { color: var(--gold) !important; }
+[data-theme="light"] .lline.suc { color: #1a7a38 !important; }
+[data-theme="light"] .lline.dan { color: #c01818 !important; }
+[data-theme="light"] .hud { background: #1a2a1a !important; }
+[data-theme="light"] .hud-tn { color: #f0c040 !important; }
+[data-theme="light"] .hud-day-n { color: #f0c040 !important; }
+[data-theme="light"] .ms { background: #fff !important; }
+[data-theme="light"] .ms-ttl { color: var(--txt) !important; }
+[data-theme="light"] .ms-cnt { color: var(--txt2) !important; }
+@media(max-width:520px){
+  .player-row{flex-wrap:wrap}
+  .player-inp{min-width:0;flex:1 1 calc(100% - 54px)}
+  .player-char{width:100%;margin-left:46px}
+  #s-setup{padding-bottom:180px}
+  .setup-actions{padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+  .act-grid{gap:8px}
+  .act-tile{height:112px}
+  .at-inner{grid-template-columns:48px minmax(0,1fr);padding:13px 12px 12px 15px;column-gap:9px;row-gap:4px}
+  .at-art{width:42px;height:42px;font-size:24px}
+  .at-name{font-size:12px;letter-spacing:1.1px}
+  .at-desc{font-size:10px;line-height:1.22}
+}
+</style>
+</head>
+<body>
+<canvas id="cvs"></canvas>
+<button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Сменить тему" style="position:fixed;top:12px;right:12px;z-index:50;width:38px;height:38px;border-radius:50%;border:1px solid rgba(200,145,10,.4);background:rgba(0,0,0,.4);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.4);">🌙</button>
+
+<!-- TITLE -->
+<div id="s-title" class="screen act">
+<div class="tw">
+  <div class="logo-d" data-i18n data-ru="✦  Карточная игра  ✦" data-en="✦  Card Game  ✦">✦ &nbsp; Карточная игра &nbsp; ✦</div>
+  <div class="logo-m">LIFEBOAT</div>
+  <div class="logo-s" data-i18n data-ru="ЗА БОРТОМ" data-en="ADRIFT">ЗА БОРТОМ</div>
+  <div class="logo-hr">⚓</div>
+  <div class="fan-w"><div class="fan-i" id="fan"></div></div>
+  <p class="tagline" data-i18n data-ru="Шлюпка. Шесть выживших. Секреты, предательство и открытое море." data-en="A lifeboat. Six survivors. Secrets, betrayal, and the open sea.">Шлюпка. Шесть выживших. Секреты, предательство и открытое море.</p>
+
+  <nav class="mn-nav">
+    <button class="btn btn-g mn-btn-play" onclick="showScr('s-setup')">
+      <div class="shine"></div>
+      <span>⚓</span><span class="mn-btn-label" data-i18n data-ru="ВЫБРАТЬ ИГРОКОВ" data-en="CHOOSE PLAYERS">ВЫБРАТЬ ИГРОКОВ</span><span class="mn-arr">›</span>
+    </button>
+    <button class="btn mn-btn-disabled" disabled>
+      <span>🌐</span><span class="mn-btn-label" data-i18n data-ru="ОНЛАЙН" data-en="ONLINE">ОНЛАЙН</span><span class="mn-soon" data-i18n data-ru="СКОРО" data-en="SOON">СКОРО</span>
+    </button>
+    <button class="btn mn-btn-disabled" disabled>
+      <span>👥</span><span class="mn-btn-label" data-i18n data-ru="ДРУЗЬЯ" data-en="FRIENDS">ДРУЗЬЯ</span><span class="mn-soon" data-i18n data-ru="СКОРО" data-en="SOON">СКОРО</span>
+    </button>
+    <button class="btn btn-o mn-btn-settings" onclick="showScr('s-settings')">
+      <span>⚙️</span><span class="mn-btn-label" data-i18n data-ru="НАСТРОЙКИ" data-en="SETTINGS">НАСТРОЙКИ</span><span class="mn-arr">›</span>
+    </button>
+    <button class="btn btn-o mn-btn-rules" onclick="showScr('s-rules')">
+      <span>📜</span><span class="mn-btn-label" data-i18n data-ru="ПРАВИЛА" data-en="RULES">ПРАВИЛА</span><span class="mn-arr">›</span>
+    </button>
+  </nav>
+</div>
+</div>
+
+<!-- SETUP -->
+<div id="s-setup" class="screen">
+  <div class="setup-hdr"><div class="setup-hdr-t" data-i18n data-ru="⚓ НАЧАТЬ ИГРУ" data-en="⚓ START GAME">⚓ НАЧАТЬ ИГРУ</div></div>
+  <div class="setup-card">
+    <div class="sec-lbl" id="setup-players-lbl" data-i18n data-ru="Число игроков" data-en="Number of players">Число игроков</div>
+    <div class="cnt-row">
+      <button class="cnt-btn" onclick="setPC(4,this)">4</button>
+      <button class="cnt-btn on" onclick="setPC(5,this)">5</button>
+      <button class="cnt-btn" onclick="setPC(6,this)">6</button>
+    </div>
+  </div>
+  <div class="setup-card" style="margin-top:12px">
+    <div class="sec-lbl" id="setup-names-lbl" data-i18n data-ru="Имена игроков" data-en="Player names">Имена игроков</div>
+    <div id="plist"></div>
+  </div>
+  <div class="setup-actions">
+    <button class="btn btn-random" id="btn-random-chars" onclick="randomizeChars()"><span data-i18n data-ru="🎲 СЛУЧАЙНЫЕ ПЕРСОНАЖИ" data-en="🎲 RANDOM CHARACTERS">🎲 СЛУЧАЙНЫЕ ПЕРСОНАЖИ</span></button>
+    <button class="btn btn-g" id="btn-sail" onclick="startGame()"><div class="shine"></div><span data-i18n data-ru="⚓  ОТЧАЛИТЬ!" data-en="⚓  SET SAIL!">⚓ &nbsp;ОТЧАЛИТЬ!</span></button>
+    <button class="btn btn-o" onclick="showScr('s-title')" data-i18n data-ru="← Назад" data-en="← Back">← Назад</button>
+  </div>
+</div>
+
+<!-- PASS PHONE -->
+<div id="s-pass" class="screen">
+<div class="pass-wrap">
+  <div class="pass-icon">📱</div>
+  <div class="pass-title" data-i18n data-ru="ПЕРЕДАЙ ТЕЛЕФОН" data-en="PASS THE PHONE">ПЕРЕДАЙ ТЕЛЕФОН</div>
+  <div class="pass-to" id="pass-to">—</div>
+  <div class="pass-sub" id="pass-sub">Не смотри на экран, пока телефон передают!</div>
+  <button class="btn btn-g" style="width:280px" onclick="onPassOK()"><div class="shine"></div><span data-i18n data-ru="✓  Я ГОТОВ" data-en="✓  I'M READY">✓ &nbsp;Я ГОТОВ</span></button>
+  <div class="pass-info" id="pass-info"></div>
+</div>
+</div>
+
+<!-- GAME -->
+<div id="s-game" class="screen">
+  <div class="hud">
+    <div class="hud-row">
+      <div class="hud-day"><div class="hud-day-n" id="hud-day">1</div><div class="hud-day-l" data-i18n data-ru="ДЕНЬ" data-en="DAY">ДЕНЬ</div></div>
+      <div class="hud-c"><div class="hud-tl" data-i18n data-ru="ХОД ИГРОКА" data-en="PLAYER TURN">ХОД ИГРОКА</div><div class="hud-tn" id="hud-player">—</div></div>
+      <div class="hud-bi"><div class="hud-bl" data-i18n data-ru="ПТИЦЫ" data-en="BIRDS">ПТИЦЫ</div><div class="hud-br" id="hud-birds"></div></div>
+    </div>
+    <div class="phase-bar"><div class="ph act" id="ph0"></div><div class="ph" id="ph1"></div><div class="ph" id="ph2"></div></div>
+    <div class="hud-pn" id="hud-phase" data-i18n data-ru="КВАРТИРМЕЙСТЕР" data-en="QUARTERMASTER">КВАРТИРМЕЙСТЕР</div>
+  </div>
+  <div style="width:100%;max-width:480px;display:flex;justify-content:flex-end;padding:2px 12px 0"><button onclick="askRestart()" style="background:none;border:none;color:rgba(200,145,10,.4);font-size:11px;cursor:pointer;font-family:Cinzel,serif;letter-spacing:1px;padding:3px 6px">↺ новая игра</button></div>
+
+  <!-- QM Phase -->
+  <div class="qm-zone" id="qm-zone" style="display:none">
+    <div class="qm-hdr" data-i18n data-ru="⚖️ КВАРТИРМЕЙСТЕР" data-en="⚖️ QUARTERMASTER">⚖️ КВАРТИРМЕЙСТЕР</div>
+    <div class="qm-sub" id="qm-sub">Раздача припасов</div>
+    <div class="qm-row" id="qm-row"></div>
+    <div class="qm-actions" id="qm-actions"></div>
+    <div class="dispute-panel" id="dispute-panel">
+      <div class="dispute-t" data-i18n data-ru="⚡ ГОЛОСОВАНИЕ — оспорить раздачу?" data-en="⚡ VOTE — dispute the deal?">⚡ ГОЛОСОВАНИЕ — оспорить раздачу?</div>
+      <div class="dispute-votes" id="dispute-votes"></div>
+      <div class="vote-result" id="vote-result"></div>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:620px;margin:16px 0 0;padding:0 12px;position:relative" id="boat-section">
+    <svg viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.7)">
+      <defs>
+        <radialGradient id="bseag" cx="50%" cy="18%" r="90%"><stop offset="0%" stop-color="#164965"/><stop offset="55%" stop-color="#092236"/><stop offset="100%" stop-color="#030a12"/></radialGradient>
+        <linearGradient id="bhullg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#b46b24"/><stop offset="46%" stop-color="#7a3b14"/><stop offset="100%" stop-color="#2a1006"/></linearGradient>
+        <linearGradient id="binnerg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3b1b0a"/><stop offset="100%" stop-color="#120805"/></linearGradient>
+        <linearGradient id="brimg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a2a0c"/><stop offset="12%" stop-color="#d18a32"/><stop offset="50%" stop-color="#f0bd5a"/><stop offset="88%" stop-color="#d18a32"/><stop offset="100%" stop-color="#5a2a0c"/></linearGradient>
+        <filter id="bshad"><feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#000" flood-opacity=".75"/></filter>
+      </defs>
+      <rect width="520" height="190" fill="url(#bseag)" rx="12"/>
+      <circle cx="370" cy="22" r="6" fill="rgba(255,245,200,0.35)"/>
+      <circle cx="30" cy="15" r="1" fill="rgba(255,255,255,0.4)"/><circle cx="150" cy="10" r="1.2" fill="rgba(255,255,255,0.5)"/><circle cx="310" cy="12" r="1" fill="rgba(255,255,255,0.4)"/>
+      <path d="M0,92 Q36,87 72,92 Q108,97 144,92 Q180,87 216,92 Q252,97 288,92 Q324,87 360,92 Q396,97 420,90" stroke="rgba(120,190,230,0.18)" stroke-width="2" fill="none"/>
+      <path d="M0,105 Q30,100 60,105 Q90,110 120,105 Q150,100 180,105 Q210,110 240,105 Q270,100 300,105 Q330,110 360,105 Q390,100 420,103" stroke="rgba(100,170,220,0.13)" stroke-width="1.5" fill="none"/>
+      <ellipse cx="210" cy="148" rx="160" ry="14" fill="rgba(0,0,0,0.4)"/>
+      <path d="M28,118 Q38,76 65,72 L355,72 Q382,76 392,118 Q370,140 210,147 Q50,140 28,118Z" fill="url(#bhullg)" filter="url(#bshad)"/>
+      <path d="M42,87 Q210,96 380,87" stroke="rgba(0,0,0,.22)" stroke-width="1.5" fill="none"/>
+      <path d="M33,106 Q210,118 387,106" stroke="rgba(0,0,0,.2)" stroke-width="1.5" fill="none"/>
+      <path d="M65,72 L355,72 Q375,74 385,82 Q210,78 35,82 Q45,74 65,72Z" fill="rgba(255,190,80,0.14)"/>
+      <path d="M65,72 L355,72" stroke="#5a3010" stroke-width="4" fill="none"/>
+      <rect x="85" y="81" width="250" height="7" rx="3" fill="#2a1206" opacity=".65"/>
+      <line x1="52" y1="98" x2="4" y2="134" stroke="#6a3010" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="1" cy="137" rx="11" ry="4.5" fill="#5a2a10" transform="rotate(-30,1,137)"/>
+      <line x1="368" y1="98" x2="416" y2="134" stroke="#6a3010" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="419" cy="137" rx="11" ry="4.5" fill="#5a2a10" transform="rotate(30,419,137)"/>
+      <text x="8" y="80" font-family="Cinzel,serif" font-size="8" fill="rgba(200,160,60,0.45)">НОС</text>
+      <text x="380" y="80" font-family="Cinzel,serif" font-size="8" fill="rgba(200,160,60,0.45)">КОРМА</text>
+      <rect width="520" height="190" fill="url(#bseag)" rx="12"/>
+      <circle cx="462" cy="24" r="8" fill="rgba(255,235,170,0.36)"/>
+      <circle cx="54" cy="18" r="1" fill="rgba(255,255,255,0.45)"/><circle cx="182" cy="13" r="1.2" fill="rgba(255,255,255,0.5)"/><circle cx="372" cy="16" r="1" fill="rgba(255,255,255,0.42)"/>
+      <path d="M0,94 Q40,88 80,94 T160,94 T240,94 T320,94 T400,94 T520,92" stroke="rgba(130,210,245,0.18)" stroke-width="2.2" fill="none"/>
+      <path d="M0,122 Q38,116 76,122 T152,122 T228,122 T304,122 T380,122 T520,120" stroke="rgba(90,170,220,0.16)" stroke-width="1.6" fill="none"/>
+      <path d="M18,154 Q90,144 154,154 T290,154 T430,154 T520,150" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" fill="none"/>
+      <ellipse cx="260" cy="162" rx="198" ry="15" fill="rgba(0,0,0,0.45)"/>
+      <g filter="url(#bshad)">
+        <path d="M42,126 Q56,86 92,76 Q174,64 260,66 Q346,64 428,76 Q464,86 478,126 Q446,154 260,164 Q74,154 42,126Z" fill="url(#bhullg)"/>
+        <path d="M82,82 Q170,72 260,74 Q350,72 438,82 Q409,105 260,109 Q111,105 82,82Z" fill="url(#binnerg)" opacity=".95"/>
+        <path d="M62,92 Q156,78 260,80 Q364,78 458,92" stroke="url(#brimg)" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <path d="M72,93 Q158,84 260,86 Q362,84 448,93" stroke="rgba(40,12,2,.8)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M65,124 Q124,139 260,145 Q396,139 455,124" stroke="rgba(20,6,2,.35)" stroke-width="2" fill="none"/>
+        <path d="M70,112 Q132,125 260,130 Q388,125 450,112" stroke="rgba(255,190,80,.13)" stroke-width="2" fill="none"/>
+        <path d="M97,86 Q88,106 75,132" stroke="rgba(245,175,70,.26)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M158,80 Q153,108 146,143" stroke="rgba(245,175,70,.20)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M260,78 L260,151" stroke="rgba(245,175,70,.18)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M362,80 Q367,108 374,143" stroke="rgba(245,175,70,.20)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M423,86 Q432,106 445,132" stroke="rgba(245,175,70,.26)" stroke-width="3" stroke-linecap="round"/>
+        <rect x="124" y="101" width="272" height="8" rx="4" fill="#d49a46" opacity=".88"/>
+        <rect x="126" y="105" width="268" height="4" rx="2" fill="#51240c" opacity=".55"/>
+        <rect x="158" y="122" width="204" height="7" rx="3.5" fill="#b7752d" opacity=".72"/>
+        <rect x="160" y="125" width="200" height="3" rx="1.5" fill="#311207" opacity=".45"/>
+        <path d="M88,81 Q60,96 43,126 Q77,104 118,89Z" fill="rgba(230,150,55,.35)"/>
+        <path d="M432,81 Q460,96 477,126 Q443,104 402,89Z" fill="rgba(230,150,55,.35)"/>
+        <path d="M98,75 Q70,85 54,103" stroke="rgba(245,200,90,.45)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M422,75 Q450,85 466,103" stroke="rgba(245,200,90,.45)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g opacity=".95">
+        <line x1="86" y1="111" x2="17" y2="161" stroke="#8a4a1a" stroke-width="5" stroke-linecap="round"/>
+        <ellipse cx="13" cy="164" rx="17" ry="6" fill="#6b3512" transform="rotate(-31,13,164)"/>
+        <line x1="434" y1="111" x2="503" y2="161" stroke="#8a4a1a" stroke-width="5" stroke-linecap="round"/>
+        <ellipse cx="507" cy="164" rx="17" ry="6" fill="#6b3512" transform="rotate(31,507,164)"/>
+      </g>
+      <text x="22" y="83" font-family="Cinzel,serif" font-size="8" fill="rgba(220,175,80,0.5)">НОС</text>
+      <text x="463" y="83" font-family="Cinzel,serif" font-size="8" fill="rgba(220,175,80,0.5)">КОРМА</text>
+    </svg>
+    <div id="pawns-layer" style="position:absolute;top:30%;left:10%;right:10%;bottom:18%;display:flex;align-items:flex-end;justify-content:space-around;pointer-events:none"></div>
+  </div>
+
+  <!-- Players -->
+  <div class="players-zone" id="players-zone"></div>
+
+  <!-- Hand -->
+  <div class="hand-zone">
+    <div class="zone-hdr"><div class="zone-t" data-i18n data-ru="🃏 Карты на руке" data-en="🃏 Cards in hand">🃏 Карты на руке</div><div class="zone-c" id="hand-count"></div></div>
+    <div class="hand-scroll" id="hand-scroll"></div>
+  </div>
+
+  <!-- Actions -->
+  <div class="act-zone" id="act-zone">
+    <div class="zone-hdr" style="margin-bottom:10px"><div class="zone-t" data-i18n data-ru="⚡ Выбери действие" data-en="⚡ Choose an action">⚡ Выбери действие</div></div>
+    <div class="act-grid">
+      <div class="act-tile act-rest" onclick="doAct('nothing')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">😴</div><div class="at-name" data-i18n data-ru="НИЧЕГО" data-en="REST">НИЧЕГО</div><div class="at-desc" data-i18n data-ru="Спокойно сидеть" data-en="Sit calmly">Спокойно сидеть</div></div></div>
+      <div class="act-tile act-row" onclick="doAct('row')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🚣</div><div class="at-name" data-i18n data-ru="ГРЕСТИ" data-en="ROW">ГРЕСТИ</div><div class="at-desc" data-i18n data-ru="Изучить навигационную карту" data-en="Look at navigation cards">Изучить навигационную карту</div></div></div>
+      <div class="act-tile act-seat" onclick="doAct('seat')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🔀</div><div class="at-name" data-i18n data-ru="ПЕРЕСЕСТЬ" data-en="SWAP SEATS">ПЕРЕСЕСТЬ</div><div class="at-desc" data-i18n data-ru="Жертва сама решает — или драка!" data-en="Target accepts or fights!">Жертва сама решает — или драка!</div></div></div>
+      <div class="act-tile act-mug" onclick="doAct('mug')"><div class="at-bg"></div><div class="at-frame"></div><div class="at-inner"><div class="at-art">🤜</div><div class="at-name" data-i18n data-ru="ОГРАБИТЬ" data-en="MUG">ОГРАБИТЬ</div><div class="at-desc" data-i18n data-ru="Жертва сама решает — или драка!" data-en="Target accepts or fights!">Жертва сама решает — или драка!</div></div></div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-zone">
+    <div class="chat-card">
+      <div class="chat-hdr" data-i18n data-ru="💬  ЧАТ ИГРОКОВ" data-en="💬  PLAYER CHAT">💬 &nbsp; ЧАТ ИГРОКОВ</div>
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <div class="chat-inp-row">
+        <input class="chat-inp" id="chat-inp" placeholder="Написать в чат..." data-placeholder-ru="Написать в чат..." data-placeholder-en="Write in chat..." maxlength="120" onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="chat-send" onclick="sendChat()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div class="log-zone">
+    <div class="log-card">
+      <div class="log-hdr" data-i18n data-ru="📖  СУДОВОЙ ЖУРНАЛ" data-en="📖  SHIP LOG">📖 &nbsp; СУДОВОЙ ЖУРНАЛ</div>
+      <div class="log-body" id="log-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE -->
+<div id="s-score" class="screen">
+  <div class="score-hdr"><span class="score-icon">🏝</span><div class="score-ttl" data-i18n data-ru="ЗЕМЛЯ!" data-en="LAND!">ЗЕМЛЯ!</div><div class="score-sub" data-i18n data-ru="Берег достигнут — итоги путешествия" data-en="The shore is reached — voyage results">Берег достигнут — итоги путешествия</div></div>
+  <div class="score-div"></div>
+  <div class="score-list" id="score-list"></div>
+  <button class="btn btn-g" style="margin-top:16px" onclick="showScr('s-title')"><div class="shine"></div><span data-i18n data-ru="⚓  НОВАЯ ИГРА" data-en="⚓  NEW GAME">⚓ &nbsp;НОВАЯ ИГРА</span></button>
+</div>
+
+<!-- RULES -->
+<div id="s-rules" class="screen">
+<div class="rules-hdr"><div class="rules-ttl" data-i18n data-ru="📜 ПРАВИЛА" data-en="📜 RULES">📜 ПРАВИЛА</div></div>
+<div class="rules-body">
+
+<!-- ЦЕЛЬ -->
+<div class="rb rb-accent">
+  <div class="rb-t">🎯 Цель игры</div>
+  <div class="rb-x">Вы выжили при кораблекрушении и дрейфуете в шлюпке. Среди вас есть ваш лучший друг и заклятый враг — но никто не знает кто есть кто. Доберитесь до берега и наберите больше очков, чем другие.<br><br>
+  Игра заканчивается когда появляется <b>4-я птица</b> на навигационной карте.</div>
+</div>
+
+<!-- СТРУКТУРА РАУНДА -->
+<div class="rb">
+  <div class="rb-t">🔄 Структура раунда (один день)</div>
+  <div class="rb-x">
+    <div class="rb-phase">
+      <span class="rb-num">1</span>
+      <span><b>Утро — Раздача припасов.</b> Игрок у носа берёт N карт (N = количество в сознании), выбирает одну, передаёт остальные к корме. Последний берёт что осталось.</span>
+    </div>
+    <div class="rb-phase">
+      <span class="rb-num">2</span>
+      <span><b>День — Действия.</b> Каждый притомный игрок выполняет одно действие (от носа к корме).</span>
+    </div>
+    <div class="rb-phase">
+      <span class="rb-num">3</span>
+      <span><b>Вечер — Навигация.</b> Игрок на корме выбирает навигационную карту и разыгрывает её эффекты.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ДЕЙСТВИЯ -->
+<div class="rb">
+  <div class="rb-t">⚡ Доступные действия</div>
+  <div class="rb-x">
+    <div class="rb-act"><span class="rb-ico">😴</span><div><b>Ничего</b> — пропустить ход. Минимальный риск получить рану.</div></div>
+    <div class="rb-act"><span class="rb-ico">🚣</span><div><b>Грести</b> — взять 2 навигационные карты (3 если есть открытое весло), отложить до 2 к корме, остальные под колоду. Получить жетон усталости.</div></div>
+    <div class="rb-act"><span class="rb-ico">🔀</span><div><b>Пересесть</b> — предложить игроку поменяться местами. Если откажет — <b>драка!</b></div></div>
+    <div class="rb-act"><span class="rb-ico">🤜</span><div><b>Ограбить</b> — забрать карту у игрока. Если откажет — <b>драка!</b> <em>Малый может тихо украсть закрытую карту без боя.</em></div></div>
+    <div class="rb-act"><span class="rb-ico">🃏</span><div><b>Сыграть спецкарту</b> — аптечку, зонтик или ракетницу (одну за ход).</div></div>
+  </div>
+</div>
+
+<!-- ДРАКА -->
+<div class="rb">
+  <div class="rb-t">⚔️ Драка</div>
+  <div class="rb-x">
+    Начинается только при <b>отказе</b> поменяться местами или отдать карту.<br><br>
+    <div class="rb-rule">🔢 Сила команды = Сила персонажа + Открытое оружие + Союзники</div>
+    <div class="rb-rule">🏆 Нападающий побеждает если его сила <b>строго больше</b> (при равенстве — победа защитника)</div>
+    <div class="rb-rule">💉 Проигравшая сторона получает по <b>1 ране</b> каждый</div>
+    <div class="rb-rule">😓 Все участники драки получают жетон <b>усталости</b></div>
+    <br>Оружие: <b>Весло +3</b> · <b>Багор +4</b> · <b>Нож +1</b> · <b>Палица +2</b><br>
+    <em>Ракетница — одноразовое оружие (8 силы), после использования уходит.</em>
+  </div>
+</div>
+
+<!-- РАНЫ И СМЕРТЬ -->
+<div class="rb">
+  <div class="rb-t">💉 Раны, сознание, смерть</div>
+  <div class="rb-x">
+    <div class="rb-rule">Раны = Сила персонажа → <b>😵 без сознания</b> (пропускает ходы, получает карты и действует союзниками)</div>
+    <div class="rb-rule">Следующая рана без сознания → <b>💀 смерть</b></div>
+    <div class="rb-rule">В начале следующего дня: без сознания но раны &lt; силы → приходит в себя</div>
+    <div class="rb-rule">За бортом → 1 рана (кроме Французика) + потеря <b>всех открытых карт</b> (кроме спасательного круга)</div>
+    <div class="rb-rule">Жажда без воды → 1 рана. Без сознания + жажда → смерть</div>
+  </div>
+</div>
+
+<!-- НАВИГАЦИЯ ВЕЧЕРОМ -->
+<div class="rb">
+  <div class="rb-t">🧭 Вечер — Навигация</div>
+  <div class="rb-x">
+    Игрок на корме (в сознании) выбирает одну из отложенных гребцами карт.<br>Если таких нет — берёт верхнюю с колоды.<br><br>
+    Карта разыгрывается в порядке:<br>
+    <div class="rb-phase"><span class="rb-num">A</span><span><b>🕊 Птица</b> — +1 жетон. 4 жетона = игра окончена, считаем очки! <b>✗Птица</b> — убрать 1 жетон.</span></div>
+    <div class="rb-phase"><span class="rb-num">B</span><span><b>🌊 За борт</b> — указанные персонажи падают: рана + потеря открытых карт.</span></div>
+    <div class="rb-phase"><span class="rb-num">C</span><span><b>🥵 Жажда</b> — указанные, гребшие или дравшиеся: скинуть воду или рана. Зонтик защищает от первой жажды.</span></div>
+    <br><em>После: убрать жетоны усталости.</em>
+  </div>
+</div>
+
+<!-- КАРТЫ ПРИПАСОВ -->
+<div class="rb">
+  <div class="rb-t">🎒 Карты припасов</div>
+  <div class="rb-x">
+    <b>Закрытая карта</b> — лежит рубашкой вверх (в шлюпке). Можно открыть в любой момент. Остаётся при падении за борт.<br>
+    <b>Открытая карта</b> — лицом вверх, эффект активен. При падении за борт — теряется.<br><br>
+    <div class="rb-cards-grid">
+      <div class="rb-card-item"><span>💧</span><div><b>Вода ×4</b> — утоляет одну жажду</div></div>
+      <div class="rb-card-item"><span>🍖</span><div><b>Провизия ×3</b> — +1 очко</div></div>
+      <div class="rb-card-item"><span>💎</span><div><b>Самоцветы ×2</b> — +3 очка (Лорен: ×2)</div></div>
+      <div class="rb-card-item"><span>🖼</span><div><b>Картина</b> — +4 очка (Стефан: ×2)</div></div>
+      <div class="rb-card-item"><span>💰</span><div><b>Монеты</b> — +2 очка (Капитан: ×2)</div></div>
+      <div class="rb-card-item"><span>💊</span><div><b>Аптечка</b> — убирает 1 рану с любого (в т.ч. без сознания). Одноразовая.</div></div>
+      <div class="rb-card-item"><span>☂️</span><div><b>Зонтик</b> — защита от первой жажды. Остаётся до потери.</div></div>
+      <div class="rb-card-item"><span>🚨</span><div><b>Ракетница</b> — действие: 3 карты навигации, применить птиц. Или оружие (сила 8). Одноразовая.</div></div>
+      <div class="rb-card-item"><span>🧭</span><div><b>Компас</b> — игрок на корме берёт +1 карту при выборе навигации.</div></div>
+      <div class="rb-card-item"><span>🔵</span><div><b>Спасательный круг</b> — нет раны при падении за борт. Можно бросить притомному.</div></div>
+      <div class="rb-card-item"><span>🚣</span><div><b>Весло</b> — +1 карта при гребле. Оружие (сила 3). Можно передать после использования.</div></div>
+      <div class="rb-card-item"><span>🔪</span><div><b>Нож</b> — оружие (сила 1).</div></div>
+      <div class="rb-card-item"><span>🪝</span><div><b>Верёвка</b> — +1 очко.</div></div>
+      <div class="rb-card-item"><span>🦈</span><div><b>Приманка для акул</b> — при навигации: все за бортом получают доп. рану (даже Матрос и с кругом).</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ПЕРСОНАЖИ -->
+<div class="rb">
+  <div class="rb-t">👤 Персонажи</div>
+  <div class="rb-x">
+    <div class="rb-chars">
+      <div class="rb-char"><b>Леди Лорен</b><span>Сила 4 · Выж. 8 · Самоцветы ×2</span></div>
+      <div class="rb-char"><b>Сэр Стефан</b><span>Сила 5 · Выж. 7 · Картины ×2</span></div>
+      <div class="rb-char"><b>Капитан</b><span>Сила 7 · Выж. 5 · Деньги ×2</span></div>
+      <div class="rb-char"><b>Боцман</b><span>Сила 8 · Выж. 4 · Огромный</span></div>
+      <div class="rb-char"><b>Французик</b><span>Сила 3 · Выж. 3 · Не получает рану за борт</span></div>
+      <div class="rb-char"><b>Малыш</b><span>Сила 3 · Выж. 9 · Тихо крадёт закрытые карты</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ПОДСЧЁТ ОЧКОВ -->
+<div class="rb rb-accent">
+  <div class="rb-t">🏆 Подсчёт очков</div>
+  <div class="rb-x">
+    <div class="rb-score-row"><span>✅ Выжил</span><span>Очки выживания персонажа</span></div>
+    <div class="rb-score-row"><span>❤️ Друг выжил</span><span>Его очки выживания</span></div>
+    <div class="rb-score-row"><span>💀 Враг погиб</span><span>Его сила</span></div>
+    <div class="rb-score-row"><span>💎 Сокровища</span><span>Стоимость карт (×2 для спецперсонажей)</span></div>
+    <br>
+    <div class="rb-rule"><b>Нарцисс</b> (сам себе друг) → двойные очки за выживание</div>
+    <div class="rb-rule"><b>Психопат</b> (сам себе враг) → 0 за выживание, +3 за каждого мертвеца (кроме себя и друга)</div>
+  </div>
+</div>
+
+</div><!-- rules-body -->
+<div style="width:calc(100% - 24px);max-width:440px;margin:16px auto;padding-bottom:40px">
+  <button class="btn btn-g" onclick="showScr('s-title')"><div class="shine"></div><span data-i18n data-ru="← Назад" data-en="← Back">← Назад</span></button>
+</div>
+</div>
+
+<div class="mv" id="modal">
+  <div class="ms">
+    <div class="ms-handle"></div>
+    <div class="ms-bi">
+      <div class="ms-ttl" id="modal-title"></div>
+      <div class="ms-div"></div>
+      <div class="ms-cnt" id="modal-content"></div>
+      <div class="ms-btns" id="modal-btns"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+// ── OCEAN BG ──
+(()=>{
+  const c=document.getElementById('cvs');if(!c||!c.getContext)return;const ctx=c.getContext('2d');
+  let t=0;
+  const r=()=>{c.width=innerWidth;c.height=innerHeight};r();window.doHealCard=doHealCard;
+window._rowToggle=null;
+window._rowChosen=new Set();
+window.addEventListener('resize',r);
+  (function d(){
+    const light=document.documentElement.getAttribute('data-theme')==='light';
+    ctx.fillStyle=light?'#e8dcc8':'#030810';ctx.fillRect(0,0,c.width,c.height);
+    for(let l=0;l<4;l++){
+      const a=.04+l*.03,s=.3+l*.1,amp=6+l*5,fr=.006-l*.0007,yb=c.height*(.45+l*.15);
+      ctx.beginPath();ctx.moveTo(0,c.height);
+      for(let x=0;x<=c.width;x+=3)ctx.lineTo(x,yb+Math.sin(x*fr+t*s)*amp+Math.cos(x*fr*1.8+t*s*.7)*amp*.3);
+      ctx.lineTo(c.width,c.height);ctx.closePath();
+      ctx.fillStyle=light?`rgba(95,150,160,${a*.75})`:`rgba(20,70,120,${a})`;ctx.fill();
+    }
+    t+=.008;requestAnimationFrame(d);
+  })();
+})();
+
+// ── DATA ──
+const CHARS=[
+  {id:'lauren',name:'Леди Лорен',sub:'Светская дама',emoji:'👩',col0:'#6030a8',col1:'#2a1060',col2:'#8a50c8',size:4,sv:4,rarity:'rare',flavor:'"Я требую немедленной эвакуации!"',fx:'Никогда не теряет больше одной карты'},
+  {id:'stephen',name:'Сэр Стефан',sub:'Английский джентльмен',emoji:'🧐',col0:'#2a5080',col1:'#0e2040',col2:'#4a80b0',size:5,sv:5,rarity:'uncommon',flavor:'"Это просто недоразумение."',fx:'Может видеть одну карту навигации'},
+  {id:'captain',name:'Капитан',sub:'Морской волк',emoji:'🎩',col0:'#1a4030',col1:'#081808',col2:'#2a6050',size:7,sv:7,rarity:'epic',flavor:'"Я бороздил эти воды 30 лет."',fx:'Квартирмейстер слушается его'},
+  {id:'mate',name:'Боцман',sub:'Суровый мореход',emoji:'⚓',col0:'#6a2010',col1:'#280a04',col2:'#9a3820',size:8,sv:6,rarity:'rare',flavor:'"Никто не выживет без меня."',fx:'+1 к силе при любой драке'},
+  {id:'frenchy',name:'Французик',sub:'Хитрый эмигрант',emoji:'🥐',col0:'#806010',col1:'#302005',col2:'#b08020',size:3,sv:3,rarity:'uncommon',flavor:'"Mon dieu!"',fx:'Не получает рану при падении за борт'},
+  {id:'kid',name:'Малыш',sub:'Юнга',emoji:'👦',col0:'#505070',col1:'#202030',col2:'#7070a0',size:3,sv:3,rarity:'common',flavor:'"Я умею плавать!"',fx:'Занимает меньше места'},
+];
+const SEAT_ORDER=['lauren','stephen','captain','mate','frenchy','kid'];
+const CHAR_NAMES_EN={
+  lauren:'Lady Lauren',
+  stephen:'Sir Stephen',
+  captain:'Captain',
+  mate:'First Mate',
+  frenchy:'Sailor',
+  kid:'Kid'
+};
+function charDisplayName(ch){
+  return _lang==='en'?(CHAR_NAMES_EN[ch.id]||ch.name):ch.name;
+}
+const CARD_EN={
+  water:{n:'Water',type:'Drink',fx:'Quenches thirst'},
+  food:{n:'Food',type:'Supply',fx:'+1 point'},
+  jewels:{n:'Jewels',type:'Treasure',fx:'+3 points'},
+  painting:{n:'Painting',type:'Treasure',fx:'+4 points'},
+  cash:{n:'Coins',type:'Treasure',fx:'+2 points'},
+  flare:{n:'Flare Gun',type:'Weapon',fx:'+8 fight'},
+  oar:{n:'Oar',type:'Weapon',fx:'+1 fight'},
+  knife:{n:'Knife',type:'Weapon',fx:'+3 fight'},
+  parasol:{n:'Parasol',type:'Protection',fx:'Protects from thirst'},
+  life:{n:'Life Ring',type:'Protection',fx:'Overboard protection'},
+  medkit:{n:'Medkit',type:'Healing',fx:'Heal one wound'},
+  rope:{n:'Rope',type:'Gear',fx:'+1 point'},
+  compass:{n:'Compass',type:'Navigation',fx:'Choose navigation card'}
+};
+function cardName(card){return _lang==='en'?(CARD_EN[card.id]?.n||card.n):card.n;}
+function cardType(card){return _lang==='en'?(CARD_EN[card.id]?.type||card.type):card.type;}
+function cardFx(card){return _lang==='en'?(CARD_EN[card.id]?.fx||card.fx):card.fx;}
+const PROV=[
+  {id:'water',n:'Вода',type:'Напиток',cat:'provision',val:0,rarity:'common',col0:'#0050a0',col1:'#001840',col2:'#0080c0',flavor:'Последний глоток.',fx:'Снимает жажду'},
+  {id:'water',n:'Вода',type:'Напиток',cat:'provision',val:0,rarity:'common',col0:'#0050a0',col1:'#001840',col2:'#0080c0',flavor:'Последний глоток.',fx:'Снимает жажду'},
+  {id:'water',n:'Вода',type:'Напиток',cat:'provision',val:0,rarity:'common',col0:'#0050a0',col1:'#001840',col2:'#0080c0',flavor:'Последний глоток.',fx:'Снимает жажду'},
+  {id:'water',n:'Вода',type:'Напиток',cat:'provision',val:0,rarity:'common',col0:'#0050a0',col1:'#001840',col2:'#0080c0',flavor:'Последний глоток.',fx:'Снимает жажду'},
+  {id:'food',n:'Провизия',type:'Припас',cat:'provision',val:1,rarity:'common',col0:'#406020',col1:'#182408',col2:'#608030',flavor:'Сухой паёк.',fx:'+1 очко'},
+  {id:'food',n:'Провизия',type:'Припас',cat:'provision',val:1,rarity:'common',col0:'#406020',col1:'#182408',col2:'#608030',flavor:'Сухой паёк.',fx:'+1 очко'},
+  {id:'food',n:'Провизия',type:'Припас',cat:'provision',val:1,rarity:'common',col0:'#406020',col1:'#182408',col2:'#608030',flavor:'Сухой паёк.',fx:'+1 очко'},
+  {id:'jewels',n:'Самоцветы',type:'Сокровище',cat:'treasure',val:3,rarity:'rare',col0:'#5040a0',col1:'#201840',col2:'#7060d0',flavor:'Бриллианты.',fx:'+3 очка'},
+  {id:'jewels',n:'Самоцветы',type:'Сокровище',cat:'treasure',val:3,rarity:'rare',col0:'#5040a0',col1:'#201840',col2:'#7060d0',flavor:'Бриллианты.',fx:'+3 очка'},
+  {id:'painting',n:'Картина',type:'Сокровище',cat:'treasure',val:4,rarity:'epic',col0:'#804010',col1:'#301808',col2:'#c06020',flavor:'"Шедевр Возрождения."',fx:'+4 очка'},
+  ...Array(2).fill({id:'cash',n:'Монеты',type:'Сокровище',cat:'treasure',val:2,rarity:'uncommon',col0:'#806000',col1:'#302400',col2:'#c09000',flavor:'"Последние сбережения."',fx:'+2 очка'}),
+  {id:'flare',n:'Ракетница',type:'Оружие',cat:'weapon',val:0,rarity:'rare',col0:'#a04000',col1:'#401800',col2:'#e06000',flavor:'"Сигнал или оружие?"',fx:'+2 Сила в бою'},
+  {id:'oar',n:'Весло',type:'Оружие',cat:'weapon',val:0,rarity:'common',col0:'#703010',col1:'#2c1008',col2:'#a04c18',flavor:'"Дерево стало оружием."',fx:'+2 Сила в бою'},
+  {id:'knife',n:'Нож',type:'Оружие',cat:'weapon',val:0,rarity:'uncommon',col0:'#606060',col1:'#202020',col2:'#909090',flavor:'"Складной нож матроса."',fx:'+3 Сила в бою'},
+  {id:'parasol',n:'Зонтик',type:'Защита',cat:'protection',val:0,rarity:'uncommon',col0:'#904060',col1:'#381828',col2:'#c06080',flavor:'"Дамская безделушка."',fx:'Защита от жажды'},
+  {id:'life',n:'Спас. круг',type:'Защита',cat:'protection',val:0,rarity:'uncommon',col0:'#204060',col1:'#081828',col2:'#306090',flavor:'"Последняя надежда."',fx:'Защита за бортом'},
+  {id:'medkit',n:'Аптечка',type:'Лечение',cat:'protection',val:0,rarity:'rare',col0:'#a01818',col1:'#400808',col2:'#d02020',flavor:'"Один шприц на всех."',fx:'Нажми — снять рану'},
+  {id:'rope',n:'Верёвка',type:'Снаряжение',cat:'provision',val:1,rarity:'common',col0:'#806830',col1:'#302810',col2:'#b09040',flavor:'"Десять метров каната."',fx:'+1 очко'},
+  {id:'compass',n:'Компас',type:'Навигация',cat:'provision',val:0,rarity:'uncommon',col0:'#284060',col1:'#101828',col2:'#406080',flavor:'"Стрелка на север."',fx:'Выбираешь карту навигации'},
+];
+const PROV_COUNTS={water:6,food:6,cash:5,jewels:5,painting:2,flare:2,oar:4,knife:2,parasol:2,life:2,medkit:2,rope:2,compass:2};
+function buildProvDeck(){
+  const byId={};
+  PROV.forEach(c=>{if(!byId[c.id])byId[c.id]=c;});
+  const deck=[];
+  Object.keys(PROV_COUNTS).forEach(id=>{
+    for(let i=0;i<PROV_COUNTS[id];i++)deck.push({...byId[id]});
+  });
+  return deck;
+}
+const NAV_DECK=[
+  {bird:1,ob:null,th:[],row:0,fig:0},{bird:1,ob:null,th:['captain'],row:0,fig:0},
+  {bird:1,ob:'frenchy',th:[],row:0,fig:0},{bird:1,ob:null,th:[],row:1,fig:0},
+  {bird:0,ob:'kid',th:[],row:0,fig:0},{bird:0,ob:'lauren',th:['stephen'],row:1,fig:1},
+  {bird:0,ob:null,th:['captain','mate'],row:1,fig:0},{bird:0,ob:'stephen',th:[],row:0,fig:1},
+  {bird:0,ob:null,th:['frenchy'],row:1,fig:1},{bird:0,ob:'captain',th:['kid'],row:0,fig:0},
+  {bird:0,ob:null,th:[],row:1,fig:1},{bird:0,ob:'mate',th:['lauren'],row:0,fig:1},
+  {bird:0,ob:'frenchy',th:[],row:1,fig:0},{bird:0,ob:null,th:['stephen','kid'],row:0,fig:0},
+  {bird:0,ob:'lauren',th:[],row:1,fig:1},{bird:0,ob:null,th:['mate'],row:1,fig:0},
+  {bird:0,ob:'kid',th:['captain'],row:0,fig:1},{bird:0,ob:null,th:[],row:1,fig:1},
+  {bird:0,ob:'stephen',th:['frenchy'],row:1,fig:0},{bird:0,ob:'captain',th:[],row:0,fig:0},
+  {bird:0,ob:null,th:['lauren','mate'],row:0,fig:1},{bird:0,ob:'mate',th:[],row:1,fig:1},
+  {bird:0,ob:null,th:['kid'],row:1,fig:0},{bird:0,ob:'frenchy',th:['stephen','captain'],row:0,fig:1},
+];
+
+
+// ══════════════════════════════════════════════
+//  GORILLAZ-STYLE SVG ART FUNCTIONS
+// ══════════════════════════════════════════════
+
+function gorillazHead(id, w, h) {
+  const hs = Math.round(h * 0.52); // head area height
+  const cx = w / 2;
+  const heads = {
+    lauren: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <!-- neck -->
+        <rect x="-7" y="${hs-8}" width="14" height="14" rx="2" fill="#c4855a"/>
+        <!-- head -->
+        <ellipse cx="0" cy="${hs*0.45}" rx="${hs*0.38}" ry="${hs*0.44}" fill="#d4956a"/>
+        <!-- big empty gorillaz eyes - left -->
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.38}" rx="${hs*0.1}" ry="${hs*0.12}" fill="#0a0a0a"/>
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.38}" rx="${hs*0.04}" ry="${hs*0.05}" fill="#1a1a3a"/>
+        <circle cx="${-hs*0.11}" cy="${hs*0.35}" r="${hs*0.025}" fill="rgba(255,255,255,0.6)"/>
+        <!-- right eye -->
+        <ellipse cx="${hs*0.14}" cy="${hs*0.38}" rx="${hs*0.1}" ry="${hs*0.12}" fill="#0a0a0a"/>
+        <ellipse cx="${hs*0.14}" cy="${hs*0.38}" rx="${hs*0.04}" ry="${hs*0.05}" fill="#1a1a3a"/>
+        <circle cx="${hs*0.17}" cy="${hs*0.35}" r="${hs*0.025}" fill="rgba(255,255,255,0.6)"/>
+        <!-- flat nose -->
+        <ellipse cx="0" cy="${hs*0.52}" rx="${hs*0.07}" ry="${hs*0.04}" fill="#b07050" opacity=".6"/>
+        <!-- thin lips -->
+        <path d="M${-hs*0.12},${hs*0.63} Q0,${hs*0.68} ${hs*0.12},${hs*0.63}" stroke="#8a4a30" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- wild hair -->
+        <path d="M${-hs*0.38},${hs*0.3} Q${-hs*0.5},${-hs*0.1} ${-hs*0.2},${-hs*0.08} Q${-hs*0.35},${-hs*0.25} 0,${-hs*0.3} Q${hs*0.35},${-hs*0.25} ${hs*0.2},${-hs*0.08} Q${hs*0.5},${-hs*0.1} ${hs*0.38},${hs*0.3}" fill="#1a0808" stroke="#1a0808" stroke-width="1"/>
+        <!-- cheek blush -->
+        <ellipse cx="${-hs*0.28}" cy="${hs*0.52}" rx="${hs*0.08}" ry="${hs*0.05}" fill="#e06080" opacity=".35"/>
+        <ellipse cx="${hs*0.28}" cy="${hs*0.52}" rx="${hs*0.08}" ry="${hs*0.05}" fill="#e06080" opacity=".35"/>
+      </g>`,
+    stephen: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-6" y="${hs-8}" width="12" height="14" rx="2" fill="#c4956a"/>
+        <ellipse cx="0" cy="${hs*0.45}" rx="${hs*0.36}" ry="${hs*0.43}" fill="#d4a57a"/>
+        <!-- monocle frame -->
+        <circle cx="${hs*0.13}" cy="${hs*0.37}" r="${hs*0.13}" fill="none" stroke="#c0a020" stroke-width="${hs*0.025}"/>
+        <!-- left eye normal -->
+        <ellipse cx="${-hs*0.15}" cy="${hs*0.37}" rx="${hs*0.09}" ry="${hs*0.1}" fill="#0a0a0a"/>
+        <circle cx="${-hs*0.12}" cy="${hs*0.34}" r="${hs*0.025}" fill="rgba(255,255,255,0.55)"/>
+        <!-- right eye through monocle - huge -->
+        <ellipse cx="${hs*0.13}" cy="${hs*0.37}" rx="${hs*0.08}" ry="${hs*0.1}" fill="#0a0808"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.37}" rx="${hs*0.035}" ry="${hs*0.05}" fill="#200820"/>
+        <circle cx="${hs*0.16}" cy="${hs*0.34}" r="${hs*0.02}" fill="rgba(255,255,255,0.7)"/>
+        <!-- monocle chain -->
+        <path d="M${hs*0.25},${hs*0.42} Q${hs*0.32},${hs*0.5} ${hs*0.28},${hs*0.6}" stroke="#c0a020" stroke-width="1" fill="none"/>
+        <!-- thin mustache -->
+        <path d="M${-hs*0.15},${hs*0.59} Q${-hs*0.06},${hs*0.56} 0,${hs*0.58}" stroke="#2a1008" stroke-width="${hs*0.035}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.15},${hs*0.59} Q${hs*0.06},${hs*0.56} 0,${hs*0.58}" stroke="#2a1008" stroke-width="${hs*0.035}" fill="none" stroke-linecap="round"/>
+        <!-- flat mouth -->
+        <path d="M${-hs*0.1},${hs*0.67} L${hs*0.1},${hs*0.67}" stroke="#7a4030" stroke-width="1.5" fill="none"/>
+        <!-- slick hair -->
+        <path d="M${-hs*0.36},${hs*0.18} Q${-hs*0.38},${-hs*0.2} 0,${-hs*0.26} Q${hs*0.38},${-hs*0.2} ${hs*0.36},${hs*0.18}" fill="#0a0a12"/>
+        <path d="M${-hs*0.1},${-hs*0.26} Q0,${-hs*0.3} ${hs*0.1},${-hs*0.24}" stroke="#1a1a2a" stroke-width="${hs*0.04}" fill="none"/>
+        <!-- top hat brim -->
+        <rect x="${-hs*0.4}" y="${-hs*0.28}" width="${hs*0.8}" height="${hs*0.06}" rx="${hs*0.02}" fill="#0a0a18"/>
+        <rect x="${-hs*0.28}" y="${-hs*0.28}" width="${hs*0.56}" height="${-hs*0.32}" rx="${hs*0.03}" fill="#0a0a18" transform="translate(0,${hs*0.03})"/>
+      </g>`,
+    captain: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-9" y="${hs-8}" width="18" height="15" rx="3" fill="#b07848"/>
+        <ellipse cx="0" cy="${hs*0.46}" rx="${hs*0.42}" ry="${hs*0.45}" fill="#c08858"/>
+        <!-- deep-set eyes -->
+        <ellipse cx="${-hs*0.15}" cy="${hs*0.35}" rx="${hs*0.12}" ry="${hs*0.1}" fill="#1a0a0a"/>
+        <ellipse cx="${-hs*0.15}" cy="${hs*0.35}" rx="${hs*0.05}" ry="${hs*0.06}" fill="#0a1830"/>
+        <circle cx="${-hs*0.11}" cy="${hs*0.32}" r="${hs*0.025}" fill="rgba(255,255,255,0.5)"/>
+        <ellipse cx="${hs*0.15}" cy="${hs*0.35}" rx="${hs*0.12}" ry="${hs*0.1}" fill="#1a0a0a"/>
+        <ellipse cx="${hs*0.15}" cy="${hs*0.35}" rx="${hs*0.05}" ry="${hs*0.06}" fill="#0a1830"/>
+        <circle cx="${hs*0.19}" cy="${hs*0.32}" r="${hs*0.025}" fill="rgba(255,255,255,0.5)"/>
+        <!-- heavy brows -->
+        <path d="M${-hs*0.28},${hs*0.24} Q${-hs*0.15},${hs*0.21} ${-hs*0.04},${hs*0.25}" stroke="#1a0808" stroke-width="${hs*0.05}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.28},${hs*0.24} Q${hs*0.15},${hs*0.21} ${hs*0.04},${hs*0.25}" stroke="#1a0808" stroke-width="${hs*0.05}" fill="none" stroke-linecap="round"/>
+        <!-- big beard -->
+        <path d="M${-hs*0.38},${hs*0.55} Q${-hs*0.4},${hs*0.85} 0,${hs*0.95} Q${hs*0.4},${hs*0.85} ${hs*0.38},${hs*0.55} Q${hs*0.2},${hs*0.7} 0,${hs*0.72} Q${-hs*0.2},${hs*0.7} ${-hs*0.38},${hs*0.55}" fill="#1a0a08"/>
+        <!-- nose -->
+        <ellipse cx="0" cy="${hs*0.51}" rx="${hs*0.09}" ry="${hs*0.055}" fill="#a06838" opacity=".7"/>
+        <!-- captain hat -->
+        <rect x="${-hs*0.46}" y="${-hs*0.06}" width="${hs*0.92}" height="${hs*0.08}" rx="${hs*0.02}" fill="#06081a"/>
+        <rect x="${-hs*0.32}" y="${-hs*0.06}" width="${hs*0.64}" height="${-hs*0.36}" rx="${hs*0.04}" fill="#06081a" transform="translate(0,${hs*0.04})"/>
+        <!-- anchor badge -->
+        <text x="0" y="${-hs*0.15}" text-anchor="middle" font-size="${hs*0.18}" fill="#c8920a" dominant-baseline="middle">⚓</text>
+      </g>`,
+    mate: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-11" y="${hs-8}" width="22" height="16" rx="3" fill="#b07040"/>
+        <!-- thick neck -->
+        <rect x="-10" y="${hs*0.75}" width="20" height="${hs*0.35}" rx="4" fill="#b07040"/>
+        <ellipse cx="0" cy="${hs*0.44}" rx="${hs*0.45}" ry="${hs*0.46}" fill="#c08050"/>
+        <!-- small beady eyes - tough look -->
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.34}" rx="${hs*0.1}" ry="${hs*0.08}" fill="#0a0808"/>
+        <ellipse cx="${-hs*0.14}" cy="${hs*0.34}" rx="${hs*0.04}" ry="${hs*0.04}" fill="#180808"/>
+        <circle cx="${-hs*0.11}" cy="${hs*0.31}" r="${hs*0.02}" fill="rgba(255,255,255,0.4)"/>
+        <ellipse cx="${hs*0.14}" cy="${hs*0.34}" rx="${hs*0.1}" ry="${hs*0.08}" fill="#0a0808"/>
+        <ellipse cx="${hs*0.14}" cy="${hs*0.34}" rx="${hs*0.04}" ry="${hs*0.04}" fill="#180808"/>
+        <circle cx="${hs*0.17}" cy="${hs*0.31}" r="${hs*0.02}" fill="rgba(255,255,255,0.4)"/>
+        <!-- furrowed brows -->
+        <path d="M${-hs*0.26},${hs*0.24} Q${-hs*0.14},${hs*0.27} ${-hs*0.04},${hs*0.26}" stroke="#1a0808" stroke-width="${hs*0.06}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.26},${hs*0.24} Q${hs*0.14},${hs*0.27} ${hs*0.04},${hs*0.26}" stroke="#1a0808" stroke-width="${hs*0.06}" fill="none" stroke-linecap="round"/>
+        <!-- stubble -->
+        <ellipse cx="0" cy="${hs*0.65}" rx="${hs*0.38}" ry="${hs*0.2}" fill="#8a5030" opacity=".4"/>
+        <!-- grim mouth -->
+        <path d="M${-hs*0.14},${hs*0.64} L${hs*0.14},${hs*0.64}" stroke="#5a2818" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- scar -->
+        <path d="M${hs*0.2},${hs*0.24} Q${hs*0.22},${hs*0.32} ${hs*0.18},${hs*0.42}" stroke="#8a3818" stroke-width="1.5" fill="none" opacity=".7"/>
+        <!-- bandana -->
+        <path d="M${-hs*0.45},${hs*0.15} Q0,${-hs*0.08} ${hs*0.45},${hs*0.15} Q${hs*0.42},${hs*0.22} 0,${hs*0.19} Q${-hs*0.42},${hs*0.22} ${-hs*0.45},${hs*0.15}" fill="#8a1010"/>
+        <path d="M${hs*0.38},${hs*0.18} Q${hs*0.48},${hs*0.28} ${hs*0.42},${hs*0.36}" stroke="#6a0808" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>`,
+    frenchy: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-5" y="${hs-8}" width="10" height="13" rx="2" fill="#c49060"/>
+        <ellipse cx="0" cy="${hs*0.45}" rx="${hs*0.34}" ry="${hs*0.42}" fill="#d4a070"/>
+        <!-- expressive wide eyes -->
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.38}" rx="${hs*0.11}" ry="${hs*0.13}" fill="#0a0808"/>
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.38}" rx="${hs*0.05}" ry="${hs*0.07}" fill="#08081a"/>
+        <circle cx="${-hs*0.09}" cy="${hs*0.34}" r="${hs*0.03}" fill="rgba(255,255,255,0.7)"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.38}" rx="${hs*0.11}" ry="${hs*0.13}" fill="#0a0808"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.38}" rx="${hs*0.05}" ry="${hs*0.07}" fill="#08081a"/>
+        <circle cx="${hs*0.17}" cy="${hs*0.34}" r="${hs*0.03}" fill="rgba(255,255,255,0.7)"/>
+        <!-- raised brows surprised -->
+        <path d="M${-hs*0.24},${hs*0.23} Q${-hs*0.13},${hs*0.18} ${-hs*0.03},${hs*0.22}" stroke="#2a1008" stroke-width="${hs*0.04}" fill="none" stroke-linecap="round"/>
+        <path d="M${hs*0.24},${hs*0.23} Q${hs*0.13},${hs*0.18} ${hs*0.03},${hs*0.22}" stroke="#2a1008" stroke-width="${hs*0.04}" fill="none" stroke-linecap="round"/>
+        <!-- pencil mustache -->
+        <path d="M${-hs*0.13},${hs*0.59} Q0,${hs*0.56} ${hs*0.13},${hs*0.59}" stroke="#1a0a08" stroke-width="${hs*0.028}" fill="none" stroke-linecap="round"/>
+        <!-- smirk -->
+        <path d="M${-hs*0.08},${hs*0.67} Q${hs*0.04},${hs*0.72} ${hs*0.12},${hs*0.65}" stroke="#7a3828" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- large beret -->
+        <ellipse cx="${-hs*0.08}" cy="${hs*0.04}" rx="${hs*0.4}" ry="${hs*0.22}" fill="#18305a"/>
+        <ellipse cx="${-hs*0.1}" cy="${hs*0.03}" rx="${hs*0.34}" ry="${hs*0.16}" fill="#1a3868"/>
+        <circle cx="${-hs*0.2}" cy="${-hs*0.08}" r="${hs*0.06}" fill="#2a4888"/>
+        <!-- beret brim -->
+        <path d="M${-hs*0.38},${hs*0.18} Q${hs*0.1},${hs*0.14} ${hs*0.3},${hs*0.2}" stroke="#18305a" stroke-width="${hs*0.06}" fill="none"/>
+      </g>`,
+    kid: `
+      <g transform="translate(${cx},${Math.round(h*0.04)})">
+        <rect x="-5" y="${hs-8}" width="10" height="13" rx="2" fill="#c89860"/>
+        <ellipse cx="0" cy="${hs*0.46}" rx="${hs*0.37}" ry="${hs*0.44}" fill="#d8a870"/>
+        <!-- huge childlike eyes -->
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.4}" rx="${hs*0.13}" ry="${hs*0.14}" fill="#0a0a0a"/>
+        <ellipse cx="${-hs*0.13}" cy="${hs*0.4}" rx="${hs*0.06}" ry="${hs*0.08}" fill="#080820"/>
+        <circle cx="${-hs*0.08}" cy="${hs*0.36}" r="${hs*0.04}" fill="rgba(255,255,255,0.75)"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.4}" rx="${hs*0.13}" ry="${hs*0.14}" fill="#0a0a0a"/>
+        <ellipse cx="${hs*0.13}" cy="${hs*0.4}" rx="${hs*0.06}" ry="${hs*0.08}" fill="#080820"/>
+        <circle cx="${hs*0.18}" cy="${hs*0.36}" r="${hs*0.04}" fill="rgba(255,255,255,0.75)"/>
+        <!-- chubby cheeks -->
+        <ellipse cx="${-hs*0.28}" cy="${hs*0.52}" rx="${hs*0.1}" ry="${hs*0.07}" fill="#e08858" opacity=".4"/>
+        <ellipse cx="${hs*0.28}" cy="${hs*0.52}" rx="${hs*0.1}" ry="${hs*0.07}" fill="#e08858" opacity=".4"/>
+        <!-- freckles -->
+        <circle cx="${-hs*0.18}" cy="${hs*0.55}" r="${hs*0.02}" fill="#a06030" opacity=".6"/>
+        <circle cx="${-hs*0.1}" cy="${hs*0.57}" r="${hs*0.015}" fill="#a06030" opacity=".6"/>
+        <circle cx="${hs*0.18}" cy="${hs*0.55}" r="${hs*0.02}" fill="#a06030" opacity=".6"/>
+        <circle cx="${hs*0.1}" cy="${hs*0.57}" r="${hs*0.015}" fill="#a06030" opacity=".6"/>
+        <!-- gap-tooth smile -->
+        <path d="M${-hs*0.12},${hs*0.65} Q0,${hs*0.72} ${hs*0.12},${hs*0.65}" stroke="#7a3828" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <rect x="${-hs*0.03}" y="${hs*0.65}" width="${hs*0.06}" height="${hs*0.05}" fill="#c89860"/>
+        <!-- messy spiked hair -->
+        <path d="M${-hs*0.36},${hs*0.22} Q${-hs*0.42},${-hs*0.05} ${-hs*0.25},${-hs*0.14} Q${-hs*0.32},${-hs*0.32} ${-hs*0.08},${-hs*0.3} Q${-hs*0.12},${-hs*0.38} ${hs*0.05},${-hs*0.32} Q${hs*0.18},${-hs*0.4} ${hs*0.22},${-hs*0.26} Q${hs*0.36},${-hs*0.28} ${hs*0.36},${-hs*0.1} Q${hs*0.44},${hs*0.05} ${hs*0.36},${hs*0.22}" fill="#5a3010"/>
+      </g>`,
+  };
+  return heads[id] || heads.kid;
+}
+
+function getCardArt(id, w, h) {
+  const arts = {
+    water: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#051828"/>
+      <path d="M${w*.5},${h*.08} Q${w*.72},${h*.28} ${w*.72},${h*.52} Q${w*.72},${h*.82} ${w*.5},${h*.88} Q${w*.28},${h*.82} ${w*.28},${h*.52} Q${w*.28},${h*.28} ${w*.5},${h*.08}Z" fill="#1a5080" stroke="#2a90c0" stroke-width="1.5"/>
+      <path d="M${w*.5},${h*.08} Q${w*.6},${h*.25} ${w*.62},${h*.42} Q${w*.55},${h*.38} ${w*.5},${h*.08}Z" fill="rgba(100,200,255,0.3)"/>
+      <ellipse cx="${w*.42}" cy="${h*.38}" rx="${w*.07}" ry="${h*.06}" fill="rgba(150,220,255,0.25)" transform="rotate(-20,${w*.42},${h*.38})"/>
+      <path d="M${w*.2},${h*.75} Q${w*.35},${h*.7} ${w*.5},${h*.75} Q${w*.65},${h*.7} ${w*.8},${h*.75}" stroke="rgba(50,160,220,0.4)" stroke-width="1.5" fill="none"/>
+    </svg>`,
+    food: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#0a1008"/>
+      <rect x="${w*.12}" y="${h*.12}" width="${w*.76}" height="${h*.7}" rx="4" fill="#2a1808" stroke="#6a3010" stroke-width="1.5"/>
+      <line x1="${w*.12}" y1="${h*.35}" x2="${w*.88}" y2="${h*.35}" stroke="#3a2010" stroke-width="1"/>
+      <line x1="${w*.12}" y1="${h*.58}" x2="${w*.88}" y2="${h*.58}" stroke="#3a2010" stroke-width="1"/>
+      <line x1="${w*.35}" y1="${h*.12}" x2="${w*.35}" y2="${h*.82}" stroke="#3a2010" stroke-width="1"/>
+      <line x1="${w*.65}" y1="${h*.12}" x2="${w*.65}" y2="${h*.82}" stroke="#3a2010" stroke-width="1"/>
+      <circle cx="${w*.5}" cy="${h*.47}" r="${w*.18}" fill="#1a3010" stroke="#4a8020" stroke-width="1.5"/>
+      <path d="M${w*.38},${h*.47} Q${w*.44},${h*.4} ${w*.5},${h*.44} Q${w*.56},${h*.4} ${w*.62},${h*.47}" stroke="#6ab030" stroke-width="2" fill="none"/>
+    </svg>`,
+    jewels: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#08040e"/>
+      <polygon points="${w*.5},${h*.1} ${w*.78},${h*.32} ${w*.7},${h*.72} ${w*.3},${h*.72} ${w*.22},${h*.32}" fill="#3020608" stroke="#8060d0" stroke-width="1.5"/>
+      <polygon points="${w*.5},${h*.1} ${w*.78},${h*.32} ${w*.7},${h*.72} ${w*.3},${h*.72} ${w*.22},${h*.32}" fill="none" stroke="#c0a0ff" stroke-width=".5" opacity=".5"/>
+      <polygon points="${w*.5},${h*.1} ${w*.64},${h*.32} ${w*.5},${h*.28} ${w*.36},${h*.32}" fill="rgba(200,180,255,0.25)"/>
+      <line x1="${w*.22}" y1="${h*.32}" x2="${w*.78}" y2="${h*.32}" stroke="rgba(180,150,255,0.3)" stroke-width="1"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.06}" fill="rgba(220,200,255,0.5)"/>
+      <circle cx="${w*.26}" cy="${h*.25}" r="${w*.03}" fill="#c0a0ff" opacity=".6"/>
+      <circle cx="${w*.74}" cy="${h*.22}" r="${w*.025}" fill="#e0c0ff" opacity=".5"/>
+    </svg>`,
+    painting: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#0a0806"/>
+      <rect x="${w*.08}" y="${h*.06}" width="${w*.84}" height="${h*.8}" rx="2" fill="#c89030"/>
+      <rect x="${w*.12}" y="${h*.1}" width="${w*.76}" height="${h*.72}" rx="1" fill="#1a3050"/>
+      <ellipse cx="${w*.5}" cy="${h*.46}" rx="${w*.22}" ry="${h*.2}" fill="#c0a020" opacity=".6"/>
+      <path d="M${w*.12},${h*.6} Q${w*.3},${h*.38} ${w*.5},${h*.46} Q${w*.7},${h*.54} ${w*.88},${h*.38}" stroke="#3a6a1a" stroke-width="2.5" fill="none"/>
+      <rect x="${w*.08}" y="${h*.78}" width="${w*.84}" height="${h*.1}" rx="1" fill="#a07020"/>
+      <circle cx="${w*.18}" cy="${h*.12}" r="${w*.04}" fill="#e0b020"/>
+      <circle cx="${w*.82}" cy="${h*.12}" r="${w*.04}" fill="#e0b020"/>
+    </svg>`,
+    cash: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#060a04"/>
+      <ellipse cx="${w*.5}" cy="${h*.62}" rx="${w*.32}" ry="${h*.12}" fill="#b09020" opacity=".5"/>
+      <ellipse cx="${w*.5}" cy="${h*.54}" rx="${w*.32}" ry="${h*.12}" fill="#c0a020" opacity=".6"/>
+      <ellipse cx="${w*.5}" cy="${h*.46}" rx="${w*.32}" ry="${h*.12}" fill="#d0b030"/>
+      <ellipse cx="${w*.5}" cy="${h*.38}" rx="${w*.32}" ry="${h*.12}" fill="#e0c040"/>
+      <ellipse cx="${w*.5}" cy="${h*.38}" rx="${w*.28}" ry="${h*.09}" fill="#f0d050"/>
+      <text x="${w*.5}" y="${h*.42}" text-anchor="middle" dominant-baseline="middle" font-family="monospace" font-size="${w*.22}" font-weight="900" fill="#604008">$</text>
+    </svg>`,
+    flare: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#08040a"/>
+      <rect x="${w*.38}" y="${h*.42}" width="${w*.24}" height="${h*.46}" rx="${w*.06}" fill="#404050"/>
+      <rect x="${w*.34}" y="${h*.54}" width="${w*.32}" height="${h*.12}" rx="${w*.04}" fill="#303040"/>
+      <ellipse cx="${w*.5}" cy="${h*.22}" rx="${w*.22}" ry="${h*.22}" fill="#e04000" opacity=".9"/>
+      <ellipse cx="${w*.5}" cy="${h*.22}" rx="${w*.14}" ry="${h*.14}" fill="#ff8020"/>
+      <ellipse cx="${w*.5}" cy="${h*.22}" rx="${w*.07}" ry="${h*.07}" fill="#ffe060"/>
+      <path d="M${w*.5},${h*.04} L${w*.46},${h*.12} M${w*.5},${h*.04} L${w*.54},${h*.12}" stroke="#ff6010" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${w*.72},${h*.12} L${w*.82},${h*.08} M${w*.28},${h*.12} L${w*.18},${h*.08}" stroke="#ff6010" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M${w*.78},${h*.3} L${w*.88},${h*.32} M${w*.22},${h*.3} L${w*.12},${h*.32}" stroke="#ff8020" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+    </svg>`,
+    oar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#060804"/>
+      <g transform="rotate(18,${w*.5},${h*.5})">
+        <rect x="${w*.46}" y="${h*.04}" width="${w*.08}" height="${h*.62}" rx="${w*.03}" fill="#6a3a10"/>
+        <rect x="${w*.47}" y="${h*.04}" width="${w*.03}" height="${h*.62}" rx="${w*.015}" fill="rgba(255,180,60,0.2)"/>
+        <ellipse cx="${w*.5}" cy="${h*.76}" rx="${w*.22}" ry="${h*.1}" fill="#5a2e0c"/>
+        <ellipse cx="${w*.5}" cy="${h*.76}" rx="${w*.18}" ry="${h*.07}" fill="#7a4015" stroke="#4a2008" stroke-width="1"/>
+      </g>
+    </svg>`,
+    knife: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#080808"/>
+      <g transform="rotate(12,${w*.5},${h*.5})">
+        <rect x="${w*.44}" y="${h*.6}" width="${w*.12}" height="${h*.3}" rx="${w*.04}" fill="#5a3010"/>
+        <rect x="${w*.42}" y="${h*.56}" width="${w*.16}" height="${h*.06}" rx="${w*.02}" fill="#808020"/>
+        <path d="M${w*.44},${h*.1} L${w*.56},${h*.1} L${w*.56},${h*.56} L${w*.44},${h*.56}Z" fill="#a0a8b0"/>
+        <path d="M${w*.56},${h*.1} L${w*.56},${h*.56} L${w*.5},${h*.56}Z" fill="#c8d0d8"/>
+        <path d="M${w*.56},${h*.1} L${w*.5},${h*.12}" stroke="rgba(220,230,240,0.6)" stroke-width="1.5" fill="none"/>
+      </g>
+    </svg>`,
+    parasol: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#08040e"/>
+      <path d="M${w*.1},${h*.44} Q${w*.5},${h*.06} ${w*.9},${h*.44}Z" fill="#c03060"/>
+      <path d="M${w*.1},${h*.44} Q${w*.5},${h*.08} ${w*.9},${h*.44}" fill="none" stroke="#e04070" stroke-width="1.5"/>
+      <line x1="${w*.5}" y1="${h*.1}" x2="${w*.5}" y2="${h*.44}" stroke="#d04060" stroke-width=".8"/>
+      <line x1="${w*.3}" y1="${h*.16}" x2="${w*.5}" y2="${h*.44}" stroke="#d04060" stroke-width=".8"/>
+      <line x1="${w*.7}" y1="${h*.16}" x2="${w*.5}" y2="${h*.44}" stroke="#d04060" stroke-width=".8"/>
+      <path d="M${w*.1},${h*.44} Q${w*.2},${h*.52} ${w*.3},${h*.44} Q${w*.4},${h*.52} ${w*.5},${h*.44} Q${w*.6},${h*.52} ${w*.7},${h*.44} Q${w*.8},${h*.52} ${w*.9},${h*.44}" fill="none" stroke="#e04070" stroke-width="2.5"/>
+      <rect x="${w*.47}" y="${h*.44}" width="${w*.06}" height="${h*.42}" rx="${w*.02}" fill="#8a4020"/>
+      <path d="M${w*.53},${h*.86} Q${w*.66},${h*.84} ${w*.64},${h*.92}" stroke="#8a4020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </svg>`,
+    life: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#040810"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.36}" fill="none" stroke="#c02010" stroke-width="${w*.12}"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.36}" fill="none" stroke="white" stroke-width="${w*.12}" stroke-dasharray="${w*.22} ${w*.115}"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.18}" fill="#040810"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.15}" fill="none" stroke="rgba(200,200,200,0.15)" stroke-width="1"/>
+      <line x1="${w*.5}" y1="${h*.12}" x2="${w*.5}" y2="${h*.32}" stroke="#c8a020" stroke-width="1.5"/>
+      <line x1="${w*.5}" y1="${h*.68}" x2="${w*.5}" y2="${h*.88}" stroke="#c8a020" stroke-width="1.5"/>
+      <line x1="${w*.12}" y1="${h*.5}" x2="${w*.32}" y2="${h*.5}" stroke="#c8a020" stroke-width="1.5"/>
+      <line x1="${w*.68}" y1="${h*.5}" x2="${w*.88}" y2="${h*.5}" stroke="#c8a020" stroke-width="1.5"/>
+    </svg>`,
+    medkit: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#080404"/>
+      <rect x="${w*.1}" y="${h*.22}" width="${w*.8}" height="${h*.6}" rx="${w*.06}" fill="#8a0808"/>
+      <rect x="${w*.1}" y="${h*.22}" width="${w*.8}" height="${h*.14}" rx="${w*.06}" fill="#aa1010"/>
+      <rect x="${w*.38}" y="${h*.1}" width="${w*.24}" height="${h*.18}" rx="${w*.06}" fill="#6a0606" stroke="#8a0808" stroke-width="1"/>
+      <rect x="${w*.34}" y="${h*.4}" width="${w*.32}" height="${h*.1}" rx="${w*.04}" fill="rgba(255,255,255,0.9)"/>
+      <rect x="${w*.44}" y="${h*.3}" width="${w*.12}" height="${h*.28}" rx="${w*.04}" fill="rgba(255,255,255,0.9)"/>
+    </svg>`,
+    rope: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#06080a"/>
+      <path d="M${w*.2},${h*.18} Q${w*.5},${h*.1} ${w*.78},${h*.24} Q${w*.88},${h*.48} ${w*.74},${h*.72} Q${w*.54},${h*.9} ${w*.3},${h*.8} Q${w*.1},${h*.6} ${w*.2},${h*.38} Q${w*.28},${h*.22} ${w*.5},${h*.22}" fill="none" stroke="#8a6018" stroke-width="${w*.1}" stroke-linecap="round"/>
+      <path d="M${w*.2},${h*.18} Q${w*.5},${h*.1} ${w*.78},${h*.24} Q${w*.88},${h*.48} ${w*.74},${h*.72} Q${w*.54},${h*.9} ${w*.3},${h*.8} Q${w*.1},${h*.6} ${w*.2},${h*.38} Q${w*.28},${h*.22} ${w*.5},${h*.22}" fill="none" stroke="#c09030" stroke-width="${w*.04}" stroke-linecap="round" stroke-dasharray="${w*.06} ${w*.04}" opacity=".6"/>
+    </svg>`,
+    compass: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+      <rect width="${w}" height="${h}" fill="#060810"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.38}" fill="#0a1020" stroke="#8a6010" stroke-width="2"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.32}" fill="none" stroke="rgba(180,140,20,0.3)" stroke-width="1"/>
+      <line x1="${w*.5}" y1="${h*.16}" x2="${w*.5}" y2="${h*.84}" stroke="rgba(180,140,20,0.25)" stroke-width="1"/>
+      <line x1="${w*.16}" y1="${h*.5}" x2="${w*.84}" y2="${h*.5}" stroke="rgba(180,140,20,0.25)" stroke-width="1"/>
+      <polygon points="${w*.5},${h*.22} ${w*.53},${h*.5} ${w*.5},${h*.46} ${w*.47},${h*.5}" fill="#aa1010"/>
+      <polygon points="${w*.5},${h*.78} ${w*.53},${h*.5} ${w*.5},${h*.54} ${w*.47},${h*.5}" fill="#c8c8d0"/>
+      <circle cx="${w*.5}" cy="${h*.5}" r="${w*.05}" fill="#c8a020"/>
+      <text x="${w*.5}" y="${h*.2}" text-anchor="middle" font-family="monospace" font-size="${w*.13}" fill="#8a2010" font-weight="900">N</text>
+    </svg>`,
+  };
+  return arts[id] || arts.rope;
+}
+
+// ══ ACTION TILE SVG ICONS ══
+function renderActionIcons() {
+  const icons = {
+    'ico-rest': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <ellipse cx="24" cy="28" rx="16" ry="12" fill="#0a1828"/>
+      <ellipse cx="24" cy="22" rx="14" ry="11" fill="#1a2838"/>
+      <!-- head shape gorillaz style -->
+      <ellipse cx="24" cy="21" rx="10" ry="11" fill="#c09060"/>
+      <!-- closed eyes zzz -->
+      <path d="M18,20 Q20,22 22,20" stroke="#0a0808" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M26,20 Q28,22 30,20" stroke="#0a0808" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- mouth open snoring -->
+      <ellipse cx="24" cy="26" rx="3" ry="2" fill="#0a0808"/>
+      <!-- zzz -->
+      <text x="34" y="14" font-family="monospace" font-size="7" fill="rgba(100,160,220,0.7)" font-weight="bold">Z</text>
+      <text x="37" y="10" font-family="monospace" font-size="5" fill="rgba(100,160,220,0.5)" font-weight="bold">z</text>
+      <text x="39" y="7" font-family="monospace" font-size="4" fill="rgba(100,160,220,0.35)" font-weight="bold">z</text>
+      <!-- pillow -->
+      <ellipse cx="24" cy="34" rx="16" ry="5" fill="#1a3040" stroke="#2a5060" stroke-width="1"/>
+    </svg>`,
+    'ico-row': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <!-- water -->
+      <path d="M2,36 Q12,30 24,36 Q36,30 46,36 L46,46 L2,46Z" fill="#0a2038"/>
+      <!-- figure rowing -->
+      <ellipse cx="24" cy="20" rx="8" ry="9" fill="#c09060"/>
+      <!-- gorillaz eyes -->
+      <ellipse cx="21" cy="19" rx="2.5" ry="2.5" fill="#080808"/>
+      <ellipse cx="27" cy="19" rx="2.5" ry="2.5" fill="#080808"/>
+      <circle cx="22" cy="18" r="1" fill="rgba(255,255,255,0.5)"/>
+      <circle cx="28" cy="18" r="1" fill="rgba(255,255,255,0.5)"/>
+      <!-- body + arms holding oar -->
+      <rect x="20" y="28" width="8" height="10" rx="3" fill="#2a4060"/>
+      <!-- oar -->
+      <line x1="4" y1="30" x2="44" y2="26" stroke="#7a4010" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="6" cy="30.5" rx="5" ry="2.5" fill="#6a3810" transform="rotate(-5,6,30)"/>
+    </svg>`,
+    'ico-seat': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <!-- two figures swapping -->
+      <!-- figure left -->
+      <ellipse cx="13" cy="16" rx="7" ry="7" fill="#c09060"/>
+      <ellipse cx="11" cy="15" rx="2" ry="2" fill="#080808"/>
+      <ellipse cx="15" cy="15" rx="2" ry="2" fill="#080808"/>
+      <path d="M11,20 Q13,22 15,20" stroke="#5a2818" stroke-width="1.5" fill="none"/>
+      <rect x="9" y="22" width="8" height="8" rx="3" fill="#3a1a50"/>
+      <!-- figure right -->
+      <ellipse cx="35" cy="16" rx="7" ry="7" fill="#b08858"/>
+      <ellipse cx="33" cy="15" rx="2" ry="2" fill="#080808"/>
+      <ellipse cx="37" cy="15" rx="2" ry="2" fill="#080808"/>
+      <path d="M33,20 Q35,22 37,20" stroke="#5a2818" stroke-width="1.5" fill="none"/>
+      <rect x="31" y="22" width="8" height="8" rx="3" fill="#1a3050"/>
+      <!-- swap arrows -->
+      <path d="M20,12 Q24,8 28,12" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr)"/>
+      <path d="M28,20 Q24,24 20,20" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <polygon points="19,11 22,14 18,15" fill="#c8a020"/>
+      <polygon points="29,21 26,18 30,17" fill="#c8a020"/>
+    </svg>`,
+    'ico-mug': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+      <!-- attacker figure -->
+      <ellipse cx="30" cy="16" rx="8" ry="8" fill="#c07050"/>
+      <!-- angry gorillaz eyes -->
+      <ellipse cx="27" cy="14" rx="2.5" ry="2" fill="#080808"/>
+      <ellipse cx="33" cy="14" rx="2.5" ry="2" fill="#080808"/>
+      <!-- angry brows -->
+      <path d="M25,11 Q27,10 29,12" stroke="#1a0808" stroke-width="2" fill="none"/>
+      <path d="M31,12 Q33,10 35,11" stroke="#1a0808" stroke-width="2" fill="none"/>
+      <!-- grin -->
+      <path d="M26,19 Q30,22 34,19" stroke="#5a1808" stroke-width="1.5" fill="none"/>
+      <!-- fist coming forward -->
+      <ellipse cx="14" cy="26" rx="8" ry="7" fill="#b07040"/>
+      <line x1="10" y1="30" x2="26" y2="22" stroke="#904020" stroke-width="3" stroke-linecap="round"/>
+      <!-- impact lines -->
+      <line x1="8" y1="20" x2="4" y2="16" stroke="#c8a020" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+      <line x1="6" y1="24" x2="2" y2="22" stroke="#c8a020" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="9" y1="18" x2="6" y2="13" stroke="#c8a020" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+    </svg>`,
+  };
+  Object.entries(icons).forEach(([id, svg]) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = svg;
+  });
+}
+
+// ── HELPERS ──
+const shuf=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+function L(ru,en){return _lang==='en'?en:ru;}
+
+// ── STATE ──
+let G={};
+let passCB=null;
+const chatLog=[];
+
+// ── SCREENS ──
+function showScr(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('act');s.style.display='none'});
+  const el=document.getElementById(id);el.style.display='flex';el.classList.add('act');window.scrollTo(0,0);
+  if(id==='s-setup' && typeof renderPL==='function') renderPL();
+}
+
+// ── PASS PHONE ──
+function passPhone(toName,sub,info,cb){
+  passCB=cb;
+  document.getElementById('pass-to').textContent=toName;
+  document.getElementById('pass-sub').textContent=sub||L('Не смотри на экран!','Do not look at the screen!');
+  document.getElementById('pass-info').textContent=info||'';
+  showScr('s-pass');
+}
+function onPassOK(){if(passCB){const cb=passCB;passCB=null;showScr('s-game');cb();}}
+
+// ── CARD SVGs ──
+function charCardSVG(ch,w,h,wounds,isAct){
+  const rb={'epic':'#c060ff','rare':'#6090ff','uncommon':'#60c060','common':'#909090'}[ch.rarity]||'#909090';
+  return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="cg${ch.id}${w}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${ch.col2}"/><stop offset="50%" stop-color="${ch.col0}"/><stop offset="100%" stop-color="${ch.col1}"/></linearGradient></defs>
+    <rect width="${w}" height="${h}" fill="url(#cg${ch.id}${w})" rx="2"/>
+    <ellipse cx="${w/2}" cy="${h*.3}" rx="${w*.6}" ry="${h*.4}" fill="rgba(255,255,255,.07)"/>
+    ${gorillazHead(ch.id, w, h)}
+    <rect x="0" y="${h*.72}" width="${w}" height="${h*.28}" fill="rgba(0,0,0,.78)"/>
+    <text x="${w/2}" y="${h*.83}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.12}" font-weight="700" fill="#f8d040">${charDisplayName(ch).split(' ')[0]}</text>
+    <rect x="1" y="1" width="${w*.33}" height="${h*.17}" rx="2" fill="rgba(0,0,0,.65)"/>
+    <text x="${w*.165}" y="${h*.11}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.13}" font-weight="900" fill="#e04040" dominant-baseline="middle">⚔${ch.size}</text>
+    <rect x="${w-w*.34}" y="1" width="${w*.33}" height="${h*.17}" rx="2" fill="rgba(0,0,0,.65)"/>
+    <text x="${w-w*.17}" y="${h*.11}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.13}" font-weight="900" fill="#40d060" dominant-baseline="middle">★${ch.sv}</text>
+    <rect width="${w}" height="${h}" fill="none" rx="2" stroke="${rb}" stroke-width="1.5" opacity=".7"/>
+    ${isAct?`<rect width="${w}" height="${h}" fill="rgba(255,215,0,.08)" rx="2"/>`:''}
+    ${wounds?Array.from({length:ch.size},(_,i)=>`<circle cx="${3+i*7}" cy="${h-4}" r="2.5" fill="${i<wounds?'#dd3030':'rgba(42,221,80,.6)'}" opacity=".9"/>`).join(''):''}
+  </svg>`;
+}
+
+function provCardSVG(card,w,h){
+  const catBg={provision:'#206020',weapon:'#602020',treasure:'#604000',protection:'#204060'}[card.cat]||'#303030';
+  const catCol={provision:'#80e080',weapon:'#ff8080',treasure:'#f8d040',protection:'#40e0a0'}[card.cat]||'#aaa';
+  const artE=getCardArt(card.id, Math.round(w*.88), Math.round(h*.42));
+  return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="pg${card.id}${w}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${card.col2||'#404040'}"/><stop offset="100%" stop-color="${card.col1||'#101010'}"/></linearGradient></defs>
+    <rect width="${w}" height="${h}" fill="url(#pg${card.id}${w})" rx="2"/>
+    <rect width="${w}" height="${h*.18}" fill="${catBg}" rx="2"/>
+    <rect x="0" y="${h*.16}" width="${w}" height="${h*.02}" fill="rgba(0,0,0,.3)"/>
+    <text x="${w/2}" y="${h*.1}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.11}" font-weight="700" fill="${catCol}" dominant-baseline="middle">${cardType(card).toUpperCase()}</text>
+    <rect x="${w*.06}" y="${h*.2}" width="${w*.88}" height="${h*.42}" fill="rgba(0,0,0,.35)" rx="2"/>
+    <image x="${w*.06}" y="${h*.2}" width="${w*.88}" height="${h*.42}" href="data:image/svg+xml;charset=utf-8,${encodeURIComponent(artE)}" />
+    <rect x="0" y="${h*.63}" width="${w}" height="${h*.13}" fill="rgba(0,0,0,.72)"/>
+    <text x="${w/2}" y="${h*.71}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.125}" font-weight="700" fill="#f8e0a0" dominant-baseline="middle">${cardName(card)}</text>
+    <rect x="0" y="${h*.77}" width="${w}" height="${h*.23}" fill="rgba(240,225,180,.92)"/>
+    <rect x="0" y="${h*.77}" width="${w}" height="${h*.006}" fill="rgba(200,145,10,.5)"/>
+    <text x="${w/2}" y="${h*.865}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.11}" fill="#1a0e04" font-weight="600" dominant-baseline="middle">${cardFx(card)}</text>
+    ${card.val>0?`<circle cx="${w-7}" cy="7" r="6" fill="#e4a820"/><text x="${w-7}" y="7" text-anchor="middle" dominant-baseline="middle" font-family="Cinzel,serif" font-size="${w*.13}" font-weight="900" fill="#1a0800">${card.val}</text>`:''}
+    <rect width="${w}" height="${h}" fill="none" rx="2" stroke="rgba(200,145,10,.6)" stroke-width="1.5"/>
+  </svg>`;
+}
+
+function navCardSVG(icon,title,col0,col1,w,h){
+  return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="nvcg${w}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${col0||'#002040'}"/><stop offset="100%" stop-color="${col1||'#001020'}"/></linearGradient></defs>
+    <rect width="${w}" height="${h}" fill="url(#nvcg${w})" rx="4"/>
+    <rect width="${w}" height="${h*.18}" fill="rgba(0,40,80,.8)" rx="4"/>
+    <text x="${w/2}" y="${h*.1}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.1}" font-weight="700" fill="#60c0f8" dominant-baseline="middle">НАВИГАЦИЯ</text>
+    <text x="${w/2}" y="${h*.5}" text-anchor="middle" font-size="${w*.5}" dominant-baseline="middle">${icon}</text>
+    <rect x="0" y="${h*.72}" width="${w}" height="${h*.28}" fill="rgba(0,0,0,.78)"/>
+    <text x="${w/2}" y="${h*.86}" text-anchor="middle" font-family="Cinzel,serif" font-size="${w*.115}" font-weight="700" fill="#f8d040" dominant-baseline="middle">${title}</text>
+    <rect width="${w}" height="${h}" fill="none" rx="4" stroke="rgba(100,180,255,.5)" stroke-width="1.5"/>
+  </svg>`;
+}
+
+// ── TITLE FAN ──
+function renderFan(){
+  const fan=document.getElementById('fan');if(!fan)return;fan.innerHTML='';
+  CHARS.forEach((ch,i)=>{
+    const n=CHARS.length,angle=-28+i*(56/(n-1)),tx=10+i*(300/Math.max(n-1,1));
+    const el=document.createElement('div');
+    el.style.cssText=`position:absolute;bottom:0;left:${tx}px;transform-origin:50% 100%;transform:rotate(${angle}deg);z-index:${i===~~(n/2)?10:5-Math.abs(i-~~(n/2))};width:85px;height:125px`;
+    el.innerHTML=charCardSVG(ch,85,125,0,false);fan.appendChild(el);
+  });
+}
+
+// ── SETUP ──
+let PC=5;
+const EICONS=['⚓','🗡️','🧭','⚡','🌊','🔱'];
+const DEFS=['Александр','Виктория','Дмитрий','Мария','Сергей','Анна'];
+let selectedCharIds=SEAT_ORDER.slice(0,PC);
+function normalizeCharChoices(){
+  const used=new Set();
+  for(let i=0;i<PC;i++){
+    let id=selectedCharIds[i];
+    if(!CHARS.some(ch=>ch.id===id)||used.has(id))id=SEAT_ORDER.find(cid=>!used.has(cid))||CHARS.find(ch=>!used.has(ch.id))?.id;
+    selectedCharIds[i]=id;
+    used.add(id);
+  }
+  selectedCharIds=selectedCharIds.slice(0,PC);
+}
+function setPC(n,btn){PC=n;document.querySelectorAll('.cnt-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');normalizeCharChoices();renderPL();}
+function setCharChoice(i,id){
+  const prev=selectedCharIds[i];
+  const dup=selectedCharIds.findIndex((cid,idx)=>idx!==i&&cid===id);
+  selectedCharIds[i]=id;
+  if(dup>=0)selectedCharIds[dup]=prev;
+  normalizeCharChoices();
+  renderPL();
+}
+function randomizeChars(){
+  selectedCharIds=shuf(SEAT_ORDER).slice(0,PC);
+  normalizeCharChoices();
+  renderPL();
+  if(typeof applyLang==='function')applyLang();
+  toast(_lang==='en'?'Characters randomized.':'Персонажи перемешаны.');
+}
+function renderPL(){
+  const l=document.getElementById('plist');l.innerHTML='';
+  normalizeCharChoices();
+  const prevNames=Array.from({length:PC},(_,i)=>document.getElementById('pi'+i)?.value||'');
+  for(let i=0;i<PC;i++){
+    const opts=CHARS.map(ch=>`<option value="${ch.id}" ${selectedCharIds[i]===ch.id?'selected':''}>${charDisplayName(ch)}</option>`).join('');
+    const ph=_lang==='en'?'Enter player name':'Введите имя игрока';
+    l.innerHTML+=`<div class="player-row"><div class="player-ico">${EICONS[i]}</div><input class="player-inp" id="pi${i}" placeholder="${ph}" maxlength="12" value="${escHtml(prevNames[i]||'')}"><select class="player-char" id="pc${i}" onchange="setCharChoice(${i},this.value)">${opts}</select></div>`;
+  }
+}
+
+function startGame(){
+  const names=[];
+  normalizeCharChoices();
+  const charIds=[];
+  for(let i=0;i<PC;i++){
+    const v=(document.getElementById('pi'+i)?.value||'').trim();
+    if(!v){
+      const inp=document.getElementById('pi'+i);
+      if(inp){
+        inp.style.borderColor='#dd2a2a';
+        inp.style.boxShadow='0 0 0 2px rgba(221,42,42,.4)';
+        inp.placeholder=_lang==='en'?'⚠ Enter a name!':'⚠ Введите имя!';
+        setTimeout(()=>{inp.style.borderColor='';inp.style.boxShadow='';inp.placeholder=_lang==='en'?'Enter player name':'Введите имя игрока';},2500);
+      }
+      toast(_lang==='en'?'⚠ Enter all player names!':'⚠ Введите имена всех игроков!');
+      return;
+    }
+    names.push(v);
+    charIds.push(document.getElementById('pc'+i)?.value||selectedCharIds[i]);
+  }
+  if(new Set(charIds).size!==charIds.length){
+    toast(_lang==='en'?'⚠ Choose different characters for all players!':'⚠ Выбери разных персонажей для всех игроков!');
+    return;
+  }
+  initGame(names,charIds);
+  showScr('s-game');
+  const first=G.players[fnext(0)];
+  passPhone(first.name,L('Начинается первый день — смотри только свои секреты!','The first day begins — look only at your secrets!'),L('День 1','Day 1'),()=>startQM());
+}
+
+function initGame(names,charIds){
+  const picked=(charIds&&charIds.length?charIds:selectedCharIds).slice(0,names.length);
+  const chars=picked.map(id=>({...CHARS.find(ch=>ch.id===id)})).filter(Boolean);
+  while(chars.length<names.length){
+    const next=CHARS.find(ch=>!chars.some(c=>c.id===ch.id));
+    if(next)chars.push({...next});
+  }
+  const prov=shuf(buildProvDeck());
+  const nav=shuf(NAV_DECK.map(x=>({...x})));
+  chars.forEach(function(ch){
+    if(ch.id==='lauren')ch.sv=8;
+    if(ch.id==='stephen')ch.sv=7;
+    if(ch.id==='captain')ch.sv=5;
+    if(ch.id==='mate')ch.sv=4;
+    if(ch.id==='frenchy')ch.sv=6;
+    if(ch.id==='kid')ch.sv=9;
+  });
+  // Create players WITHOUT friend/enemy first
+  const players=names.map((name,i)=>({
+    name,char:chars[i],pos:i,wounds:0,hand:[],
+    alive:1,conscious:1,rowed:0,fought:0,thirstMark:null,love:-1,hate:-1
+  }));
+  // Seats follow the boat cards from bow to stern; missing characters are skipped.
+  players.sort((a,b)=>SEAT_ORDER.indexOf(a.char.id)-SEAT_ORDER.indexOf(b.char.id));
+  players.forEach((p,i)=>p.pos=i);
+  const friendDeck=shuf(players.map(p=>p.char.id));
+  const enemyDeck=shuf(players.map(p=>p.char.id));
+  players.forEach((p,i)=>{
+    p.love=players.findIndex(pl=>pl.char.id===friendDeck[i]);
+    p.hate=players.findIndex(pl=>pl.char.id===enemyDeck[i]);
+  });
+  G={players,day:1,birds:0,nav,rowStack:[],prov,phase:0,ct:0,done:[],log:[]};
+  // Per rules: each player gets 1 supply card face-down at game start
+  players.forEach(p=>{
+    if(G.prov.length){
+      const card={...G.prov.pop(),revealed:false};
+      p.hand.push(card);
+    }
+  });
+  addLog(L('Шлюпка отчалила от тонущего корабля...','The lifeboat pushes away from the sinking ship...'),'imp');
+  addLog(L('Каждый получил стартовую карту припасов (закрытую).','Each player received a starting supply card (hidden).'),'imp');
+}
+
+function renderGame(){
+  const cp=G.players[G.ct]||G.players[0];
+  document.getElementById('hud-day').textContent=G.day;
+  document.getElementById('hud-player').textContent=cp.name;
+  const actZone=document.getElementById('act-zone');
+  if(actZone) actZone.style.display=G.phase===1?'block':'none';
+  const qmZone=document.getElementById('qm-zone');
+  if(qmZone&&G.phase!==0) qmZone.style.display='none';
+  const br=document.getElementById('hud-birds');br.innerHTML='';
+  for(let i=0;i<4;i++){const lit=i<G.birds;br.innerHTML+=`<div class="bip ${lit?'lit':''}"><svg viewBox="0 0 28 20" xmlns="http://www.w3.org/2000/svg" width="28" height="20"><path d="M2,14 Q7,4 14,8 Q21,4 26,14" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="14" cy="8" r="1.5" fill="currentColor"/><path d="M14,8 Q16,6 18,7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>`;}
+  for(let i=0;i<3;i++){const p=document.getElementById(`ph${i}`);p.className='ph'+(i===G.phase?' act':i<G.phase?' dn':'');}
+  ['ph-0','ph-1','ph-2'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.className='phase-step '+(i===G.phase?'ph-act':i<G.phase?'ph-done':'ph-inactive');
+  });
+  renderPlayers();renderHand();renderLog();
+}
+
+function renderPlayers(){
+  const z=document.getElementById('players-zone');z.innerHTML='';
+  // Update boat pawns
+  const pawnsLayer=document.getElementById('pawns-layer');
+  if(pawnsLayer){
+    pawnsLayer.innerHTML=G.players.map((p,i)=>{
+      const isc=i===G.ct;
+      const dead=!p.alive;
+      const unc=!p.conscious&&p.alive;
+      const op=dead?'opacity:.35;filter:grayscale(1)':unc?'opacity:.55':'';
+      const cardBorder=isc
+        ?'border:2px solid #ffd700;box-shadow:0 0 0 3px rgba(255,215,0,.4),0 0 20px 6px rgba(255,200,0,.5);'
+        :'border:1px solid rgba(200,145,10,.4);';
+      const nameStyle=isc
+        ?'font-weight:700;color:#ffd700;background:rgba(0,0,0,.7);border-radius:3px;padding:1px 4px;'
+        :'color:rgba(220,200,160,.75);';
+      return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;'+op+'">'
+        +'<div style="width:42px;height:52px;border-radius:6px;overflow:hidden;'+cardBorder+'">'
+        +charCardSVG(p.char,42,52,p.wounds,isc)+'</div>'
+        +'<div style="font-size:9px;font-family:Cinzel,serif;'+nameStyle+'text-align:center;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.name+'</div>'
+        +(dead?'<div style="font-size:10px;line-height:1">💀</div>':unc?'<div style="font-size:10px;line-height:1">😵</div>':'')
+        +'</div>';
+    }).join('');
+  }
+  G.players.forEach((p,i)=>{
+    const isc=i===G.ct;
+    const lv=G.players[p.love],ht=G.players[p.hate];
+    const sc=p.alive?(!p.conscious?'#c09010':'#2add6a'):'#dd2a2a';
+    const st=!p.alive?L('💀 Погиб','💀 Dead'):(!p.conscious?L('😵 Без сознания','😵 Unconscious'):L('✓ Жив','✓ Alive'));
+    const pips=Array.from({length:p.char.size},(_,j)=>'<div class="pp '+(j<p.wounds?(p.alive?'w':'l'):'ok')+'"></div>').join('');
+    const cards=p.hand.length?'<span class="prow-tag">🃏 '+p.hand.length+'</span>':'';
+    const bonus=wb(p);
+    const bonusTag=bonus>0?'<span class="prow-tag" style="color:#f0c040;border-color:rgba(200,145,10,.5)">⚔️ +'+bonus+'</span>':'';
+    const rowTag=p.rowed?'<span class="prow-tag">🚣</span>':'';
+    const thirstTag=p.thirstMark?'<span class="prow-thirst '+(p.thirstMark.kind||'')+'">'+p.thirstMark.label+'</span>':'';
+    const secs=isc?'<div class="inline-secrets">'
+      +'<div class="isec isec-love"><span class="isec-icon">❤</span><div class="isec-body"><div class="isec-role">'+L('ДРУГ','FRIEND')+'</div><div class="isec-name">'+(lv?.name||'?')+'</div><div class="isec-pts">+'+(lv?.char?.sv||0)+' '+L('очков если выживет','points if survives')+'</div></div></div>'
+      +'<div class="isec isec-hate"><span class="isec-icon">💀</span><div class="isec-body"><div class="isec-role">'+L('ВРАГ','ENEMY')+'</div><div class="isec-name">'+(ht?.name||'?')+'</div><div class="isec-pts">+'+(ht?.char?.size||0)+' '+L('очков если погибнет','points if dies')+'</div></div></div>'
+      +'</div>':'';
+    z.innerHTML+='<div class="prow '+(isc?'act-p':'')+' '+(!p.alive?'dead-p':'br')+'">'
+      +'<div class="prow-portrait '+(isc?'prow-portrait-act':'')+' '+(!p.alive?'prow-portrait-dead':'')+' '+(!p.conscious&&p.alive?'prow-portrait-unc':'')+'">'
+      +charCardSVG(p.char,60,78,p.wounds,isc)
+      +(!p.alive?'<div class="prow-status-badge">💀</div>':(!p.conscious&&p.alive?'<div class="prow-status-badge">😵</div>':''))
+      +'</div>'
+      +'<div class="prow-info">'
+        +'<div class="prow-top"><div class="prow-name '+(isc?'prow-name-act':'')+'">'+p.name+'</div><div class="prow-status" style="color:'+sc+'">'+st+'</div></div>'
+        +'<div class="prow-charname">'+charDisplayName(p.char)+'</div>'
+        +'<div class="prow-hp-row"><span style="font-size:9px;color:var(--txt3);font-family:Cinzel,serif;margin-right:4px">HP</span><div class="hp-track">'+pips+'</div><span class="hp-lbl">'+p.wounds+'/'+p.char.size+'</span>'+cards+rowTag+thirstTag+'</div>'
+        +secs
+      +'</div>'
+    +'</div>';
+  });
+}
+
+function renderHand(){
+  var cp=G.players[G.ct]||G.players[0];
+  var hidden=(cp.hand||[]).filter(function(c){return !c.revealed;}).length;
+  var open=(cp.hand||[]).filter(function(c){return c.revealed;}).length;
+  document.getElementById('hand-count').textContent=_lang==='en'
+    ? cp.hand.length+' cards ('+hidden+' hidden, '+open+' open)'
+    : cp.hand.length+' карт ('+hidden+' закрытых, '+open+' открытых)';
+  var sc=document.getElementById('hand-scroll'); sc.innerHTML='';
+  if(!cp.hand.length){
+    sc.innerHTML='<div style="color:var(--txt3);font-style:italic;padding:20px 10px;font-size:13px">'+(_lang==='en'?'No cards in hand':'Нет карт на руке')+'</div>';
+    return;
+  }
+  cp.hand.forEach(function(card,idx){
+    var el=document.createElement('div');
+    el.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0';
+    if(!card.revealed){
+      // Face-down: show back + open button
+      var back='<svg viewBox="0 0 80 116" xmlns="http://www.w3.org/2000/svg" width="80" height="116"><rect width="80" height="116" fill="#1a0e04" rx="8"/><rect x="4" y="4" width="72" height="108" fill="none" stroke="rgba(180,140,60,.4)" stroke-width="1.5" rx="5"/><text x="40" y="62" text-anchor="middle" dominant-baseline="middle" font-size="32" fill="rgba(180,140,60,.3)">☠</text><text x="40" y="88" text-anchor="middle" font-size="8" fill="rgba(180,140,60,.35)" font-family="Cinzel,serif" letter-spacing="2">'+L('ЗАКРЫТАЯ','HIDDEN')+'</text></svg>';
+      el.innerHTML='<div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:2px 4px 10px var(--shadow)" class="dealing">'+back+'</div>'
+        +'<button onclick="event.stopPropagation();openCard('+idx+')" style="width:80px;padding:5px 0;background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;border-radius:6px;font-family:Cinzel,serif;font-size:9px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:1px">'+(_lang==='en'?'👁 REVEAL':'👁 ОТКРЫТЬ')+'</button>';
+    } else {
+      // Face-up: show card
+      el.innerHTML='<div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:2px 4px 10px var(--shadow);border:1.5px solid var(--bdr2)" class="dealing">'+provCardSVG(card,80,116)+'</div>'
+        +'<div style="font-size:8px;font-family:Cinzel,serif;color:var(--txt3);letter-spacing:1px">'+(card.permanent?(_lang==='en'?'⚓ PERMANENT':'⚓ ПОСТОЯННАЯ'):(_lang==='en'?'OPEN':'ОТКРЫТАЯ'))+'</div>';
+      el.style.cursor='pointer';
+      el.onclick=function(){tapCard(idx);};
+    }
+    el.style.animationDelay=(idx*80)+'ms';
+    sc.appendChild(el);
+  });
+}
+
+function renderLog(){
+  const el=document.getElementById('log-body');
+  el.innerHTML=G.log.slice(-24).map(e=>`<div class="lline ${e.t||''}">${e.m}</div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function addLog(m,t=''){G.log.push({m,t});if(document.getElementById('log-body'))renderLog();}
+
+// ── CHAT ──
+function sendChat(){
+  const inp=document.getElementById('chat-inp');const txt=inp.value.trim();if(!txt)return;
+  const cp=G.players[G.ct]||G.players[0];
+  chatLog.push({name:cp.name,text:txt});inp.value='';
+  renderChat();
+}
+function addSysMsg(m){chatLog.push({name:'⚓',text:m,sys:true});renderChat();}
+function renderChat(){
+  const el=document.getElementById('chat-msgs');if(!el)return;
+  el.innerHTML=chatLog.slice(-40).map(m=>`<div class="cmsg ${m.sys?'sys':''}"><div class="cmsg-who">${m.name}</div><div class="cmsg-text">${escHtml(m.text)}</div></div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ── QM PHASE ──
+let qmDrawn=[], qmVotes={};
+
+function startQM(){
+  G.phase=0; renderGame();
+  document.getElementById('qm-zone').style.display='block';
+  document.getElementById('act-zone').style.display='none';
+  var dp=document.getElementById('dispute-panel');
+  if(dp) dp.style.display='none';
+
+  var alive=G.players.filter(function(p){return p.alive&&p.conscious;});
+  if(!alive.length){startActions();return;}
+
+  // Draw N cards (one per alive player)
+  var pile=[];
+  for(var i=0;i<alive.length;i++) if(G.prov.length) pile.push(G.prov.pop());
+
+  if(!pile.length){
+    document.getElementById('qm-sub').textContent=L('Припасы закончились!','Supplies are gone!');
+    document.getElementById('qm-row').innerHTML='<div style="font-size:32px;opacity:.4;width:100%;text-align:center">📦</div>';
+    document.getElementById('qm-actions').innerHTML='<button class="qm-btn qm-btn-accept" onclick="doStartActions()">'+L('Продолжить →','Continue →')+'</button>';
+    addLog(L('Припасы закончились!','Supplies are gone!'),'dan');
+    return;
+  }
+
+  // Store state
+  window._draft={pile:pile, alive:alive, pickerIdx:0};
+  addLog(L('Квартирмейстер выложил ','The quartermaster dealt ')+pile.length+L(' карт.',' cards.'),'imp');
+  runDraftRound();
+}
+
+function runDraftRound(){
+  var d=window._draft;
+  // Update HUD to show current picker
+  if(d&&d.pickerIdx<d.alive.length){
+    G.ct=G.players.indexOf(d.alive[d.pickerIdx]);
+    renderGame();
+  }
+  if(!d||d.pickerIdx>=d.alive.length||d.pile.length===0){
+    // Last player gets remainder automatically
+    if(d&&d.pile.length>0){
+      d.alive[d.alive.length-1].hand=d.alive[d.alive.length-1].hand.concat(
+        d.pile.map(function(c){c.revealed=false;return c;})
+      );
+      addLog(d.alive[d.alive.length-1].name+L(' получает оставшиеся карты.',' receives the remaining cards.'));
+      d.pile=[];
+    }
+    addSysMsg(L('✓ Снаряжение роздано.','✓ Supplies dealt.'));
+    closeQM();
+    var fi=fnext(0);
+    if(fi===-1){startNav();return;}
+    passPhone(G.players[fi].name,L('Твой ход!','Your turn!'),L('День ','Day ')+G.day+L(' — фаза действий',' — action phase'),function(){startActions();});
+    return;
+  }
+
+  var picker=d.alive[d.pickerIdx];
+  document.getElementById('qm-sub').textContent=picker.name+L(' выбирает карту (',' chooses a card (')+(d.pickerIdx+1)+'/'+d.alive.length+')';
+  document.getElementById('qm-actions').innerHTML='';
+
+  // Show face-down pile
+  var row=document.getElementById('qm-row'); row.innerHTML='';
+  var back='<svg viewBox="0 0 70 102" xmlns="http://www.w3.org/2000/svg" width="70" height="102"><rect width="70" height="102" fill="#1a0e04" rx="6"/><rect x="3" y="3" width="64" height="96" fill="none" stroke="rgba(180,140,60,.4)" stroke-width="1.5" rx="4"/><text x="35" y="55" text-anchor="middle" dominant-baseline="middle" font-size="26" fill="rgba(180,140,60,.3)">☠</text><text x="35" y="78" text-anchor="middle" font-size="8" fill="rgba(180,140,60,.35)" font-family="Cinzel,serif" letter-spacing="2">'+L('ЗАКРЫТАЯ','HIDDEN')+'</text></svg>';
+  d.pile.forEach(function(c,i){
+    var el=document.createElement('div');
+    el.style.cssText='flex-shrink:0;cursor:default';
+    el.innerHTML=back;
+    el.classList.add('dealing');
+    el.style.animationDelay=(i*150)+'ms';
+    row.appendChild(el);
+  });
+
+  // Pass phone to picker, then show cards face-up
+  passPhone(picker.name,
+    L('Выбери карту снаряжения!','Choose a supply card!'),
+    d.pile.length+L(' карт — выбери одну, остальные уйдут следующему',' cards — choose one, the rest pass to the next player'),
+    function(){showDraftCards(picker);}
+  );
+}
+
+function showDraftCards(picker){
+  var d=window._draft;
+  document.getElementById('qm-sub').textContent=picker.name+L(' — нажми на карту чтобы взять её',' — tap a card to take it');
+  var row=document.getElementById('qm-row'); row.innerHTML='';
+
+  d.pile.forEach(function(card,i){
+    var wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:5px;width:86px;cursor:pointer';
+    var cd=document.createElement('div');
+    cd.style.cssText='width:80px;height:116px;border-radius:9px;overflow:hidden;border:2px solid var(--bdr2);box-shadow:3px 5px 14px var(--shadow);transition:all .15s';
+    cd.innerHTML=provCardSVG(card,80,116);
+    var lbl=document.createElement('div');
+    lbl.style.cssText='font-family:Cinzel,serif;font-size:9px;color:var(--gold);letter-spacing:1px';
+    lbl.textContent=L('Взять','Take');
+    wrap.appendChild(cd); wrap.appendChild(lbl);
+    wrap.addEventListener('mouseenter',function(){cd.style.borderColor='var(--gold3)';cd.style.boxShadow='0 0 16px rgba(200,145,10,.5)';});
+    wrap.addEventListener('mouseleave',function(){cd.style.borderColor='var(--bdr2)';cd.style.boxShadow='3px 5px 14px var(--shadow)';});
+    wrap.addEventListener('click',function(){pickDraftCard(i);});
+    row.appendChild(wrap);
+  });
+
+  document.getElementById('qm-actions').innerHTML='<div style="font-size:12px;color:var(--txt2);font-style:italic;text-align:center;padding:4px 0">'+L('Выбери одну карту — остальные уйдут следующему игроку','Choose one card — the rest pass to the next player')+'</div>';
+}
+
+function pickDraftCard(idx){
+  var d=window._draft;
+  var picker=d.alive[d.pickerIdx];
+  var card=d.pile.splice(idx,1)[0];
+  card.revealed=false; // starts face-down
+  picker.hand.push(card);
+  addLog(picker.name+L(' берёт карту (закрытую).',' takes a card (hidden).'));
+  d.pickerIdx++;
+  runDraftRound();
+}
+
+function doStartActions(){
+  closeQM();startActions();
+}
+
+function doAcceptQM(){
+  const drawn=window._qmDrawn||[];
+  const alive=window._qmAlive||[];
+  alive.forEach((p,i)=>{if(drawn[i]){drawn[i].revealed=false;p.hand.push(drawn[i]);addLog(p.name+L(' получает карту (закрытую).',' receives a card (hidden).'));}});
+  addSysMsg(L('✓ Снаряжение роздано.','✓ Supplies dealt.'));
+  closeQM();
+  const fi=fnext(0);if(fi===-1){startNav();return;}
+  passPhone(G.players[fi].name,'Твой ход!','День '+G.day,()=>startActions());
+}
+
+function doDisputeQM(){
+  const dp=document.getElementById('dispute-panel');
+  if(dp){dp.style.display='block';}
+  document.getElementById('qm-actions').innerHTML='';
+  const alive=G.players.filter(p=>p.alive);
+  const votes={};
+  document.getElementById('dispute-votes').innerHTML=alive.map((p,i)=>
+    '<div class="vote-item"><div class="vote-name">'+p.name+'</div>'
+    +'<div class="vote-btns">'
+    +'<div class="vote-btns">'
+    +'<button class="vbtn vbtn-yes" onclick="doVoteQM('+i+',1,this)">👍 За</button>'
+    +'<button class="vbtn vbtn-no" onclick="doVoteQM('+i+',0,this)">👎 Против</button>'
+  ).join('');
+  window._qmVotes={};
+  document.getElementById('vote-result').textContent='';
+}
+
+function doVoteQM(idx,vote,btn){
+  if(!window._qmVotes)window._qmVotes={};
+  if(window._qmVotes[idx])return;
+  window._qmVotes[idx]=vote;
+  btn.parentElement.querySelectorAll('.vbtn').forEach(b=>b.classList.add('voted'));
+  const alive=G.players.filter(p=>p.alive);
+  const total=alive.length;
+  const against=Object.values(window._qmVotes).filter(v=>v===0).length;
+  const done=Object.keys(window._qmVotes).length;
+  document.getElementById('vote-result').textContent='Проголосовали: '+done+'/'+total;
+  if(done===total){
+    if(against>total/2){
+      addLog('Большинство против! Карты возвращаются...','dan');
+      G.prov=[...G.prov,...(window._qmDrawn||[])];
+      const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+      G.prov=shuf(G.prov);
+      toast('Раздача оспорена — новая раздача!');
+      setTimeout(()=>{closeQM();startQM();},1200);
+    } else {
+      addLog('Раздача принята.','suc');
+      setTimeout(doAcceptQM,600);
+    }
+  }
+}
+
+function acceptQM(){
+  const alive=G.players.filter(p=>p.alive&&p.conscious);
+  alive.forEach((p,i)=>{if(qmDrawn[i]){p.hand.push(qmDrawn[i]);addLog(p.name+L(' получает: ',' receives: ')+cardName(qmDrawn[i]));}});
+  addSysMsg(L('✓ Раздача принята.','✓ Deal accepted.'));
+  closeQM();
+  const first=G.players[fnext(0)];
+  passPhone(first.name,'Твой ход! Только ты видишь этот экран.',`День ${G.day} — фаза действий`,()=>startActions());
+}
+
+function beginDispute(){
+  document.getElementById('qm-actions').innerHTML='';
+  document.getElementById('dispute-panel').style.display='block';
+  qmVotes={};
+  addSysMsg('⚡ Оспаривание раздачи! Голосуют все живые игроки...');
+  const alive=G.players.filter(p=>p.alive);
+  document.getElementById('dispute-votes').innerHTML=alive.map((p,i)=>`
+    <div class="vote-item" id="vi-${i}">
+      <div class="vote-name">${p.name}</div>
+      <div class="vote-btns">
+        <button class="vbtn vbtn-yes" onclick="castVote(${i},'yes')">👍 За раздачу</button>
+        <button class="vbtn vbtn-no" onclick="castVote(${i},'no')">👎 Против</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('vote-result').textContent='';
+}
+
+function castVote(idx,vote){
+  if(qmVotes[idx]!==undefined)return;
+  qmVotes[idx]=vote;
+  // Mark buttons
+  const vi=document.getElementById(`vi-${idx}`);
+  if(vi)vi.querySelectorAll('.vbtn').forEach(b=>b.classList.add('voted'));
+  const alive=G.players.filter(p=>p.alive);
+  const total=alive.length;
+  const votes=Object.values(qmVotes);
+  document.getElementById('vote-result').textContent=`Проголосовали: ${votes.length} из ${total}`;
+  if(votes.length===total){
+    const against=votes.filter(v=>v==='no').length;
+    if(against>total/2){
+      addLog('Большинство против! Карты перетасовываются...','dan');
+      addSysMsg('❌ Раздача оспорена! Карты возвращаются.');
+      G.prov=[...G.prov,...qmDrawn];G.prov=shuf(G.prov);
+      toast('Раздача оспорена — новая раздача!');
+      setTimeout(()=>{closeQM();startQM();},1200);
+    } else {
+      addLog('Раздача принята голосованием.','suc');
+      addSysMsg('✓ Большинство за раздачу.');
+      setTimeout(acceptQM,800);
+    }
+  }
+}
+
+function closeQM(){
+  document.getElementById('qm-zone').style.display='none';
+}
+
+// ── ACTIONS ──
+function fnext(from){for(let i=from;i<G.players.length;i++)if(G.players[i].alive&&G.players[i].conscious)return i;return -1;}
+
+function startActions(){
+  G.phase=1;G.done=[];G.turnOrder=G.players.filter(p=>p.alive&&p.conscious);G.turnPtr=0;
+  G.ct=G.turnOrder.length?G.players.indexOf(G.turnOrder[0]):-1;
+  if(G.ct===-1){startNav();return;}
+  document.getElementById('act-zone').style.display='block';
+  addLog(`Ход: ${G.players[G.ct].name}`,'imp');
+  renderGame();
+}
+
+function doAct(type){
+  const cp=G.players[G.ct];if(!cp||!cp.alive||!cp.conscious){advTurn();return;}
+  if(type==='nothing'){addLog(`${cp.name} отдыхает.`);advTurn();}
+  else if(type==='row'){
+    cp.rowed=1;
+    // How many cards to take: base 2, +1 if has open oar
+    const hasOar=cp.hand.some(c=>c.id==='oar'&&c.revealed);
+    const drawCount=hasOar?3:2;
+    const drawn=[];
+    for(let i=0;i<drawCount&&G.nav.length;i++) drawn.push(G.nav.pop());
+    if(!drawn.length){addLog(cp.name+' гребёт, но навигационная колода пуста.','suc');advTurn();return;}
+    addLog(cp.name+' налегает на вёсла!'+(hasOar?' (весло: +1 карта)':''),'suc');
+    // Player chooses which cards to set aside (0 to 2 max), rest go under deck
+    const btnHtml='<div style="margin-bottom:10px;font-size:12px;color:var(--txt2)">Выбери карты для вечерней навигации (до 2):</div>'
+      +drawn.map((card,i)=>'<button onclick="window._rowToggle('+i+')" id="rowcard'+i+'" style="background:none;border:2px solid rgba(200,145,10,.3);border-radius:8px;cursor:pointer;overflow:hidden;margin:4px;vertical-align:top">'+provCardSVG(card,80,116)+'</button>').join('')
+      +'<div id="row-hint" style="font-size:11px;color:var(--txt3);margin-top:8px">Выбрано: 0 / макс. 2</div>';
+    window._rowChosen=new Set();
+    window._rowToggle=function(i){
+      if(window._rowChosen.has(i)){window._rowChosen.delete(i);document.getElementById('rowcard'+i).style.borderColor='rgba(200,145,10,.3)';}
+      else if(window._rowChosen.size<2){window._rowChosen.add(i);document.getElementById('rowcard'+i).style.borderColor='#f0c040';}
+      document.getElementById('row-hint').textContent='Выбрано: '+window._rowChosen.size+' / макс. 2';
+    };
+    openModal('🚣 '+cp.name+' — выбери карты',btnHtml,[{lbl:'Готово →',fn:function(){
+      closeModal();
+      const chosen=drawn.filter((_,i)=>window._rowChosen.has(i));
+      const rest=drawn.filter((_,i)=>!window._rowChosen.has(i));
+      chosen.forEach(c=>G.rowStack.push(c));
+      rest.forEach(c=>G.nav.unshift(c));
+      renderGame();advTurn();
+    }},{lbl:'Пропустить',fn:function(){
+      closeModal();drawn.forEach(c=>G.nav.unshift(c));renderGame();advTurn();
+    }}]);
+  }
+  else if(type==='seat'){
+    pickP('🔀 Пересесть — выбери игрока:',(ti)=>{
+      const t=G.players[ti];if(!t.alive){toast('Этот игрок мёртв!');return;}
+      passPhone(t.name,`${cp.name} хочет поменяться с тобой местами. Ты решаешь!`,'Только ты видишь этот экран.',()=>resistModal(cp,t,'seat'));
+    });
+  }
+  else if(type==='mug'){
+    const isKid=cp.char.id==='kid';
+    pickP('🤜 '+(isKid?'Малый ворует':'Ограбить')+' — выбери жертву:',(ti)=>{
+      const t=G.players[ti];if(!t.alive||!t.hand.length){toast('Нечего красть!');return;}
+      if(!t.conscious){
+        // Unconscious — take freely
+        const s=t.hand.splice(~~(Math.random()*t.hand.length),1)[0];cp.hand.push(s);
+        addLog(cp.name+' грабит беспомощного '+t.name+'! Берёт: '+s.n,'dan');advTurn();renderGame();return;
+      }
+      if(isKid){
+        // Kid can silently steal a CLOSED card (no fight, no permission)
+        const closedCards=t.hand.filter(c=>!c.revealed);
+        if(!closedCards.length){
+          // No closed cards — must fight or give up
+          toast('У '+t.name+' нет закрытых карт! Малый не может красть открытые бесшумно.');
+          passPhone(t.name,cp.name+' хочет тебя ограбить! Ты решаешь!','Только ты видишь этот экран.',()=>resistModal(cp,t,'mug'));
+          return;
+        }
+        // Take random closed card silently
+        const closedIdx=t.hand.findIndex(c=>!c.revealed);
+        const stolen=t.hand.splice(closedIdx,1)[0];
+        cp.hand.push(stolen);
+        addLog('🤫 Малый тихо стащил закрытую карту у '+t.name+'!','suc');
+        advTurn();renderGame();return;
+      }
+      passPhone(t.name,cp.name+' хочет тебя ограбить! Ты решаешь!','Только ты видишь этот экран.',()=>resistModal(cp,t,'mug'));
+    });
+  }
+  renderGame();
+}
+
+function resistModal(attacker,target,action){
+  const isSeat=action==='seat';
+  openModal(
+    isSeat?`🔀 ${attacker.name} предлагает поменяться`:`⚔ ${attacker.name} хочет тебя ограбить`,
+    `<div style="display:flex;gap:14px;justify-content:center;margin-bottom:14px">
+      <div style="text-align:center"><div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.7)">${charCardSVG(attacker.char,80,116,attacker.wounds,false)}</div><div style="font-family:Cinzel,serif;font-size:11px;color:var(--g2);margin-top:4px">${attacker.name}</div></div>
+      <div style="align-self:center;padding-bottom:50px">${isSeat?'<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><path d="M6,10 Q16,4 26,10" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/><polygon points="5,9 9,12 5,13" fill="#c8a020"/><path d="M26,22 Q16,28 6,22" stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/><polygon points="27,23 23,20 27,19" fill="#c8a020"/></svg>':'<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><ellipse cx="17" cy="17" rx="10" ry="9" fill="#b07040"/><rect x="10" y="13" width="14" height="8" rx="3" fill="#c08050"/><line x1="12" y1="13" x2="12" y2="21" stroke="#a06030" stroke-width="1"/><line x1="16" y1="13" x2="16" y2="21" stroke="#a06030" stroke-width="1"/><line x1="20" y1="13" x2="20" y2="21" stroke="#a06030" stroke-width="1"/><path d="M4,14 L2,10 M3,17 L0,15" stroke="#c8a020" stroke-width="1.5" stroke-linecap="round" opacity=".7"/></svg>'}</div>
+      <div style="text-align:center"><div style="width:80px;height:116px;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.7)">${charCardSVG(target.char,80,116,target.wounds,false)}</div><div style="font-family:Cinzel,serif;font-size:11px;color:var(--g2);margin-top:4px">ТЫ</div></div>
+    </div>
+    <div style="font-size:13px;color:rgba(200,185,155,.8);margin-bottom:4px">${isSeat?'Поменяться местами?':'Отдать карту?'}</div>`,
+    [
+      {lbl:isSeat?'✓ Соглашаюсь':'💸 Отдаю карту',cls:'grn',fn:()=>{
+        closeModal();
+        if(isSeat){const tmp=attacker.pos;attacker.pos=target.pos;target.pos=tmp;G.players.sort((a,b)=>a.pos-b.pos);addLog(`${target.name} соглашается поменяться с ${attacker.name}.`,'suc');}
+        else{const s=target.hand.splice(~~(Math.random()*target.hand.length),1)[0];attacker.hand.push(s);addLog(`${target.name} отдаёт ${s.n} → ${attacker.name}.`,'dan');}
+        passPhone(attacker.name,'Жертва приняла решение — продолжай ход.','',()=>{advTurn();renderGame();});
+      }},
+      {lbl:'⚔️ Драться!',cls:'red',fn:()=>{
+        closeModal();attacker.fought=1;target.fought=1;addLog(`${target.name} сопротивляется! Драка!`,'dan');
+        fight(G.players.indexOf(attacker),G.players.indexOf(target),
+          ()=>{
+            if(!isSeat&&target.hand.length){const s=target.hand.splice(0,1)[0];attacker.hand.push(s);addLog(`${attacker.name} победил! Взял ${s.n}.`,'suc');}
+            else if(isSeat){const tmp=attacker.pos;attacker.pos=target.pos;target.pos=tmp;G.players.sort((a,b)=>a.pos-b.pos);}
+            passPhone(attacker.name,'Бой завершён — продолжай ход.','',()=>{advTurn();renderGame();});
+          },
+          ()=>{passPhone(attacker.name,'Ты проиграл бой — ход продолжается.','',()=>{advTurn();renderGame();});});
+      }},
+    ]
+  );
+}
+
+function useCompass(cp){
+  const topCards=G.nav.slice(-Math.min(4,G.nav.length));
+  const grid=topCards.map((card,i)=>`
+    <div style="width:88px;border-radius:8px;overflow:hidden;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.7);flex-shrink:0" onclick="pickNavByCompass(${G.nav.length-topCards.length+i})">
+      ${navCardSVG(card.bird?'🕊️':card.ob?'🌊':card.th.length?'🥵':'⭐',card.bird?'Птица!':card.ob?'За борт!':card.th.length?'Жажда':'Спокойно','#002040','#001020',88,128)}
+    </div>`).join('');
+  openModal('🧭 КОМПАС — выбери карту навигации',
+    `<div style="font-size:12px;color:rgba(200,185,150,.6);margin-bottom:14px;font-style:italic">Ты видишь верхние навигационные карты. Выбери какую сыграть.</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${grid}</div>`,
+    [{lbl:'Случайная карта',fn:()=>{closeModal();if(G.nav.length>=2){const c1=G.nav.pop(),c2=G.nav.pop();G.rowStack.push(c1);G.nav.unshift(c2);}addLog(`${cp.name} гребёт (компас).`,'suc');advTurn();renderGame();}}]);
+}
+window.pickNavByCompass=function(idx){
+  closeModal();const card=G.nav.splice(idx,1)[0];G.rowStack.push(card);
+  addLog(`${G.players[G.ct].name} использует компас — выбирает карту!`,'suc');
+  advTurn();renderGame();
+};
+
+function wb(p){let b=0;(p.hand||[]).forEach(c=>{if(!c.revealed)return;if(c.id==='flare')b+=8;if(c.id==='oar')b+=1;if(c.id==='knife')b+=3});return b;}
+
+function fight(ai,di,wCb,lCb){
+  const a=G.players[ai],d=G.players[di];if(!a||!d){wCb();return;}
+  const as=a.char.size+wb(a),ds=d.char.size+wb(d);
+  const ar=~~(Math.random()*as)+1,dr=~~(Math.random()*ds)+1,win=ar>dr;
+  const winColor='#60e060',loseColor='#606060';
+  const aNumColor=win?'#f8d040':loseColor;
+  const dNumColor=!win?'#f8d040':loseColor;
+  const resultText=win?('\u2694 '+a.name+' \u043f\u043e\u0431\u0435\u0434\u0438\u043b!'):('\uD83D\uDEE1 '+d.name+' \u0443\u0441\u0442\u043e\u044f\u043b!');
+  const resultColor=win?winColor:'#e06060';
+  const html=[
+    '<div style="display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-bottom:14px">',
+    '<div style="text-align:center">',
+    '<div style="width:88px;height:128px;border-radius:8px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.7)">'+charCardSVG(a.char,88,128,a.wounds,false)+'</div>',
+    '<div style="font-family:Cinzel,serif;font-size:10px;color:rgba(200,170,100,.6);margin-top:4px">'+a.name+'</div>',
+    '<div style="font-family:Cinzel,serif;font-size:28px;font-weight:900;color:'+aNumColor+'">'+ar+'</div>',
+    '</div>',
+    '<div style="font-size:26px;padding-bottom:60px">\u2694\uFE0F</div>',
+    '<div style="text-align:center">',
+    '<div style="width:88px;height:128px;border-radius:8px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.7)">'+charCardSVG(d.char,88,128,d.wounds,false)+'</div>',
+    '<div style="font-family:Cinzel,serif;font-size:10px;color:rgba(200,170,100,.6);margin-top:4px">'+d.name+'</div>',
+    '<div style="font-family:Cinzel,serif;font-size:28px;font-weight:900;color:'+dNumColor+'">'+dr+'</div>',
+    '</div></div>',
+    '<div style="font-family:Cinzel,serif;font-size:14px;color:'+resultColor+';margin-bottom:4px">'+resultText+'</div>',
+    '<div style="font-size:11px;color:rgba(200,170,100,.4)">\u0421\u0438\u043b\u0430 '+a.name+': '+as+' | \u0421\u0438\u043b\u0430 '+d.name+': '+ds+'</div>',
+  ].join('');
+  openModal('\u2694\uFE0F \u041f\u041e\u0415\u0414\u0418\u041d\u041e\u041a',html,[{lbl:'\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u2192',fn:()=>{
+    // Per rules: ALL participants get fight fatigue (only if not already has one)
+    a.fought=1; d.fought=1;
+    // Loser gets wound
+    if(win){d.wounds++;checkP(d);addLog(a.name+' победил! '+d.name+' ранен.','dan');}
+    else{a.wounds++;checkP(a);addLog(d.name+' устоял! '+a.name+' ранен.','dan');}
+    closeModal();win?wCb():lCb();
+  }}]);
+}
+
+function checkP(p){
+  if(p.wounds>=p.char.size&&p.conscious){p.conscious=0;addLog(`⚠️ ${p.name} без сознания — пропустит ход!`,'dan');toast(`${p.name} без сознания!`);}
+  if(p.wounds>p.char.size&&p.alive){p.alive=0;addLog(`💀 ${p.name} ПОГИБ!`,'dan');}
+}
+
+function advTurn(){
+  if(!G.turnOrder)G.turnOrder=G.players.filter(p=>p.alive&&p.conscious);
+  G.turnPtr=(G.turnPtr||0)+1;
+  while(G.turnPtr<G.turnOrder.length&&(!G.turnOrder[G.turnPtr].alive||!G.turnOrder[G.turnPtr].conscious)){
+    addLog(`${G.turnOrder[G.turnPtr].name} без сознания — пропускает ход.`,'dan');
+    G.turnPtr++;
+  }
+  if(G.turnPtr>=G.turnOrder.length){startNav();return;}
+  const next=G.turnOrder[G.turnPtr];
+  G.ct=G.players.indexOf(next);
+  addLog(`Ход: ${next.name}`);
+  passPhone(next.name,'Твой ход! Смотри только свои карты.',`День ${G.day}`,()=>{renderGame();});
+}
+
+// ── NAV PHASE ──
+function startNav(){
+  G.phase=2;
+  G.players.forEach(function(p){p.thirstMark=null;});
+  var actZone=document.getElementById('act-zone');
+  if(actZone)actZone.style.display='none';
+  renderGame();
+  addLog('Фаза навигации!','imp');
+
+  setTimeout(function(){
+    // Find stern player (highest pos, alive+conscious)
+    var sternPlayer=G.players.filter(p=>p.alive&&p.conscious).sort((a,b)=>b.pos-a.pos)[0];
+    var hasCompass=sternPlayer&&sternPlayer.hand.some(c=>c.id==='compass'&&c.revealed);
+
+    // Build available cards
+    var available=[];
+    if(G.rowStack.length){available=G.rowStack.splice(0);} // use set-aside cards
+    else if(G.nav.length){available.push(G.nav.pop());}
+    else{G.nav=shuf(NAV_DECK.map(x=>({...x})));available.push(G.nav.pop());}
+
+    // Compass: stern player gets 1 extra card to choose from
+    if(hasCompass&&G.nav.length){
+      available.push(G.nav.pop());
+      addLog((sternPlayer.name)+' использует компас — доп. карта навигации!','suc');
+    }
+
+    if(available.length<=1){
+      // No choice, just play it
+      var leftover=available.slice(1);
+      leftover.forEach(c=>G.nav.unshift(c));
+      resolveNav(available[0]);
+    } else {
+      // Stern player chooses which card to play
+      var stern=sternPlayer?sternPlayer.name:'игрок на корме';
+      var btnHtml=available.map(function(card,i){
+          provCardSVG(card,80,116)+'</div>';
+      }).join('');
+      window._navCards=available;
+      window._navResolve=function(ni){
+        var chosen=window._navCards[ni||0];
+        var rest=window._navCards.filter(function(_,i){return i!==(ni||0);});
+        rest.forEach(function(c){G.nav.unshift(c);});
+        resolveNav(chosen);
+      };
+      passPhone(stern,'Выбери навигационную карту!','',function(){
+        openModal('⚓ '+stern+' — выбери навигацию',
+          '<p style="color:var(--txt2);font-size:12px;margin-bottom:10px">Нажми на карту:</p>'+
+          available.map(function(card,i){
+            return '<button onclick="closeModal();window._navResolve('+i+')" style="background:none;border:2px solid rgba(200,145,10,.3);border-radius:8px;cursor:pointer;overflow:hidden;margin:4px;vertical-align:top">'
+              +provCardSVG(card,80,116)+'</button>';
+          }).join(''),
+          [{lbl:'Случайная',fn:function(){closeModal();window._navResolve(~~(Math.random()*available.length));}}]
+        );
+      });
+    }
+  },500);
+}
+
+function resolveNav(card){
+  let icon='🌊',title='Спокойная ночь',col0='#102030',col1='#050e18',lines=[];
+
+  // ── ПТИЦЫ ──
+  if(card.bird){
+    G.birds++;icon='🕊️';title='Птица! ('+G.birds+'/4)';
+    col0='#1a3010';col1='#081404';
+    lines.push('🕊 Птица на горизонте! Земля близко...');
+    addLog('ПТИЦА! '+G.birds+' из 4','suc');
+    if(G.birds>=4){showNavModal(icon,title,col0,col1,lines,()=>endGame());return;}
+  }
+
+  // ── ЗА БОРТОМ ──
+  // Helper: apply thirst (quench with water or take wound)
+  function applyThirst(p, src){
+    // Открытый зонтик защищает от первой жажды
+    var parasol=p.hand.find(function(c){return c.id==='parasol'&&c.revealed;});
+    if(parasol){p.thirstMark={kind:'safe',label:'☂️ Зонтик: '+src};lines.push('☂️ '+p.name+' — зонтик спасает от жажды ('+src+')');return;}
+    var wi=p.hand.findIndex(function(c){return c.id==='water';});
+    if(wi>=0){p.hand.splice(wi,1);p.thirstMark={kind:'ok',label:'💧 Утолил: '+src};lines.push('💧 '+p.name+' выпивает воду ('+src+')');}
+    else{
+      p.thirstMark={kind:'',label:'🥵 Жажда: '+src};
+      if(!p.conscious){
+        // Unconscious + thirst = death
+        p.alive=0;p.conscious=0;
+        lines.push('💀 '+p.name+' умирает от жажды!');
+        addLog(p.name+' — умер от жажды!','dan');
+      } else {
+        p.wounds++;checkP(p);
+        lines.push('🥵 '+p.name+' — жажда! ('+src+')');
+        addLog(p.name+' — жажда!','dan');
+      }
+    }
+  }
+
+  if(card.ob){
+    // Find the player who falls overboard
+    var victims=[];
+    if(card.ob==='all') victims=G.players.filter(function(p){return p.alive;});
+    else if(card.ob==='allbut') victims=G.players.filter(function(p){return p.alive&&p.char.id!==card.obex;});
+    else {var v=G.players.find(function(p){return p.char.id===card.ob&&p.alive;});if(v)victims=[v];}
+
+    victims.forEach(function(p){
+      var ff=p.char.id==='frenchy'; // Матрос не получает рану за борт
+      var hasLifeRing=p.hand.some(function(c){return c.id==='life'&&c.revealed;});
+      lines.push('🌊 '+p.name+' падает за борт!'+(ff?' (плавает!)':'')+(hasLifeRing?' (спас. круг!)':''));
+
+      // Мёртвый/без сознания + за борт = смерть (без спасательного круга)
+      if(!p.conscious||!p.alive){
+        if(hasLifeRing){lines.push('🔵 '+p.name+' спасён кругом!');}
+        else{p.alive=0;p.conscious=0;lines.push('💀 '+p.name+' унесён волнами!');addLog(p.name+' — погиб за бортом!','dan');}
+      } else {
+        // Рана: Матрос не получает, у кого есть спас. круг - тоже
+        if(!ff&&!hasLifeRing){p.wounds++;checkP(p);}
+      }
+
+      // Теряет ВСЕ открытые припасы (кроме спас. круга)
+      var lost=p.hand.filter(function(c){return c.revealed&&c.id!=='life';});
+      lost.forEach(function(c){
+        var idx=p.hand.indexOf(c);if(idx>=0)p.hand.splice(idx,1);
+        lines.push('📦 '+p.name+' теряет: '+c.n);
+      });
+      addLog(p.name+' за бортом!','dan');
+    });
+  }
+
+  // ── ЖАЖДА (поимённо) ──
+  if(card.th&&card.th.length){
+    card.th.forEach(function(cid){
+      var p=G.players.find(function(pl){return pl.char.id===cid&&pl.alive;});
+      if(p) applyThirst(p,'жажда');
+    });
+  }
+
+  // ── ЖАЖДА от вёсел ──
+  if(card.row){
+    G.players.filter(function(p){return p.rowed&&p.alive;}).forEach(function(p){
+      applyThirst(p,'гребля');
+    });
+  }
+
+  // ── ЖАЖДА от бойни ──
+  if(card.fig){
+    G.players.filter(function(p){return p.fought&&p.alive;}).forEach(function(p){
+      applyThirst(p,'бойня');
+    });
+  }
+
+  if(!lines.length)lines.push('Тихая ночь. Волны спокойны. Ничего не произошло.');
+  showNavModal(icon,title,col0,col1,lines,()=>endDay());
+}
+
+function endDay(){
+  G.players.forEach(p=>{p.rowed=0;p.fought=0;});
+  // Unconscious players wake up (if not dead)
+  G.players.filter(p=>p.alive&&!p.conscious).forEach(p=>{
+    if(p.wounds<p.char.size){p.conscious=1;addLog(`${p.name} приходит в себя.`,'suc');}
+  });
+  G.day++;addLog(`═══ ДЕНЬ ${G.day} ═══`,'imp');
+  if(G.day>30){addLog('30 дней в море — игра завершается!','dan');endGame();return;}
+  if(G.players.filter(p=>p.alive).length<=1){endGame();return;}
+  G.ct=fnext(0);
+  passPhone('НОВЫЙ ДЕНЬ',`День ${G.day} начинается — передавайте телефон по очереди.`,`Фаза Квартирмейстера`,()=>{startQM();renderGame();});
+}
+
+function endGame(){
+  const scores=G.players.map(p=>{
+    let pts=0,parts=[];
+    if(p.alive){pts+=p.char.sv;parts.push(`Выжил +${p.char.sv}`);}
+    const lv=G.players[p.love];if(lv?.alive){pts+=lv.char.sv;parts.push(`❤ +${lv.char.sv}`);}
+    const ht=G.players[p.hate];if(ht&&!ht.alive){pts+=ht.char.size;parts.push(`💀 +${ht.char.size}`);}
+    p.hand.forEach(c=>{if(c.val>0){pts+=c.val;parts.push(`${c.n} +${c.val}`);}});
+    return{p,pts,parts};
+  }).sort((a,b)=>b.pts-a.pts);
+  scores.splice(0,scores.length,...G.players.map(p=>{
+    let pts=0,parts=[];
+    const lv=G.players[p.love], ht=G.players[p.hate];
+    const narcissist=lv===p, psychopath=ht===p;
+    if(p.alive){
+      let survival=p.char.sv;
+      if(narcissist&&!psychopath)survival*=2;
+      if(psychopath&&!narcissist)survival=0;
+      pts+=survival;parts.push(`survival +${survival}`);
+    }
+    p.hand.forEach(c=>{
+      if(c.val>0){
+        let val=c.val;
+        if((p.char.id==='lauren'&&c.id==='jewels')||(p.char.id==='stephen'&&c.id==='painting')||(p.char.id==='captain'&&c.id==='cash'))val*=2;
+        pts+=val;parts.push(`${c.n} +${val}`);
+      }
+    });
+    if(lv&&lv!==p&&lv.alive){pts+=lv.char.sv;parts.push(`friend +${lv.char.sv}`);}
+    if(ht&&ht!==p&&!ht.alive){pts+=ht.char.size;parts.push(`enemy +${ht.char.size}`);}
+    if(psychopath){
+      G.players.forEach(other=>{
+        if(other!==p&&other!==lv&&!other.alive){pts+=3;parts.push(`psycho +3 (${other.name})`);}
+      });
+    }
+    return{p,pts,parts};
+  }).sort((a,b)=>b.pts-a.pts));
+  const medals=['🥇','🥈','🥉'];
+  // Reveal all secrets banner
+  const _secretsReveal='<div style="background:rgba(0,0,0,.4);border:1px solid rgba(200,145,10,.2);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center"><div style="font-family:Cinzel,serif;font-size:12px;color:var(--g2);letter-spacing:3px;margin-bottom:8px">🔓 СЕКРЕТЫ РАСКРЫТЫ</div>'+
+    G.players.map(p=>'<div style="font-size:12px;color:rgba(200,185,155,.7);margin-bottom:4px;font-style:italic">'+p.name+
+    ' — ❤ любил <b style=\'color:#ff80a0\'>'+G.players[p.love]?.name+'</b>, 💀 ненавидел <b style=\'color:#ff6060\'>'+G.players[p.hate]?.name+'</b></div>').join('')+
+    '</div>';
+  const secretsReveal=_secretsReveal;
+  document.getElementById('secrets-reveal').innerHTML=secretsReveal;
+  document.getElementById('score-list').innerHTML=secretsReveal+scores.map((s,i)=>`
+    <div class="score-entry">
+      <div class="se-rank">${medals[i]||`${i+1}`}</div>
+      <div class="se-cw">${charCardSVG(s.p.char,56,80,s.p.wounds,false)}</div>
+      <div class="se-info">
+        <div class="se-name">${s.p.name} <span style="font-size:10px;opacity:.45">${s.p.char.name}</span></div>
+        <div class="se-bd">${s.parts.join(' · ')||'Без очков'}</div>
+        <div class="se-sec">❤ ${G.players[s.p.love]?.name} &nbsp;|&nbsp; 💀 ${G.players[s.p.hate]?.name}</div>
+      </div>
+      <div class="se-pts-w"><div class="se-pts">${s.pts}</div><div class="se-pts-l">очков</div></div>
+    </div>`).join('');
+  showScr('s-score');
+}
+
+// ── CARD TAP ──
+function tapCard(cardIdx){
+  const cp=G.players[G.ct]||G.players[0];
+  const card=cp.hand[cardIdx];
+  if(!card)return;
+  const isSpecialAction=['medkit','parasol','flare'].includes(card.id);
+  if(isSpecialAction&&G.phase!==1){toast('Спецкарты разыгрываются только днем.');return;}
+  if(isSpecialAction&&cp!==G.players[G.ct]){toast('Сейчас ход другого игрока.');return;}
+  if(!card.revealed){
+    // Must open card first
+    openCard(cardIdx);return;
+  }
+
+  // ── АПТЕЧКА: снять рану с любого персонажа ──
+  if(card.id==='medkit'){
+    // Show picker: which player to heal?
+    const alive=G.players.filter(p=>p.wounds>0||(p.alive&&!p.conscious));
+    if(!alive.length){toast('Некого лечить!');return;}
+    const btnList=alive.map((p,i)=>`<button onclick="window._healTarget=${G.players.indexOf(p)};doHealCard(${cardIdx})" style="display:block;width:100%;margin:4px 0;padding:10px;background:var(--surface2);border:1px solid var(--bdr);border-radius:8px;font-family:'Cinzel',serif;font-size:12px;color:var(--txt);cursor:pointer">
+      ${p.name} (${p.char.name}) — ранений: ${p.wounds}/${p.char.size}${!p.conscious?' 😵':''}
+    </button>`).join('');
+    openModal('💊 Кого лечим?', btnList, [{lbl:'Отмена',fn:closeModal}]);
+    return;
+  }
+
+  // ── ЗОНТИК: открыть для защиты от жажды ──
+  if(card.id==='parasol'){
+    // Already revealed, just confirm it's active
+    toast('☂️ Зонтик активен — защита от первой жажды');
+    addLog(cp.name+' держит зонтик (защита от жажды)');
+    advTurn();renderGame();return;
+  }
+
+  // ── РАКЕТНИЦА (flare): взять 3 навигационных карты, применить птиц ──
+  if(card.id==='flare'){
+    // Use as action: take 3 nav cards, apply bird effects
+    openModal('🚨 Сигнальная ракета',
+      '<p style="color:var(--txt2);font-size:13px;margin-bottom:14px">Выстрел в небо! Возьмём 3 карты навигации и применим птиц.</p>',
+      [{lbl:'Выстрелить!',fn:function(){
+        cp.hand.splice(cardIdx,1);
+        const cards=G.nav.splice(0,Math.min(3,G.nav.length));
+        let birds=0;
+        cards.forEach(c=>{if(c.bird)birds++;if(c.bird===-1)birds--;});
+        G.birds=Math.max(0,G.birds+birds);
+        cards.forEach(c=>G.nav.push(c));
+        addLog(cp.name+' использует ракетницу! Птицы: '+G.birds+'/4','suc');
+        closeModal();
+        if(G.birds>=4)endGame();
+        else{advTurn();renderGame();}
+      }},
+      {lbl:'Использовать как оружие',fn:closeModal}]
+    );return;
+  }
+
+  // ── КОМПАС: показать инфо ──
+  if(card.id==='compass'){
+    toast('🧭 Компас активен — при навигации возьмёшь лишнюю карту');
+    return;
+  }
+
+  // ── ВОДА: выпить чтобы снять жажду (если есть) ──
+  if(card.id==='water'){
+    cp.hand.splice(cardIdx,1);
+    cp.thirstMark={kind:'ok',label:'💧 Вода выпита'};
+    addLog(cp.name+' выпивает воду.','suc');
+    renderGame();return;
+  }
+
+  // ── Остальные открытые карты: показать инфо ──
+  openModal(cardName(card),
+    '<div style="width:140px;margin:0 auto 12px;border-radius:8px;overflow:hidden">'+provCardSVG(card,140,204)+'</div>'
+    +'<div style="font-size:12px;color:var(--txt2);text-align:center">'+cardFx(card)+'</div>',
+    [{lbl:L('Закрыть','Close'),fn:closeModal}]
+  );
+}
+
+function doHealCard(cardIdx){
+  closeModal();
+  const cp=G.players[G.ct]||G.players[0];
+  const card=cp.hand[cardIdx];if(!card)return;
+  const ti=window._healTarget;
+  const target=G.players[ti];if(!target)return;
+  cp.hand.splice(cardIdx,1);
+  if(target.wounds>0){
+    target.wounds--;
+    if(!target.conscious&&target.wounds<target.char.size){target.conscious=1;}
+    addLog(cp.name+' лечит '+target.name+' — рана снята!','suc');
+  }
+  advTurn();renderGame();
+}
+
+function openModal(title,html,btns){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-content').innerHTML=html;
+  const b=document.getElementById('modal-btns');b.innerHTML='';
+  btns.forEach(btn=>{const el=document.createElement('button');el.className=`mbn ${btn.cls||''}`;el.textContent=btn.lbl;el.onclick=btn.fn;b.appendChild(el);});
+  document.getElementById('modal').classList.add('open');
+}
+function showNavModal(icon,title,col0,col1,lines,cb){
+  openModal('⚓ Навигация',`<div style="width:140px;margin:0 auto 14px;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.8);animation:cardflip .4s ease">${navCardSVG(icon,title,col0,col1,140,200)}</div><div style="font-size:14px;line-height:1.8;color:rgba(200,185,155,.88)">${lines.join('<br>')}</div>`,[{lbl:'Следующий день →',fn:()=>{closeModal();cb();}}]);
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+function pickP(title,cb){
+  const others=G.players.filter((p,i)=>i!==G.ct&&p.alive);
+  if(!others.length){toast('Нет доступных игроков!');return;}
+  const grid=`<div class="pick-grid">${others.map(p=>`<div class="pick-card" onclick="closeModal();(window._pcb)(${G.players.indexOf(p)})"><div style="height:100px;overflow:hidden">${charCardSVG(p.char,120,100,p.wounds,false)}</div><div style="padding:6px;text-align:center;background:rgba(0,0,0,.5)"><div style="font-family:Cinzel,serif;font-size:12px;font-weight:700;color:#f8e0a0">${p.name}</div></div></div>`).join('')}</div>`;
+  window._pcb=cb;openModal(title,grid,[{lbl:'Отмена',fn:closeModal}]);
+}
+
+function toast(text){const o=document.querySelector('.toast');if(o)o.remove();const el=document.createElement('div');el.className='toast';el.textContent=text;document.body.appendChild(el);setTimeout(()=>el.remove(),2800);}
+
+// ── EXPORT to window so inline onclick= handlers work ──
+
+
+// ── THEME ──
+let theme = (function(){try{return localStorage.getItem('lb-theme')||'dark';}catch(e){return 'dark';}})();
+function applyTheme(t) {
+  t=t==='light'?'light':'dark';
+  theme = t;
+  const root=document.documentElement;
+  root.setAttribute('data-theme', t);
+  root.classList.toggle('theme-light',t==='light');
+  root.classList.toggle('theme-dark',t==='dark');
+  if(document.body){
+    document.body.setAttribute('data-theme',t);
+    document.body.classList.toggle('theme-light',t==='light');
+    document.body.classList.toggle('theme-dark',t==='dark');
+    document.body.style.background=t==='light'?'#e8dcc8':'#030810';
+    document.body.style.color=t==='light'?'#1a1410':'#e8dfc8';
+  }
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = t === 'dark' ? '🌙' : '☀️';
+  document.querySelectorAll('.stt-theme-btn').forEach(function(el){
+    el.classList.toggle('stt-active', el.getAttribute('data-theme-choice')===t);
+  });
+  try{localStorage.setItem('lb-theme', t);}catch(e){}
+}
+function toggleTheme() { applyTheme(theme === 'dark' ? 'light' : 'dark'); }
+// ── LANG ──
+var _lang=(function(){try{return localStorage.getItem('lb-lang')||'ru';}catch(e){return 'ru';}})();
+let _rulesRuHtml=null;
+const RULES_EN_HTML=`
+<div class="rb rb-accent"><div class="rb-t">🎯 Goal</div><div class="rb-x">Survive in the lifeboat, reach land, and score more points than the other players. The game ends when the 4th bird appears on a navigation card.</div></div>
+<div class="rb"><div class="rb-t">⚓ Setup</div><div class="rb-x">Choose 4-6 players and unique characters. Characters sit from bow to stern by their character order. Each player receives a hidden supply card plus secret Friend and Enemy cards.</div></div>
+<div class="rb"><div class="rb-t">🌅 Day Round</div><div class="rb-phase"><span class="rb-num">A</span><span><b>Quartermaster</b> draws supplies equal to conscious survivors. Players choose one card in seating order.</span></div><div class="rb-phase"><span class="rb-num">B</span><span><b>Actions</b>: rest, row, swap seats, mug, or play a special card.</span></div><div class="rb-phase"><span class="rb-num">C</span><span><b>Navigation</b>: the stern player resolves a navigation card. Birds, thirst, rowing fatigue, fighting fatigue, and falling overboard can happen.</span></div></div>
+<div class="rb"><div class="rb-t">⚔️ Fights</div><div class="rb-x">A target may accept a request or resist. If they resist, a fight happens. Character size plus revealed weapons determines strength. The loser takes a wound.</div></div>
+<div class="rb"><div class="rb-t">🥵 Thirst</div><div class="rb-x">A thirsty player drinks water if possible. If not, they take a wound. An unconscious thirsty player dies. A revealed parasol protects from thirst.</div></div>
+<div class="rb"><div class="rb-t">🌊 Overboard</div><div class="rb-x">A player falling overboard loses revealed supplies. A life ring protects them. The Sailor does not take the overboard wound.</div></div>
+<div class="rb"><div class="rb-t">🏁 Scoring</div><div class="rb-score-row"><span>✅ Survived</span><span>Character survival points</span></div><div class="rb-score-row"><span>❤️ Friend survived</span><span>Friend survival points</span></div><div class="rb-score-row"><span>💀 Enemy died</span><span>Enemy size</span></div><div class="rb-score-row"><span>💎 Treasures</span><span>Card value, doubled for matching characters</span></div><div class="rb-rule"><b>Narcissist</b>: if your friend is yourself, your survival points are doubled.</div><div class="rb-rule"><b>Psychopath</b>: if your enemy is yourself, you score 0 for surviving and +3 for each dead character except yourself and your friend.</div></div>`;
+function syncRulesLang(){
+  const body=document.querySelector('#s-rules .rules-body');
+  if(!body)return;
+  if(_rulesRuHtml===null)_rulesRuHtml=body.innerHTML;
+  body.innerHTML=_lang==='en'?RULES_EN_HTML:_rulesRuHtml;
+}
+function setLang(l){
+  _lang=l;
+  try{localStorage.setItem('lb-lang',l);}catch(e){}
+  applyLang();
+}
+function toggleLang(){setLang(_lang==='ru'?'en':'ru');}
+function applyLang(){
+  // Update lang button text
+  document.querySelectorAll('.lang-btn-txt').forEach(function(el){
+    el.textContent=_lang==='ru'?'English':'Русский';
+  });
+  // Update settings active state
+  document.querySelectorAll('.stt-lang-btn').forEach(function(btn){
+    btn.classList.toggle('stt-active', btn.getAttribute('data-lang')===_lang);
+  });
+  document.documentElement.lang=_lang;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var ru=el.getAttribute('data-ru');
+    var en=el.getAttribute('data-en');
+    if(ru!==null&&en!==null)el.textContent=_lang==='ru'?ru:en;
+  });
+  document.querySelectorAll('[data-placeholder-ru]').forEach(function(el){
+    el.placeholder=_lang==='ru'?el.getAttribute('data-placeholder-ru'):el.getAttribute('data-placeholder-en');
+  });
+  syncRulesLang();
+  // Translate setup screen labels
+  var nl=document.getElementById('setup-players-lbl');
+  if(nl) nl.textContent=_lang==='ru'?'Число игроков':'Number of players';
+  var pl=document.getElementById('setup-names-lbl');
+  if(pl) pl.textContent=_lang==='ru'?'Имена игроков':'Player names';
+  document.querySelectorAll('.player-inp').forEach(function(inp){
+    inp.placeholder=_lang==='ru'?'Введите имя игрока':'Enter player name';
+  });
+  // Translate buttons
+  var sail=document.getElementById('btn-sail');
+  if(sail) sail.textContent=_lang==='ru'?'⚓  ОТЧАЛИТЬ!':'⚓  SET SAIL!';
+  var back=document.getElementById('btn-back-setup');
+  if(back) back.textContent=_lang==='ru'?'← Назад':'← Back';
+  if(document.getElementById('plist'))renderPL();
+  if(G&&G.players){renderGame();}
+}
+
+
+// ── INIT ──
+applyTheme(theme);
+renderPL();renderFan();renderActionIcons();
+document.addEventListener('DOMContentLoaded',function(){
+  applyTheme(theme);
+  applyLang();
+  document.querySelectorAll('.stt-theme-btn').forEach(function(btn){
+    btn.addEventListener('click',function(ev){
+      ev.preventDefault();
+      applyTheme(btn.getAttribute('data-theme-choice'));
+    });
+  });
+  const fixedThemeBtn=document.getElementById('theme-btn');
+  if(fixedThemeBtn)fixedThemeBtn.addEventListener('click',function(ev){
+    ev.preventDefault();
+    toggleTheme();
+  });
+});
+
+
+function pickNavByCompass(idx){
+  closeModal();
+  if(G.nav&&G.nav.length>idx){const card=G.nav.splice(idx,1)[0];G.rowStack.push(card);}
+  addLog(G.players[G.ct].name+' использует компас!','suc');
+  advTurn();renderGame();
+}
+function openCard(idx){
+  var cp=G.players[G.ct]||G.players[0];
+  var card=cp.hand[idx];
+  if(!card||card.revealed) return;
+  openModal(L('👁 Открыть карту?','👁 Reveal card?'),
+    '<div style="width:160px;margin:0 auto 14px;border-radius:10px;overflow:hidden;box-shadow:0 8px 28px var(--shadow)">'
+    +provCardSVG(card,160,232)+'</div>'
+    +'<div style="font-size:12px;color:var(--txt2);text-align:center;margin-top:6px">'
+    +(card.permanent?L('⚓ Постоянная карта — останется видна всем игрокам','⚓ Permanent card — stays visible to everyone'):L('⚡ Одноразовая — после использования уходит в отбой','⚡ One-use card — discarded after use'))
+    +'</div>',
+    [{lbl:L('✓ Открыть','✓ Reveal'),fn:function(){
+      card.revealed=true;
+      addLog(cp.name+L(' открывает: ',' reveals: ')+cardName(card)+'.','suc');
+      if(card.permanent) addLog(cardName(card)+L(' теперь видна всем!',' is now visible to everyone!'));
+      closeModal(); renderGame();
+    }},
+    {lbl:L('Оставить закрытой','Keep hidden'),fn:closeModal}]
+  );
+}
+function closeQM(){const el=document.getElementById('qm-zone');if(el)el.style.display='none';}
+function acceptQM(){}
+function beginDispute(){}
+function castVote(){}
+
+window.doStartActions=function(){closeQM();startActions();};
+window.runDraftRound=runDraftRound;
+window.showDraftCards=showDraftCards;
+window.pickDraftCard=pickDraftCard;
+window.doAcceptQM=function(){};
+window.doDisputeQM=doDisputeQM;
+window.doVoteQM=doVoteQM;
+window.askRestart=askRestart;
+function askRestart(){
+  // Collect votes from all alive players via pass-phone
+  const alive=G.players.filter(p=>p.alive);
+  let votes=0;
+  let pidx=0;
+  function collectVote(){
+    if(pidx>=alive.length){
+      // All voted
+      if(votes===alive.length){
+        showScr('s-title');
+        toast('Игра завершена — начните новую!');
+      } else {
+        toast('Не все согласны — игра продолжается.');
+      }
+      return;
+    }
+    const p=alive[pidx];
+    passPhone(p.name,'Начать игру заново?','Нажми «Да» чтобы проголосовать за перезапуск',()=>{
+      openModal('↺ Начать заново?',
+        '<div style="font-size:14px;color:rgba(200,185,155,.8)">'+p.name+', ты хочешь начать игру заново? Нужно согласие всех игроков.</div>',
+        [{lbl:'✓ Да, начать заново',cls:'red',fn:()=>{
+          votes++;pidx++;closeModal();
+          if(pidx<alive.length){
+            collectVote();
+          } else {
+            showScr('s-title');
+            toast('Все согласны — начинайте новую игру!');
+          }
+        }},
+        {lbl:'✗ Нет, продолжаем',fn:()=>{
+          pidx++;closeModal();
+          // Short-circuit — if someone said no, stop asking
+          toast('Игра продолжается.');
+        }}]);
+    });
+  }
+  collectVote();
+}
+
+// ── EXPORTS ──
+window.showScr=showScr;
+window.setPC=setPC;
+window.setCharChoice=setCharChoice;
+window.randomizeChars=randomizeChars;
+window.startGame=startGame;
+window.onPassOK=onPassOK;
+window.doAct=doAct;
+window.sendChat=sendChat;
+window.tapCard=tapCard;
+window.openCard=openCard;
+window.closeModal=closeModal;
+window.applyTheme=applyTheme;
+window.toggleTheme=toggleTheme;
+window.setLang=setLang;
+window.toggleLang=toggleLang;
+window.pickNavByCompass=pickNavByCompass;
+
+</script>
+<!-- SETTINGS -->
+<div id="s-settings" class="screen">
+<div class="tw" style="gap:14px;padding-top:30px">
+  <div class="logo-d" data-i18n data-ru="⚙️  НАСТРОЙКИ  ⚙️" data-en="⚙️  SETTINGS  ⚙️">⚙️ &nbsp; НАСТРОЙКИ &nbsp; ⚙️</div>
+  <div class="logo-m" style="font-size:28px" data-i18n data-ru="НАСТРОЙКИ" data-en="SETTINGS">НАСТРОЙКИ</div>
+
+  <!-- Theme -->
+  <div class="stt-card">
+    <div class="stt-card-lbl" data-i18n data-ru="🎨 Тема оформления" data-en="🎨 Theme">🎨 Тема оформления</div>
+    <div class="stt-row">
+      <button class="stt-theme-btn" data-theme-choice="dark" onclick="applyTheme('dark')">
+        <span data-i18n data-ru="🌙 Ночная" data-en="🌙 Night">🌙 Ночная</span>
+      </button>
+      <button class="stt-theme-btn" data-theme-choice="light" onclick="applyTheme('light')">
+        <span data-i18n data-ru="☀️ Дневная" data-en="☀️ Day">☀️ Дневная</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Language -->
+  <div class="stt-card">
+    <div class="stt-card-lbl" data-i18n data-ru="🌐 Язык / Language" data-en="🌐 Language / Язык">🌐 Язык / Language</div>
+    <div class="stt-row">
+      <button class="stt-lang-btn" data-lang="ru" onclick="setLang('ru')">
+        🇷🇺 Русский
+      </button>
+      <button class="stt-lang-btn" data-lang="en" onclick="setLang('en')">
+        🇬🇧 English
+      </button>
+    </div>
+  </div>
+
+  <!-- Coming soon -->
+  <div class="stt-card stt-card-dim">
+    <div class="stt-card-lbl"><span data-i18n data-ru="🎭 Иконки персонажей" data-en="🎭 Character icons">🎭 Иконки персонажей</span> <span class="mn-soon" data-i18n data-ru="СКОРО" data-en="SOON">СКОРО</span></div>
+    <div style="font-size:28px;opacity:.3;padding:8px 0">🔒 🔒 🔒 🔒 🔒 🔒</div>
+  </div>
+
+  <button class="btn btn-o" onclick="showScr('s-title')" style="margin-top:8px" data-i18n data-ru="← Назад" data-en="← Back">← Назад</button>
+</div>
+</div>
+
+<script>
+(function(){
+  function forceTheme(t){
+    t=t==='light'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',t);
+    document.documentElement.classList.toggle('theme-light',t==='light');
+    document.documentElement.classList.toggle('theme-dark',t==='dark');
+    document.body.setAttribute('data-theme',t);
+    document.body.classList.toggle('theme-light',t==='light');
+    document.body.classList.toggle('theme-dark',t==='dark');
+    document.body.style.background=t==='light'?'#e8dcc8':'#030810';
+    document.body.style.color=t==='light'?'#1a1410':'#e8dfc8';
+    document.querySelectorAll('.screen').forEach(function(s){
+      if(t==='light'){
+        if(s.id==='s-title'||s.id==='s-settings'||s.id==='s-setup'||s.id==='s-rules')s.style.background='linear-gradient(160deg,#e8ddd0 0%,#d6c9b4 100%)';
+        if(s.id==='s-game')s.style.background='linear-gradient(160deg,#e8ddd0 0%,#d6c9b4 100%)';
+      }else{
+        s.style.background='';
+      }
+    });
+    var topBtn=document.getElementById('theme-btn');
+    if(topBtn)topBtn.textContent=t==='light'?'☀️':'🌙';
+    document.querySelectorAll('.stt-theme-btn').forEach(function(b){
+      b.classList.toggle('stt-active',b.getAttribute('data-theme-choice')===t);
+    });
+    try{localStorage.setItem('lb-theme',t);}catch(e){}
+    if(window.applyTheme&&window.applyTheme!==forceTheme){
+      try{window.applyTheme(t);}catch(e){}
+    }
+  }
+  window.forceTheme=forceTheme;
+  document.addEventListener('click',function(ev){
+    var btn=ev.target.closest&&ev.target.closest('.stt-theme-btn');
+    if(btn){
+      ev.preventDefault();
+      ev.stopPropagation();
+      forceTheme(btn.getAttribute('data-theme-choice'));
+      return;
+    }
+    var toggle=ev.target.closest&&ev.target.closest('#theme-btn');
+    if(toggle){
+      ev.preventDefault();
+      ev.stopPropagation();
+      var cur=document.documentElement.getAttribute('data-theme')||'dark';
+      forceTheme(cur==='dark'?'light':'dark');
+    }
+  },true);
+  var saved='dark';
+  try{saved=localStorage.getItem('lb-theme')||'dark';}catch(e){}
+  forceTheme(saved);
+})();
+</script>
+
+</body>
+</html>
