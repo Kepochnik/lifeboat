@@ -12,7 +12,8 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="preload" href="./assets/art/lifeboat.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="./styles.css?v=3.1.0-art2">
+  <link rel="preload" href="./assets/art/tabletop-v2.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="./styles.css?v=3.2.0-table2">
 </head>
 <body>
   <a class="skip-link" href="#main">К содержимому</a>
@@ -106,10 +107,7 @@
           <div class="hud-stat hud-stat--birds"><small data-i18n="birds">Птицы</small><strong id="hud-birds">○○○○</strong></div>
         </header>
 
-        <section class="boat-board surface" aria-labelledby="boat-heading">
-          <div class="section-title"><h3 id="boat-heading" data-i18n="boat">Порядок в лодке</h3><span id="deck-status"></span></div>
-          <div class="boat-track" id="boat-track"></div>
-        </section>
+        <section class="turn-panel surface" id="turn-panel" aria-live="polite"></section>
 
         <section class="private-panel surface" id="private-panel" aria-labelledby="private-heading">
           <div class="section-title"><h3 id="private-heading" data-i18n="hand">Карты на руке</h3><span id="hand-count"></span></div>
@@ -117,7 +115,10 @@
           <div class="card-row" id="hand-row"></div>
         </section>
 
-        <section class="turn-panel surface" id="turn-panel" aria-live="polite"></section>
+        <section class="boat-board surface" aria-labelledby="boat-heading">
+          <div class="section-title"><h3 id="boat-heading" data-i18n="boat">Порядок в лодке</h3><span id="deck-status"></span></div>
+          <div class="boat-track" id="boat-track"></div>
+        </section>
 
         <section class="log-panel surface" aria-labelledby="log-heading">
           <div class="section-title"><h3 id="log-heading" data-i18n="shipLog">Судовой журнал</h3><button class="text-button" id="toggle-log-button" type="button" aria-expanded="true">−</button></div>
@@ -173,6 +174,7 @@
           <div class="setting surface"><div><strong data-i18n="theme">Тема</strong><span data-i18n="theme">Тема</span></div><div class="segmented"><button type="button" data-theme-choice="dark" data-i18n="dark">Ночная</button><button type="button" data-theme-choice="light" data-i18n="light">Дневная</button></div></div>
           <div class="setting surface"><div><strong data-i18n="language">Язык</strong><span>Русский / English</span></div><div class="segmented"><button type="button" data-language-choice="ru">RU</button><button type="button" data-language-choice="en">EN</button></div></div>
           <label class="setting surface"><div><strong data-i18n="sound">Звук</strong><span>UI / SFX</span></div><input type="checkbox" id="setting-sound"><i class="switch"></i></label>
+          <label class="setting surface"><div><strong data-i18n="music">Фоновая мелодия</strong><span data-i18n="musicHint">Тихая музыка после первого касания</span></div><input type="checkbox" id="setting-music"><i class="switch"></i></label>
           <label class="setting surface"><div><strong data-i18n="vibration">Вибрация</strong><span>Haptic</span></div><input type="checkbox" id="setting-vibration"><i class="switch"></i></label>
           <label class="setting surface"><div><strong data-i18n="motion">Анимации</strong><span>Motion</span></div><input type="checkbox" id="setting-motion"><i class="switch"></i></label>
           <label class="setting surface"><div><strong data-i18n="textSize">Крупный текст</strong><span>Accessibility</span></div><input type="checkbox" id="setting-large-text"><i class="switch"></i></label>
@@ -195,6 +197,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <input id="import-input" type="file" accept="application/json" hidden>
-  <script type="module" src="./src/app.js?v=3.1.0-art1"></script>
+  <script type="module" src="./src/app.js?v=3.2.0-table2"></script>
 </body>
 </html>

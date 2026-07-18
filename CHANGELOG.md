@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.2.0 — 2026-07-18
+
+### Mobile tabletop
+
+- Turned the game screen into a tactile felt-and-walnut table with paper cards,
+  wooden action tiles, stitched trays and a centered swipeable boat.
+- Reordered the mobile play flow so the current turn and private hand appear
+  before the shared boat, with sticky day/phase status and larger touch targets.
+- Added a quiet procedural nautical melody with an independent setting,
+  automatic pause in the background and no audio before the first interaction.
+
+### Rules fidelity
+
+- Let the Kid choose between an uncontested random hidden theft and a normal
+  attempt to steal a visible card.
+- Made the Parasol protect against thirst only after spending a special action.
+- Let a hidden Compass be revealed during navigation to add a card choice.
+- Split revealing the Flare Gun as a weapon from firing its special action.
+- Added an attacker preparation handoff so weapons may be revealed after a
+  target chooses to fight, before neutral players pick sides.
+- Expanded the in-game rules and tutorial to explain these timings.
+
 ## 3.1.0 — 2026-07-18
 
 ### Visual redesign
