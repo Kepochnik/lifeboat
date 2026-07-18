@@ -1,14 +1,17 @@
-const CACHE = 'lifeboat-v3.1.0-r5';
+const CACHE = 'lifeboat-v3.1.0-art2';
 const APP_SHELL = [
   './',
   './index.html',
-  './styles.css?v=3.1.0-r2',
+  './styles.css?v=3.1.0-art2',
   './assets/ui-icons.svg',
+  './assets/game-icons.svg',
+  './assets/art/character-atlas.webp',
+  './assets/art/lifeboat.webp',
   './assets/lucide-LICENSE.txt',
   './src/data.js?v=3.1.0-r2',
   './src/i18n.js?v=3.1.0-r2',
   './src/engine.js?v=3.1.0-r2',
-  './src/app.js?v=3.1.0-r3',
+  './src/app.js?v=3.1.0-art1',
   './assets/icon.svg',
   './manifest.webmanifest',
 ];

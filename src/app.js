@@ -1,4 +1,4 @@
-import { CHARACTERS, CHARACTER_BY_ID, PHASES, PROVISION_TEMPLATES } from './data.js?v=3.1.0-r2';
+import { CHARACTERS, CHARACTER_BY_ID, PHASES } from './data.js?v=3.1.0-r2';
 import { createTranslator, getCardText, getCharacterText } from './i18n.js?v=3.1.0-r2';
 import {
   activePlayers,
@@ -80,8 +80,29 @@ function iconMarkup(name, modifier = '') {
   return `<svg class="ui-icon${modifier ? ` ${modifier}` : ''}" aria-hidden="true"><use href="./assets/ui-icons.svg#${name}"></use></svg>`;
 }
 
-function cardToken(card) {
-  return PROVISION_TEMPLATES[card.id]?.icon || card.icon || '—';
+const CARD_ICON_IDS = Object.freeze({
+  water: 'card-water',
+  cash: 'card-cash',
+  jewels: 'card-jewels',
+  painting: 'card-painting',
+  flare: 'card-flare',
+  oar: 'card-oar',
+  blackjack: 'card-blackjack',
+  knife: 'card-knife',
+  hook: 'card-hook',
+  parasol: 'card-parasol',
+  life: 'card-life',
+  medkit: 'card-medkit',
+  compass: 'card-compass',
+  chum: 'card-chum',
+});
+
+function gameIconMarkup(name, modifier = '') {
+  return `<svg class="game-icon${modifier ? ` ${modifier}` : ''}" aria-hidden="true"><use href="./assets/game-icons.svg#${name}"></use></svg>`;
+}
+
+function characterPortraitMarkup(characterId, modifier = '') {
+  return `<span class="character-portrait character-portrait--${characterId}${modifier ? ` ${modifier}` : ''}" aria-hidden="true"></span>`;
 }
 
 function saveSettings() {
@@ -282,7 +303,7 @@ function renderSetup() {
     const text = getCharacterText(selectedId, settings.language);
     const options = CHARACTERS.map((item) => `<option value="${item.id}" ${item.id === selectedId ? 'selected' : ''}>${escapeHtml(getCharacterText(item.id, settings.language)[0])} · ${item.size}/${item.survival}</option>`).join('');
     return `<div class="setup-player surface" style="--player-color:${selected.color}">
-      <div class="setup-player__icon" aria-hidden="true">${selected.icon}</div>
+      ${characterPortraitMarkup(selectedId, 'setup-player__portrait')}
       <div class="field"><label for="player-name-${index}">${t('playerName')} ${index + 1}</label><input id="player-name-${index}" name="player-name" maxlength="24" autocomplete="off" value="${escapeHtml(existingNames[index] || defaultNames[settings.language][index])}" required></div>
       <div class="field"><label for="player-character-${index}">${t('character')}</label><select id="player-character-${index}" data-character-index="${index}" aria-describedby="character-hint-${index}">${options}</select><span id="character-hint-${index}" hidden>${escapeHtml(text[2])}</span></div>
     </div>`;
@@ -382,13 +403,13 @@ function renderBoat(current) {
     const text = getCharacterText(player.characterId, settings.language);
     const status = statusFor(player);
     const markers = [
-      player.rowed ? '<span class="mini-marker">R</span>' : '',
-      player.fought ? '<span class="mini-marker">F</span>' : '',
-      player.hand.some((card) => card.id === 'life' && card.revealed) ? '<span class="mini-marker">L</span>' : '',
-      player.hand.some((card) => card.id === 'parasol' && card.revealed) ? '<span class="mini-marker">S</span>' : '',
+      player.rowed ? `<span class="mini-marker">${gameIconMarkup('card-oar')}</span>` : '',
+      player.fought ? `<span class="mini-marker">${gameIconMarkup('marker-fight')}</span>` : '',
+      player.hand.some((card) => card.id === 'life' && card.revealed) ? `<span class="mini-marker">${gameIconMarkup('card-life')}</span>` : '',
+      player.hand.some((card) => card.id === 'parasol' && card.revealed) ? `<span class="mini-marker">${gameIconMarkup('card-parasol')}</span>` : '',
     ].join('');
     return `<article class="player-card ${player.id === current?.id ? 'current' : ''} ${!player.inBoat ? 'lost' : ''}" style="--player-color:${character.color}" aria-label="${escapeHtml(player.name)}, ${escapeHtml(status.label)}">
-      <div class="player-card__icon" aria-hidden="true">${character.icon}</div>
+      ${characterPortraitMarkup(player.characterId, 'player-card__portrait')}
       <strong>${escapeHtml(player.name)}</strong><small>${escapeHtml(text[0])}</small>
       <small>${t('wounds')}: ${player.wounds}/${character.size}</small>
       <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span><div class="mini-markers" aria-hidden="true">${markers}</div>
@@ -408,14 +429,15 @@ function cardMarkup(card, { selectable = false, selected = false, control = '', 
   const accessible = hidden ? t('hidden') : `${name}. ${description}`;
   return `<article class="${classes}" style="--card-color:${categoryColor(card.category)}" ${selectable ? `role="button" tabindex="0" ${control}` : ''} aria-label="${escapeHtml(accessible)}">
     <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span>
-    <span class="game-card__icon" aria-hidden="true">${hidden ? 'LB' : escapeHtml(cardToken(card))}</span>
+    <span class="game-card__icon" aria-hidden="true">${gameIconMarkup(hidden ? 'card-back' : CARD_ICON_IDS[card.id] || 'card-back')}</span>
     <strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong>
     <small>${hidden ? t('hidden') : escapeHtml(description)}</small>
   </article>`;
 }
 
 function navigationCardMarkup(card, { selectable = false, selected = false, control = '' } = {}) {
-  const bird = card.bird > 0 ? '+1' : card.bird < 0 ? '−1' : '0';
+  const birdIcon = card.bird > 0 ? 'nav-bird' : card.bird < 0 ? 'nav-fog' : 'nav-calm';
+  const birdDelta = card.bird > 0 ? '+1' : card.bird < 0 ? '−1' : '0';
   const overboardLabel = card.overboard === 'all'
     ? t('everyone')
     : card.overboard === 'allbut'
@@ -428,7 +450,7 @@ function navigationCardMarkup(card, { selectable = false, selected = false, cont
     card.fight ? t('fight') : '',
   ].filter(Boolean).join(' · ') || t('navCalm');
   return `<article class="game-card nav-card ${selectable ? 'selectable' : ''} ${selected ? 'selected' : ''}" style="--card-color:#16495c" ${selectable ? `role="button" tabindex="0" aria-pressed="${selected}" ${control}` : ''}>
-    <span class="game-card__type">${t('navigation')}</span><span class="game-card__icon" aria-hidden="true">${bird}</span>
+    <span class="game-card__type">${t('navigation')}</span><span class="game-card__icon nav-card__icon" aria-hidden="true">${gameIconMarkup(birdIcon)}<b>${birdDelta}</b></span>
     <strong>${card.bird > 0 ? t('birdSeen') : card.bird < 0 ? t('birdLost') : t('navCalm')}</strong><small>${escapeHtml(effects)}</small>
   </article>`;
 }
@@ -452,7 +474,7 @@ function renderPrivatePanel(current) {
     const canReveal = ownsPrivateScreen;
     const label = hidden ? (special && canUseSpecial ? t('specialAction') : canReveal ? t('reveal') : '') : (special && canUseSpecial ? t('specialAction') : '');
     return `<article class="game-card ${hidden ? 'hidden-card' : ''}" style="--card-color:${categoryColor(card.category)}" aria-label="${escapeHtml(hidden ? t('hidden') : `${name}. ${description}`)}">
-      <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span><span class="game-card__icon" aria-hidden="true">${hidden ? 'LB' : escapeHtml(cardToken(card))}</span><strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong><small>${hidden ? t('hidden') : escapeHtml(description)}</small>
+      <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span><span class="game-card__icon" aria-hidden="true">${gameIconMarkup(hidden ? 'card-back' : CARD_ICON_IDS[card.id] || 'card-back')}</span><strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong><small>${hidden ? t('hidden') : escapeHtml(description)}</small>
       ${label ? `<button type="button" data-hand-action="${special && canUseSpecial ? 'special' : 'reveal'}" data-card-uid="${card.uid}">${escapeHtml(label)}</button>` : ''}
     </article>`;
   }).join('');
@@ -532,7 +554,7 @@ function renderMugReward(panel) {
   const target = getPlayer(game, pending.targetId);
   const openCards = target.hand.filter((card) => card.revealed);
   const hidden = target.hand.filter((card) => !card.revealed);
-  panel.innerHTML = `<div class="turn-heading"><span>${t('mug')}</span><h3>${t('chooseMugReward')}</h3></div><div class="card-row">${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-mug-card="${card.uid}"` })).join('')}${hidden.length ? `<button class="game-card selectable hidden-card" type="button" data-mug-hidden><span class="game-card__type">${t('hidden')}</span><span class="game-card__icon">LB</span><strong>${t('randomHidden')}</strong><small>${hidden.length}</small></button>` : ''}</div>`;
+  panel.innerHTML = `<div class="turn-heading"><span>${t('mug')}</span><h3>${t('chooseMugReward')}</h3></div><div class="card-row">${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-mug-card="${card.uid}"` })).join('')}${hidden.length ? `<button class="game-card selectable hidden-card" type="button" data-mug-hidden><span class="game-card__type">${t('hidden')}</span><span class="game-card__icon">${gameIconMarkup('card-back')}</span><strong>${t('randomHidden')}</strong><small>${hidden.length}</small></button>` : ''}</div>`;
 }
 
 function renderTradeReturn(panel) {

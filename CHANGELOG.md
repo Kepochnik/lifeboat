@@ -8,6 +8,7 @@
 - Rebuilt the title screen as a responsive editorial layout with a dedicated game menu panel.
 - Expanded the game board to use wide screens with a two-column hand and turn layout.
 - Redesigned character and provision cards as physical paper components with clearer hierarchy.
+- Added six original painted character portraits, an illustrated six-seat lifeboat and a custom full-color game icon set.
 - Improved the boat, action controls, log, modal sheets and mobile bottom navigation.
 - Preserved the existing game engine, accessibility settings and bilingual interface.
 

@@ -139,6 +139,30 @@ button:active:not(:disabled),
   height: 48px;
 }
 
+.game-icon {
+  display: block;
+  width: 54px;
+  height: 54px;
+  overflow: visible;
+}
+
+.character-portrait {
+  display: block;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background-image: url("./assets/art/character-atlas.webp");
+  background-repeat: no-repeat;
+  background-size: 300% 200%;
+  background-position: var(--portrait-x, 0%) var(--portrait-y, 0%);
+}
+
+.character-portrait--lauren { --portrait-x: 0%; --portrait-y: 0%; }
+.character-portrait--stephen { --portrait-x: 50%; --portrait-y: 0%; }
+.character-portrait--captain { --portrait-x: 100%; --portrait-y: 0%; }
+.character-portrait--mate { --portrait-x: 0%; --portrait-y: 100%; }
+.character-portrait--frenchy { --portrait-x: 50%; --portrait-y: 100%; }
+.character-portrait--kid { --portrait-x: 100%; --portrait-y: 100%; }
+
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
@@ -372,59 +396,40 @@ body:not([data-screen="title"]) #home-button {
 
 .boat-silhouette {
   position: relative;
-  display: flex;
   grid-column: 1;
-  align-items: end;
-  justify-content: center;
-  width: min(100%, 500px);
-  height: 78px;
-  margin: 7px 0 0;
-  padding: 0 46px 23px;
+  width: min(100%, 560px);
+  height: 156px;
+  margin: 2px 0 0;
   animation: boat-bob 5.5s ease-in-out infinite;
 }
 
 .boat-silhouette::before {
   position: absolute;
-  inset: auto 0 2px;
-  height: 34px;
-  border: 2px solid rgba(226, 137, 61, .48);
-  border-top: 0;
-  border-radius: 4px 4px 54% 54% / 0 0 100% 100%;
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, .04) 0 1px, transparent 1px 8px),
-    linear-gradient(180deg, #a95f2b, #4c2918);
-  box-shadow: 0 17px 30px rgba(0, 0, 0, .28);
+  z-index: -1;
+  inset: 38% 5% 4%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(72, 180, 180, .24), transparent 68%);
+  filter: blur(10px);
   content: "";
 }
 
 .boat-silhouette::after {
   position: absolute;
-  inset: auto 8% 0;
-  height: 7px;
+  inset: auto 7% 4px;
+  height: 5px;
   border-radius: 50%;
   background: rgba(72, 180, 180, .28);
-  filter: blur(4px);
+  filter: blur(5px);
   content: "";
 }
 
-.boat-silhouette i {
-  position: relative;
-  z-index: 1;
-  width: 54px;
-  height: 39px;
-  margin: 0 -4px;
-  transform: skew(-6deg);
-  border: 2px solid rgba(255, 255, 255, .12);
-  border-radius: 8px 8px 3px 3px;
-  background: #65347e;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .14);
+.boat-silhouette img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 18px rgba(0, 0, 0, .38));
 }
-
-.boat-silhouette i:nth-child(2) { background: #2e6684; }
-.boat-silhouette i:nth-child(3) { background: #28715f; }
-.boat-silhouette i:nth-child(4) { background: #963f32; }
-.boat-silhouette i:nth-child(5) { background: #80651c; }
-.boat-silhouette i:nth-child(6) { background: #50506f; }
 
 @keyframes boat-bob {
   50% { transform: translateY(-4px) rotate(.35deg); }
@@ -678,7 +683,7 @@ fieldset {
 .setup-player {
   position: relative;
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr);
+  grid-template-columns: 70px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
   padding: 13px;
@@ -693,19 +698,13 @@ fieldset {
   content: "";
 }
 
-.setup-player__icon {
-  display: grid;
+.setup-player__portrait {
   grid-row: 1 / span 2;
-  place-items: center;
-  width: 53px;
-  height: 68px;
+  width: 66px;
+  height: 66px;
   border: 2px solid color-mix(in srgb, var(--player-color) 60%, white);
-  border-radius: 10px 10px 18px 18px;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--player-color) 72%, white 10%), color-mix(in srgb, var(--player-color) 78%, black));
-  color: white;
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .16), 0 7px 15px rgba(0, 0, 0, .18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--player-color) 28%, transparent), 0 8px 18px rgba(0, 0, 0, .24);
 }
 
 .field {
@@ -1090,9 +1089,10 @@ fieldset {
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(var(--boat-count, 5), minmax(130px, 1fr));
-  gap: 9px;
+  gap: 10px;
   overflow-x: auto;
-  padding: 7px 8px 28px;
+  min-height: 276px;
+  padding: 8px 17px 78px;
   scrollbar-color: rgba(237, 157, 75, .45) transparent;
   scrollbar-width: thin;
 }
@@ -1100,27 +1100,23 @@ fieldset {
 .boat-track::before {
   position: absolute;
   z-index: -1;
-  right: 3%;
-  bottom: 14px;
-  left: 3%;
-  height: 10px;
+  right: 4%;
+  bottom: 7px;
+  left: 4%;
+  height: 26px;
   border-radius: 50%;
-  background: rgba(2, 8, 10, .35);
-  filter: blur(4px);
+  background: rgba(41, 145, 151, .24);
+  filter: blur(9px);
   content: "";
 }
 
 .boat-track::after {
   position: absolute;
   z-index: -1;
-  inset: auto 0 4px;
-  height: 31px;
-  border: 2px solid rgba(225, 133, 63, .55);
-  border-top: 0;
-  border-radius: 4px 4px 48% 48% / 0 0 100% 100%;
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, .045) 0 1px, transparent 1px 8px),
-    linear-gradient(180deg, #985126, #3f2215);
+  inset: auto 1% 0;
+  height: 152px;
+  background: url("./assets/art/lifeboat.webp") center bottom / 100% auto no-repeat;
+  filter: drop-shadow(0 14px 14px rgba(0, 0, 0, .34));
   content: "";
   pointer-events: none;
 }
@@ -1129,13 +1125,13 @@ fieldset {
   position: relative;
   z-index: 1;
   min-width: 130px;
-  min-height: 165px;
-  padding: 12px 10px 11px;
+  min-height: 190px;
+  padding: 9px 10px 12px;
   transform: rotate(var(--card-tilt, 0deg));
   border: 2px solid color-mix(in srgb, var(--player-color) 60%, #f6ead1);
   border-radius: 11px 11px 24px 24px;
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--player-color) 46%, #f7ead0) 0 42%, var(--paper) 42% 100%);
+    linear-gradient(180deg, color-mix(in srgb, var(--player-color) 30%, #f7ead0) 0 44%, var(--paper) 44% 100%);
   color: var(--paper-ink);
   box-shadow: 0 8px 0 rgba(31, 17, 11, .34), 0 16px 28px rgba(0, 0, 0, .24);
   text-align: center;
@@ -1156,22 +1152,13 @@ fieldset {
   filter: grayscale(.85);
 }
 
-.player-card__icon {
-  display: grid;
-  place-items: center;
-  width: 55px;
-  height: 55px;
-  margin: 0 auto 9px;
-  border: 2px solid rgba(255, 255, 255, .55);
+.player-card__portrait {
+  width: clamp(70px, 7vw, 92px);
+  height: clamp(70px, 7vw, 92px);
+  margin: 0 auto 7px;
+  border: 3px solid rgba(255, 248, 226, .84);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--player-color) 76%, #111);
-  color: white;
-  font-family: var(--font-display);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 900;
-  letter-spacing: .06em;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, .18);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--player-color) 35%, transparent), 0 7px 18px rgba(0, 0, 0, .28);
 }
 
 .player-card strong {
@@ -1217,15 +1204,18 @@ fieldset {
 .mini-marker {
   display: grid;
   place-items: center;
-  min-width: 17px;
-  height: 17px;
-  padding-inline: 4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 2px;
   border: 1px solid rgba(38, 28, 20, .24);
   border-radius: 999px;
   background: rgba(255, 255, 255, .42);
   color: #4e4031;
-  font-size: .56rem;
-  font-weight: 900;
+}
+
+.mini-marker .game-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .secret-strip {
@@ -1294,7 +1284,7 @@ fieldset {
 .game-card {
   position: relative;
   display: flex;
-  min-height: 202px;
+  min-height: 218px;
   padding: 15px 12px 13px;
   flex-direction: column;
   align-items: center;
@@ -1362,16 +1352,19 @@ fieldset {
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 57px;
-  height: 57px;
+  width: 76px;
+  height: 76px;
   margin: 3px 0;
   border: 1px solid rgba(38, 28, 20, .15);
   border-radius: 50%;
-  background: rgba(255, 255, 255, .33);
-  font-size: 1rem;
-  font-weight: 950;
-  letter-spacing: .035em;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, .7), rgba(255, 255, 255, .24) 58%, rgba(77, 47, 26, .08));
   filter: drop-shadow(0 4px 7px rgba(0, 0, 0, .14));
+}
+
+.game-card__icon .game-icon {
+  width: 61px;
+  height: 61px;
 }
 
 .hidden-card .game-card__icon {
@@ -1379,6 +1372,28 @@ fieldset {
   background: rgba(0, 0, 0, .18);
 }
 
+.hidden-card .game-card__icon .game-icon {
+  width: 54px;
+  height: 54px;
+}
+
+.nav-card__icon b {
+  position: absolute;
+  right: -4px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  min-width: 27px;
+  height: 27px;
+  padding-inline: 5px;
+  border: 2px solid var(--paper);
+  border-radius: 999px;
+  background: #174b59;
+  color: white;
+  font-family: var(--font-body);
+  font-size: .68rem;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, .24);
+}
 .game-card strong {
   position: relative;
   z-index: 1;
@@ -2074,10 +2089,10 @@ fieldset {
   .setup-list { grid-template-columns: 1fr; }
 
   .setup-player {
-    grid-template-columns: 56px minmax(0, 1fr) minmax(145px, .8fr);
+    grid-template-columns: 70px minmax(0, 1fr) minmax(145px, .8fr);
   }
 
-  .setup-player__icon { grid-row: auto; }
+  .setup-player__portrait { grid-row: auto; }
 
   .action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
@@ -2152,14 +2167,7 @@ fieldset {
   }
 
   .boat-silhouette {
-    height: 67px;
-    padding-right: 27px;
-    padding-left: 27px;
-  }
-
-  .boat-silhouette i {
-    width: 42px;
-    height: 34px;
+    height: 108px;
   }
 
   .hero__menu-panel {
@@ -2187,13 +2195,13 @@ fieldset {
   .score-page h2 { font-size: 2.45rem; }
 
   .setup-player {
-    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-columns: 64px minmax(0, 1fr);
   }
 
-  .setup-player__icon {
+  .setup-player__portrait {
     grid-row: 1 / span 2;
-    width: 48px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
   }
 
   .setup-player .field:last-child { grid-column: 2; }
@@ -2241,20 +2249,21 @@ fieldset {
   }
 
   .boat-track {
-    grid-template-columns: repeat(var(--boat-count, 5), 119px);
+    grid-template-columns: repeat(var(--boat-count, 5), 138px);
     gap: 8px;
     margin-inline: -4px;
-    padding-inline: 4px;
+    min-height: 258px;
+    padding: 7px 4px 72px;
   }
 
   .player-card {
-    min-width: 119px;
-    min-height: 153px;
+    min-width: 138px;
+    min-height: 182px;
   }
 
-  .player-card__icon {
-    width: 49px;
-    height: 49px;
+  .player-card__portrait {
+    width: 68px;
+    height: 68px;
   }
 
   .secret-strip { grid-template-columns: 1fr; }
@@ -2264,7 +2273,7 @@ fieldset {
     gap: 10px;
   }
 
-  .game-card { min-height: 185px; }
+  .game-card { min-height: 205px; }
 
   .turn-heading h3 { font-size: 1.38rem; }
 
