@@ -1,5 +1,5 @@
-import { CHARACTERS, CHARACTER_BY_ID, PHASES } from './data.js';
-import { createTranslator, getCardText, getCharacterText } from './i18n.js';
+import { CHARACTERS, CHARACTER_BY_ID, PHASES } from './data.js?v=3.2.0-table2';
+import { createTranslator, getCardText, getCharacterText } from './i18n.js?v=3.2.0-table2';
 import {
   activePlayers,
   addLog,
@@ -8,6 +8,7 @@ import {
   buildThirstQueue,
   createGame,
   deepClone,
+  deployParasol,
   discardCard,
   getPlayer,
   getPlayerByCharacter,
@@ -27,7 +28,7 @@ import {
   swapPositions,
   takeRandomHidden,
   validateGame,
-} from './engine.js';
+} from './engine.js?v=3.2.0-table2';
 
 const SETTINGS_KEY = 'lifeboat-settings-v3';
 const SAVE_KEY = 'lifeboat-game-v4';
@@ -37,6 +38,7 @@ const defaultSettings = {
   language: 'ru',
   theme: 'dark',
   sound: true,
+  music: true,
   vibration: true,
   motion: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   largeText: false,
@@ -55,6 +57,11 @@ let toastTimer = null;
 let wakeLock = null;
 let deferredInstallPrompt = null;
 let audioContext = null;
+let musicTimer = null;
+let musicStep = 0;
+let audioUnlocked = false;
+
+const MUSIC_NOTES = [220, 261.63, 329.63, null, 293.66, 261.63, 220, 196, null, 220, 293.66, 349.23];
 
 const screens = [...document.querySelectorAll('[data-screen]')];
 const modal = document.getElementById('modal');
@@ -76,6 +83,35 @@ function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
 }
 
+function iconMarkup(name, modifier = '') {
+  return `<svg class="ui-icon${modifier ? ` ${modifier}` : ''}" aria-hidden="true"><use href="./assets/ui-icons.svg#${name}"></use></svg>`;
+}
+
+const CARD_ICON_IDS = Object.freeze({
+  water: 'card-water',
+  cash: 'card-cash',
+  jewels: 'card-jewels',
+  painting: 'card-painting',
+  flare: 'card-flare',
+  oar: 'card-oar',
+  blackjack: 'card-blackjack',
+  knife: 'card-knife',
+  hook: 'card-hook',
+  parasol: 'card-parasol',
+  life: 'card-life',
+  medkit: 'card-medkit',
+  compass: 'card-compass',
+  chum: 'card-chum',
+});
+
+function gameIconMarkup(name, modifier = '') {
+  return `<svg class="game-icon${modifier ? ` ${modifier}` : ''}" aria-hidden="true"><use href="./assets/game-icons.svg#${name}"></use></svg>`;
+}
+
+function characterPortraitMarkup(characterId, modifier = '') {
+  return `<span class="character-portrait character-portrait--${characterId}${modifier ? ` ${modifier}` : ''}" aria-hidden="true"></span>`;
+}
+
 function saveSettings() {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* storage is optional */ }
 }
@@ -87,20 +123,29 @@ function setSetting(key, value) {
   renderAll();
 }
 
+function setAudioMaster(enabled) {
+  settings.sound = enabled;
+  settings.music = enabled;
+  saveSettings();
+  applySettings();
+  renderAll();
+}
+
 function applySettings() {
   t = createTranslator(settings.language);
   document.documentElement.lang = settings.language;
   document.documentElement.dataset.theme = settings.theme;
   document.documentElement.classList.toggle('reduce-motion', !settings.motion);
   document.documentElement.classList.toggle('large-text', settings.largeText);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', settings.theme === 'dark' ? '#07131c' : '#e8ddc9');
-  document.getElementById('theme-button').textContent = settings.theme === 'dark' ? '☾' : '☀';
-  document.getElementById('sound-button').textContent = settings.sound ? '♪' : '∅';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', settings.theme === 'dark' ? '#08171a' : '#d5c6a9');
+  document.getElementById('theme-button').innerHTML = iconMarkup(settings.theme === 'dark' ? 'moon' : 'sun');
+  const audioEnabled = settings.sound || settings.music;
+  document.getElementById('sound-button').innerHTML = iconMarkup(audioEnabled ? 'volume-2' : 'volume-x');
   document.getElementById('language-button').textContent = settings.language === 'ru' ? 'EN' : 'RU';
   document.getElementById('home-button').setAttribute('aria-label', t('home'));
   document.getElementById('home-button').title = t('home');
-  document.getElementById('sound-button').setAttribute('aria-label', t('sound'));
-  document.getElementById('sound-button').title = t('sound');
+  document.getElementById('sound-button').setAttribute('aria-label', t('audio'));
+  document.getElementById('sound-button').title = t('audio');
   document.getElementById('theme-button').setAttribute('aria-label', t('changeTheme'));
   document.getElementById('theme-button').title = t('changeTheme');
   document.getElementById('save-menu-button').setAttribute('aria-label', t('more'));
@@ -112,16 +157,73 @@ function applySettings() {
   document.querySelectorAll('[data-theme-choice]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === settings.theme)));
   document.querySelectorAll('[data-language-choice]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.languageChoice === settings.language)));
   document.getElementById('setting-sound').checked = settings.sound;
+  document.getElementById('setting-music').checked = settings.music;
   document.getElementById('setting-vibration').checked = settings.vibration;
   document.getElementById('setting-motion').checked = settings.motion;
   document.getElementById('setting-large-text').checked = settings.largeText;
+  if (settings.music && audioUnlocked && document.visibilityState !== 'hidden') startMusic();
+  else if (!settings.music) stopMusic();
+}
+
+function getAudioContext() {
+  try {
+    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+    if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+    return audioContext;
+  } catch {
+    return null;
+  }
+}
+
+function playMusicNote() {
+  musicTimer = null;
+  if (!settings.music || !audioUnlocked || document.visibilityState === 'hidden') return;
+  const context = getAudioContext();
+  if (!context) return;
+  const frequency = MUSIC_NOTES[musicStep % MUSIC_NOTES.length];
+  musicStep += 1;
+  if (frequency) {
+    const now = context.currentTime;
+    const gain = context.createGain();
+    const filter = context.createBiquadFilter();
+    const lead = context.createOscillator();
+    const air = context.createOscillator();
+    filter.type = 'lowpass';
+    filter.frequency.value = 1100;
+    lead.type = 'triangle';
+    air.type = 'sine';
+    lead.frequency.value = frequency;
+    air.frequency.value = frequency * 2;
+    gain.gain.setValueAtTime(.0001, now);
+    gain.gain.exponentialRampToValueAtTime(.018, now + .16);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + 2.65);
+    lead.connect(filter);
+    air.connect(filter);
+    filter.connect(gain).connect(context.destination);
+    lead.start(now);
+    air.start(now);
+    lead.stop(now + 2.7);
+    air.stop(now + 2.7);
+  }
+  musicTimer = window.setTimeout(playMusicNote, frequency ? 2100 : 950);
+}
+
+function startMusic() {
+  if (musicTimer || !settings.music || !audioUnlocked) return;
+  playMusicNote();
+}
+
+function stopMusic() {
+  if (musicTimer) window.clearTimeout(musicTimer);
+  musicTimer = null;
 }
 
 function feedback(kind = 'tap') {
   if (settings.vibration && navigator.vibrate) navigator.vibrate(kind === 'danger' ? [35, 30, 55] : kind === 'success' ? [20, 20, 20] : 14);
   if (!settings.sound) return;
   try {
-    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+    const context = getAudioContext();
+    if (!context) return;
     const oscillator = audioContext.createOscillator();
     const gain = audioContext.createGain();
     oscillator.type = kind === 'danger' ? 'sawtooth' : 'sine';
@@ -274,7 +376,7 @@ function renderSetup() {
     const text = getCharacterText(selectedId, settings.language);
     const options = CHARACTERS.map((item) => `<option value="${item.id}" ${item.id === selectedId ? 'selected' : ''}>${escapeHtml(getCharacterText(item.id, settings.language)[0])} · ${item.size}/${item.survival}</option>`).join('');
     return `<div class="setup-player surface" style="--player-color:${selected.color}">
-      <div class="setup-player__icon" aria-hidden="true">${selected.icon}</div>
+      ${characterPortraitMarkup(selectedId, 'setup-player__portrait')}
       <div class="field"><label for="player-name-${index}">${t('playerName')} ${index + 1}</label><input id="player-name-${index}" name="player-name" maxlength="24" autocomplete="off" value="${escapeHtml(existingNames[index] || defaultNames[settings.language][index])}" required></div>
       <div class="field"><label for="player-character-${index}">${t('character')}</label><select id="player-character-${index}" data-character-index="${index}" aria-describedby="character-hint-${index}">${options}</select><span id="character-hint-${index}" hidden>${escapeHtml(text[2])}</span></div>
     </div>`;
@@ -373,15 +475,20 @@ function renderBoat(current) {
     const character = CHARACTER_BY_ID[player.characterId];
     const text = getCharacterText(player.characterId, settings.language);
     const status = statusFor(player);
-    const markers = `${player.rowed ? '🚣' : ''}${player.fought ? '⚔' : ''}${player.hand.some((card) => card.id === 'life' && card.revealed) ? '🛟' : ''}${player.hand.some((card) => card.id === 'parasol' && card.revealed) ? '☂' : ''}`;
+    const markers = [
+      player.rowed ? `<span class="mini-marker">${gameIconMarkup('card-oar')}</span>` : '',
+      player.fought ? `<span class="mini-marker">${gameIconMarkup('marker-fight')}</span>` : '',
+      player.hand.some((card) => card.id === 'life' && card.revealed) ? `<span class="mini-marker">${gameIconMarkup('card-life')}</span>` : '',
+      player.hand.some((card) => card.id === 'parasol' && card.revealed && card.active) ? `<span class="mini-marker">${gameIconMarkup('card-parasol')}</span>` : '',
+    ].join('');
     return `<article class="player-card ${player.id === current?.id ? 'current' : ''} ${!player.inBoat ? 'lost' : ''}" style="--player-color:${character.color}" aria-label="${escapeHtml(player.name)}, ${escapeHtml(status.label)}">
-      <div class="player-card__icon" aria-hidden="true">${character.icon}</div>
+      ${characterPortraitMarkup(player.characterId, 'player-card__portrait')}
       <strong>${escapeHtml(player.name)}</strong><small>${escapeHtml(text[0])}</small>
       <small>${t('wounds')}: ${player.wounds}/${character.size}</small>
       <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span><div class="mini-markers" aria-hidden="true">${markers}</div>
     </article>`;
   }).join('');
-  document.getElementById('deck-status').textContent = `▣ ${game.provisions.length} · ◫ ${game.navigation.length} · 🚣 ${game.rowStack.length}`;
+  document.getElementById('deck-status').textContent = `P ${game.provisions.length} · N ${game.navigation.length} · R ${game.rowStack.length}`;
 }
 
 function categoryColor(category) {
@@ -395,27 +502,28 @@ function cardMarkup(card, { selectable = false, selected = false, control = '', 
   const accessible = hidden ? t('hidden') : `${name}. ${description}`;
   return `<article class="${classes}" style="--card-color:${categoryColor(card.category)}" ${selectable ? `role="button" tabindex="0" ${control}` : ''} aria-label="${escapeHtml(accessible)}">
     <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span>
-    <span class="game-card__icon" aria-hidden="true">${hidden ? '⚜' : card.icon}</span>
+    <span class="game-card__icon" aria-hidden="true">${gameIconMarkup(hidden ? 'card-back' : CARD_ICON_IDS[card.id] || 'card-back')}</span>
     <strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong>
     <small>${hidden ? t('hidden') : escapeHtml(description)}</small>
   </article>`;
 }
 
 function navigationCardMarkup(card, { selectable = false, selected = false, control = '' } = {}) {
-  const bird = card.bird > 0 ? '🕊️' : card.bird < 0 ? '🌫️' : '🌊';
+  const birdIcon = card.bird > 0 ? 'nav-bird' : card.bird < 0 ? 'nav-fog' : 'nav-calm';
+  const birdDelta = card.bird > 0 ? '+1' : card.bird < 0 ? '−1' : '0';
   const overboardLabel = card.overboard === 'all'
     ? t('everyone')
     : card.overboard === 'allbut'
       ? t('everyone')
       : getCharacterText(card.overboard, settings.language)?.[0] || '';
   const effects = [
-    card.overboard ? `🌊 ${overboardLabel}` : '',
-    card.thirsty?.length ? `☀ ${card.thirsty.length}` : '',
-    card.row ? '🚣' : '',
-    card.fight ? '⚔' : '',
+    card.overboard ? `${t('overboard')}: ${overboardLabel}` : '',
+    card.thirsty?.length ? `${t('thirst')}: ${card.thirsty.length}` : '',
+    card.row ? t('row') : '',
+    card.fight ? t('fight') : '',
   ].filter(Boolean).join(' · ') || t('navCalm');
   return `<article class="game-card nav-card ${selectable ? 'selectable' : ''} ${selected ? 'selected' : ''}" style="--card-color:#16495c" ${selectable ? `role="button" tabindex="0" aria-pressed="${selected}" ${control}` : ''}>
-    <span class="game-card__type">${t('navigation')}</span><span class="game-card__icon" aria-hidden="true">${bird}</span>
+    <span class="game-card__type">${t('navigation')}</span><span class="game-card__icon nav-card__icon" aria-hidden="true">${gameIconMarkup(birdIcon)}<b>${birdDelta}</b></span>
     <strong>${card.bird > 0 ? t('birdSeen') : card.bird < 0 ? t('birdLost') : t('navCalm')}</strong><small>${escapeHtml(effects)}</small>
   </article>`;
 }
@@ -426,7 +534,7 @@ function renderPrivatePanel(current) {
   panel.hidden = false;
   const loved = getPlayerByCharacter(game, current.lovedCharacterId);
   const hated = getPlayerByCharacter(game, current.hatedCharacterId);
-  document.getElementById('secret-strip').innerHTML = `<div class="secret secret--love"><small>♥ ${t('friend')}</small><strong>${escapeHtml(loved?.name || '—')}</strong></div><div class="secret secret--hate"><small>☠ ${t('enemy')}</small><strong>${escapeHtml(hated?.name || '—')}</strong></div>`;
+  document.getElementById('secret-strip').innerHTML = `<div class="secret secret--love"><small>${iconMarkup('heart', 'ui-icon--sm')} ${t('friend')}</small><strong>${escapeHtml(loved?.name || '—')}</strong></div><div class="secret secret--hate"><small>${iconMarkup('skull', 'ui-icon--sm')} ${t('enemy')}</small><strong>${escapeHtml(hated?.name || '—')}</strong></div>`;
   document.getElementById('hand-count').textContent = String(current.hand.length);
   const row = document.getElementById('hand-row');
   if (!current.hand.length) { row.innerHTML = `<p>${t('noCards')}</p>`; return; }
@@ -437,10 +545,14 @@ function renderPrivatePanel(current) {
     const ownsPrivateScreen = current.id === game.currentPlayerId && current.alive && current.conscious;
     const canUseSpecial = ownsPrivateScreen && game.phase === 'actions' && !game.pending;
     const canReveal = ownsPrivateScreen;
-    const label = hidden ? (special && canUseSpecial ? t('specialAction') : canReveal ? t('reveal') : '') : (special && canUseSpecial ? t('specialAction') : '');
+    const canDeploySpecial = special && canUseSpecial && !(card.id === 'parasol' && card.active);
+    const actions = [
+      hidden && canReveal ? `<button type="button" data-hand-action="reveal" data-card-uid="${card.uid}">${escapeHtml(t('reveal'))}</button>` : '',
+      canDeploySpecial ? `<button type="button" data-hand-action="special" data-card-uid="${card.uid}">${escapeHtml(t('specialAction'))}</button>` : '',
+    ].filter(Boolean).join('');
     return `<article class="game-card ${hidden ? 'hidden-card' : ''}" style="--card-color:${categoryColor(card.category)}" aria-label="${escapeHtml(hidden ? t('hidden') : `${name}. ${description}`)}">
-      <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span><span class="game-card__icon" aria-hidden="true">${hidden ? '⚜' : card.icon}</span><strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong><small>${hidden ? t('hidden') : escapeHtml(description)}</small>
-      ${label ? `<button type="button" data-hand-action="${special && canUseSpecial ? 'special' : 'reveal'}" data-card-uid="${card.uid}">${escapeHtml(label)}</button>` : ''}
+      <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span><span class="game-card__icon" aria-hidden="true">${gameIconMarkup(hidden ? 'card-back' : CARD_ICON_IDS[card.id] || 'card-back')}</span><strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong><small>${hidden ? t('hidden') : escapeHtml(description)}</small>
+      ${actions ? `<div class="card-action-row">${actions}</div>` : ''}
     </article>`;
   }).join('');
 }
@@ -467,10 +579,10 @@ function renderTurnPanel(current) {
 function renderActionChoice(panel, current) {
   if (!current?.alive || !current?.conscious) return;
   panel.innerHTML = `<div class="turn-heading"><span>${t('actions')}</span><h3>${t('chooseAction')}</h3></div><div class="action-grid">
-    <button class="action-button" type="button" data-game-action="rest" style="--action-tint:rgba(55,67,96,.7)"><span>☾</span><strong>${t('rest')}</strong><small>${t('restHint')}</small></button>
-    <button class="action-button" type="button" data-game-action="row" style="--action-tint:rgba(20,91,111,.7)"><span>≈</span><strong>${t('row')}</strong><small>${t('rowHint')}</small></button>
-    <button class="action-button" type="button" data-game-action="swap" style="--action-tint:rgba(76,47,103,.72)"><span>⇄</span><strong>${t('swap')}</strong><small>${t('swapHint')}</small></button>
-    <button class="action-button" type="button" data-game-action="mug" style="--action-tint:rgba(108,45,36,.75)"><span>✊</span><strong>${t('mug')}</strong><small>${t('mugHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="rest" style="--action-tint:rgba(55,67,96,.7)"><span>${iconMarkup('moon')}</span><strong>${t('rest')}</strong><small>${t('restHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="row" style="--action-tint:rgba(20,91,111,.7)"><span>${iconMarkup('waves')}</span><strong>${t('row')}</strong><small>${t('rowHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="swap" style="--action-tint:rgba(76,47,103,.72)"><span>${iconMarkup('arrow-left-right')}</span><strong>${t('swap')}</strong><small>${t('swapHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="mug" style="--action-tint:rgba(108,45,36,.75)"><span>${iconMarkup('swords')}</span><strong>${t('mug')}</strong><small>${t('mugHint')}</small></button>
   </div>`;
 }
 
@@ -493,17 +605,21 @@ function renderResponse(panel) {
 
 function renderFightSupport(panel) {
   const pending = game.pending;
-  const supporterId = pending.supporters[pending.supportIndex];
-  const supporter = getPlayer(game, supporterId);
   const attacker = getPlayer(game, pending.attackerId);
   const defender = getPlayer(game, pending.defenderId);
+  if (pending.stage === 'attacker-prep') {
+    panel.innerHTML = `<div class="turn-heading"><span>${t('fight')}</span><h3>${t('fightPrepare')}</h3><p>${t('fightPrepareHint')}</p></div>${fightBoardMarkup(attacker, defender)}<button class="button button--gold" type="button" data-pending-action="fight-ready">${t('fightReady')}</button>`;
+    return;
+  }
+  const supporterId = pending.supporters[pending.supportIndex];
+  const supporter = getPlayer(game, supporterId);
   panel.innerHTML = `<div class="turn-heading"><span>${t('fight')}</span><h3>${escapeHtml(supporter?.name || '')}: ${t('chooseAction')}</h3></div>${fightBoardMarkup(attacker, defender)}<div class="choice-grid"><button class="choice-button" type="button" data-fight-support="attacker"><strong>${t('supportAttacker')}</strong><small>${escapeHtml(attacker.name)}</small></button><button class="choice-button" type="button" data-fight-support="defender"><strong>${t('supportDefender')}</strong><small>${escapeHtml(defender.name)}</small></button><button class="choice-button" type="button" data-fight-support="neutral"><strong>${t('neutral')}</strong></button></div>`;
 }
 
 function fightBoardMarkup(attacker, defender, result = null) {
   const aStrength = result?.attackerStrength ?? playerStrength(attacker);
   const dStrength = result?.defenderStrength ?? playerStrength(defender);
-  return `<div class="fight-board"><div class="fight-side"><small>${t('attacker')}</small><strong>${escapeHtml(attacker.name)}</strong><b>${aStrength}</b></div><div class="fight-versus">⚔</div><div class="fight-side"><small>${t('defender')}</small><strong>${escapeHtml(defender.name)}</strong><b>${dStrength}</b></div></div>`;
+  return `<div class="fight-board"><div class="fight-side"><small>${t('attacker')}</small><strong>${escapeHtml(attacker.name)}</strong><b>${aStrength}</b></div><div class="fight-versus">${iconMarkup('swords')}</div><div class="fight-side"><small>${t('defender')}</small><strong>${escapeHtml(defender.name)}</strong><b>${dStrength}</b></div></div>`;
 }
 
 function renderFightResult(panel) {
@@ -519,7 +635,7 @@ function renderMugReward(panel) {
   const target = getPlayer(game, pending.targetId);
   const openCards = target.hand.filter((card) => card.revealed);
   const hidden = target.hand.filter((card) => !card.revealed);
-  panel.innerHTML = `<div class="turn-heading"><span>${t('mug')}</span><h3>${t('chooseMugReward')}</h3></div><div class="card-row">${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-mug-card="${card.uid}"` })).join('')}${hidden.length ? `<button class="game-card selectable hidden-card" type="button" data-mug-hidden><span class="game-card__type">${t('hidden')}</span><span class="game-card__icon">⚜</span><strong>${t('randomHidden')}</strong><small>${hidden.length}</small></button>` : ''}</div>`;
+  panel.innerHTML = `<div class="turn-heading"><span>${t('mug')}</span><h3>${t('chooseMugReward')}</h3></div><div class="card-row">${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-mug-card="${card.uid}"` })).join('')}${hidden.length ? `<button class="game-card selectable hidden-card" type="button" data-mug-hidden><span class="game-card__type">${t('hidden')}</span><span class="game-card__icon">${gameIconMarkup('card-back')}</span><strong>${t('randomHidden')}</strong><small>${hidden.length}</small></button>` : ''}</div>`;
 }
 
 function renderTradeReturn(panel) {
@@ -544,20 +660,28 @@ function renderOverboardPrep(panel) {
   });
   const canThrowChum = helper.hand.some((card) => card.id === 'chum');
   const targets = pending.targetIds.map((id) => getPlayer(game, id)?.name).filter(Boolean).join(', ');
-  panel.innerHTML = `<div class="turn-heading"><span>${t('overboard')}</span><h3>${t('overboardPrep')}</h3><p>${escapeHtml(targets)}</p></div><div class="button-row">${canThrowLife ? `<button class="button button--good" type="button" data-overboard-prep="life">${t('throwPreserver')}</button>` : ''}${canThrowChum ? `<button class="button button--danger" type="button" data-overboard-prep="chum">${t('throwChum')}</button>` : ''}<button class="button button--ghost" type="button" data-overboard-prep="continue">${t('keepCards')}</button></div>${pending.sharks ? `<p class="modal-copy">🦈 ${t('sharksAttack')} × ${pending.sharks}</p>` : ''}`;
+  panel.innerHTML = `<div class="turn-heading"><span>${t('overboard')}</span><h3>${t('overboardPrep')}</h3><p>${escapeHtml(targets)}</p></div><div class="button-row">${canThrowLife ? `<button class="button button--good" type="button" data-overboard-prep="life">${t('throwPreserver')}</button>` : ''}${canThrowChum ? `<button class="button button--danger" type="button" data-overboard-prep="chum">${t('throwChum')}</button>` : ''}<button class="button button--ghost" type="button" data-overboard-prep="continue">${t('keepCards')}</button></div>${pending.sharks ? `<p class="modal-copy">${t('sharksAttack')} × ${pending.sharks}</p>` : ''}`;
 }
 
 function renderNavigationChoice(panel) {
   const pending = game.pending;
-  panel.innerHTML = `<div class="turn-heading"><span>${t('navigation')}</span><h3>${t('chooseCard')}</h3><p>${t('navInstruction')}</p></div><div class="card-row">${pending.cards.map((card) => navigationCardMarkup(card, { selectable: true, control: `data-nav-card="${card.uid}"` })).join('')}</div>`;
+  const compassButton = pending.compassUid && game.navigation.length
+    ? `<button class="button button--secondary compass-action" type="button" data-pending-action="use-compass">${gameIconMarkup('card-compass')}<span>${t('useCompass')}</span></button>`
+    : '';
+  panel.innerHTML = `<div class="turn-heading"><span>${t('navigation')}</span><h3>${t('chooseCard')}</h3><p>${t('navInstruction')}</p></div>${compassButton}<div class="card-row">${pending.cards.map((card) => navigationCardMarkup(card, { selectable: true, control: `data-nav-card="${card.uid}"` })).join('')}</div>`;
 }
 
 function renderNavigationResult(panel) {
   const pending = game.pending;
   const lines = pending.outcomes.map((outcome) => {
     const player = getPlayer(game, outcome.playerId);
-    if (outcome.lost) return `🌊 ${escapeHtml(player.name)} — ${t('statusLost')}`;
-    return `🌊 ${escapeHtml(player.name)}${outcome.protected ? ' · 🛟' : ''}${outcome.swimmer ? ' · ≈' : ''}${outcome.shark ? ' · 🦈' : ''}`;
+    if (outcome.lost) return `${escapeHtml(player.name)} — ${t('statusLost')}`;
+    const details = [
+      outcome.protected ? t('throwPreserver') : '',
+      outcome.swimmer ? t('survived') : '',
+      outcome.shark ? t('sharksAttack') : '',
+    ].filter(Boolean).join(' · ');
+    return `${escapeHtml(player.name)}${details ? ` · ${details}` : ''}`;
   });
   panel.innerHTML = `<div class="turn-heading"><span>${t('navigation')}</span><h3>${pending.card.bird > 0 ? t('birdSeen') : pending.card.bird < 0 ? t('birdLost') : t('navCalm')}</h3><p>${lines.join('<br>') || t('navCalm')}</p></div>${navigationCardMarkup(pending.card)}<button class="button button--gold" type="button" data-pending-action="continue-navigation">${t('next')}</button>`;
 }
@@ -568,7 +692,7 @@ function renderThirst(panel) {
   const player = getPlayer(game, task?.playerId);
   if (!player) return;
   const water = player.hand.some((card) => card.id === 'water');
-  const parasol = player.hand.some((card) => card.id === 'parasol' && card.revealed) && player.parasolDay !== game.day;
+  const parasol = player.hand.some((card) => card.id === 'parasol' && card.revealed && card.active) && player.parasolDay !== game.day;
   const sourceLabel = { named: t('thirstNamed'), row: t('thirstRow'), fight: t('thirstFight') }[task.source] || task.source;
   panel.innerHTML = `<div class="turn-heading"><span>${t('thirst')}</span><h3>${escapeHtml(player.name)}</h3><p>${escapeHtml(sourceLabel)}</p></div><div class="button-row">${water ? `<button class="button button--good" type="button" data-thirst-choice="water">${t('useWater')}</button>` : ''}${parasol ? `<button class="button button--secondary" type="button" data-thirst-choice="parasol">${t('useParasol')}</button>` : ''}<button class="button button--danger" type="button" data-thirst-choice="wound">${t('takeWound')}</button></div>`;
 }
@@ -740,12 +864,15 @@ function initiateRequest(action, attackerId, targetId) {
   const attacker = getPlayer(game, attackerId);
   const target = getPlayer(game, targetId);
   if (!attacker || !target) return;
-  pushHistory();
   if (action === 'mug' && attacker.characterId === 'kid' && target.hand.some((card) => !card.revealed)) {
+    const openCards = target.hand.filter((card) => card.revealed);
+    if (openCards.length) return chooseKidMug(attacker, target, openCards);
+    pushHistory();
     const card = takeRandomHidden(game, target.id, attacker.id);
     addLog(game, 'mug', { playerId: attacker.id, targetId: target.id, cardId: card.id }, 'success');
     return setPostAction(attacker.id, `${t('mug')}: ${getCardText(card.id, settings.language)[0]}`);
   }
+  pushHistory();
   if (!target.alive || !target.conscious) {
     if (action === 'swap') {
       swapPositions(game, attacker.id, target.id);
@@ -758,6 +885,33 @@ function initiateRequest(action, attackerId, targetId) {
   passTo(target.id, target.name, action === 'swap' ? t('swap') : t('mug'));
 }
 
+function chooseKidMug(attacker, target, openCards) {
+  const html = `<p class="modal-copy">${t('kidMugChoice')}</p><div class="modal-card-grid">
+    ${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-kid-mug-card="${card.uid}"` })).join('')}
+    <button class="game-card selectable hidden-card" type="button" data-kid-mug-hidden>
+      <span class="game-card__type">${t('hidden')}</span>
+      <span class="game-card__icon">${gameIconMarkup('card-back')}</span>
+      <strong>${t('randomHidden')}</strong>
+      <small>${target.hand.filter((card) => !card.revealed).length}</small>
+    </button>
+  </div>`;
+  openModal(t('mug'), html, [{ label: t('cancel'), className: 'button--ghost' }]);
+  modalContent.querySelector('[data-kid-mug-hidden]')?.addEventListener('click', () => {
+    closeModal();
+    pushHistory();
+    const card = takeRandomHidden(game, target.id, attacker.id);
+    if (!card) return toast(t('noTargetCards'), 'danger');
+    addLog(game, 'mug', { playerId: attacker.id, targetId: target.id, cardId: card.id }, 'success');
+    setPostAction(attacker.id, `${t('mug')}: ${getCardText(card.id, settings.language)[0]}`);
+  });
+  modalContent.querySelectorAll('[data-kid-mug-card]').forEach((cardElement) => cardElement.addEventListener('click', () => {
+    closeModal();
+    pushHistory();
+    game.pending = { type: 'response', action: 'mug', attackerId: attacker.id, targetId: target.id, requestedCardUid: cardElement.dataset.kidMugCard };
+    passTo(target.id, target.name, t('mug'));
+  }));
+}
+
 function handleResponse(response) {
   const pending = game.pending;
   if (!pending || pending.type !== 'response') return;
@@ -767,21 +921,30 @@ function handleResponse(response) {
       addLog(game, 'swap', { playerId: pending.attackerId, targetId: pending.targetId }, 'success');
       return setPostAction(pending.attackerId, t('swap'));
     }
-    return prepareMugReward(pending.attackerId, pending.targetId);
+    return prepareMugReward(pending.attackerId, pending.targetId, pending.requestedCardUid);
   }
   beginFight(pending);
 }
 
 function beginFight(request) {
   const supporters = activePlayers(game).map((player) => player.id).filter((id) => id !== request.attackerId && id !== request.targetId);
-  game.pending = { type: 'fight', action: request.action, attackerId: request.attackerId, defenderId: request.targetId, supporters, supportIndex: 0, support: {} };
-  if (!supporters.length) return finishFight();
-  const first = getPlayer(game, supporters[0]);
+  game.pending = { type: 'fight', stage: 'attacker-prep', action: request.action, attackerId: request.attackerId, defenderId: request.targetId, requestedCardUid: request.requestedCardUid || null, supporters, supportIndex: 0, support: {} };
+  const attacker = getPlayer(game, request.attackerId);
+  passTo(attacker.id, attacker.name, t('fightPrepare'));
+}
+
+function prepareFightAttacker() {
+  const pending = game.pending;
+  if (!pending || pending.type !== 'fight' || pending.stage !== 'attacker-prep') return;
+  pending.stage = 'support';
+  if (!pending.supporters.length) return finishFight();
+  const first = getPlayer(game, pending.supporters[0]);
   passTo(first.id, first.name, t('fight'));
 }
 
 function chooseFightSupport(side) {
   const pending = game.pending;
+  if (!pending || pending.type !== 'fight' || pending.stage !== 'support') return;
   const supporterId = pending.supporters[pending.supportIndex];
   pending.support[supporterId] = side;
   pending.supportIndex += 1;
@@ -812,14 +975,21 @@ function continueAfterFight() {
       addLog(game, 'swap', { playerId: pending.attackerId, targetId: pending.defenderId }, 'success');
       return setPostAction(pending.attackerId, t('swap'));
     }
-    return prepareMugReward(pending.attackerId, pending.defenderId);
+    return prepareMugReward(pending.attackerId, pending.defenderId, pending.requestedCardUid);
   }
   setPostAction(pending.attackerId, t('fightResult'));
 }
 
-function prepareMugReward(attackerId, targetId) {
+function prepareMugReward(attackerId, targetId, requestedCardUid = null) {
   const target = getPlayer(game, targetId);
   if (!target?.hand.length) return setPostAction(attackerId, t('noTargetCards'));
+  if (requestedCardUid) {
+    const attacker = getPlayer(game, attackerId);
+    const card = moveCard(game, target.id, attacker.id, requestedCardUid);
+    if (!card) return setPostAction(attackerId, t('noTargetCards'));
+    addLog(game, 'mug', { playerId: attacker.id, targetId: target.id, cardId: card.id }, 'success');
+    return setPostAction(attacker.id, `${t('mug')}: ${getCardText(card.id, settings.language)[0]}`);
+  }
   game.pending = { type: 'mugReward', attackerId, targetId };
   const attacker = getPlayer(game, attackerId);
   passTo(attacker.id, attacker.name, t('chooseMugReward'));
@@ -899,11 +1069,24 @@ function startNavigation() {
     cards.push(game.navigation.pop());
   }
   if (!cards.length) return finishDay();
-  const compass = navigator?.hand.some((card) => card.id === 'compass' && card.revealed);
-  if (compass && game.navigation.length) cards.push(game.navigation.pop());
-  if (cards.length === 1 || !navigator) return resolveNavigation(cards[0]);
-  game.pending = { type: 'navChoose', cards, navigatorId: navigator.id };
+  const revealedCompass = navigator?.hand.find((card) => card.id === 'compass' && card.revealed);
+  const hiddenCompass = navigator?.hand.find((card) => card.id === 'compass' && !card.revealed);
+  if (revealedCompass && game.navigation.length) cards.push(game.navigation.pop());
+  if ((cards.length === 1 && !hiddenCompass) || !navigator) return resolveNavigation(cards[0]);
+  game.pending = { type: 'navChoose', cards, navigatorId: navigator.id, compassUid: hiddenCompass?.uid || null };
   passTo(navigator.id, navigator.name, t('navigation'));
+}
+
+function useCompassForNavigation() {
+  const pending = game.pending;
+  if (!pending || pending.type !== 'navChoose' || !pending.compassUid || !game.navigation.length) return;
+  pushHistory();
+  const compass = revealCard(game, pending.navigatorId, pending.compassUid);
+  if (!compass) return;
+  pending.cards.push(game.navigation.pop());
+  pending.compassUid = null;
+  addLog(game, 'reveal', { playerId: pending.navigatorId, cardId: 'compass' }, 'success');
+  renderGame();
 }
 
 function chooseNavigationCard(cardUid) {
@@ -1048,7 +1231,7 @@ function useSpecialCard(player, card) {
   if (game.phase !== 'actions' || game.pending || game.currentPlayerId !== player.id) return;
   if (card.id === 'parasol') {
     pushHistory();
-    card.revealed = true;
+    if (!deployParasol(game, player.id, card.uid)) return;
     addLog(game, 'parasol', { playerId: player.id }, 'success');
     return setPostAction(player.id, t('parasolOpened'));
   }
@@ -1105,7 +1288,7 @@ function renderScore() {
   reveal.innerHTML = `<h3>${t('secrets')}</h3>${game.players.map((player) => {
     const loved = getPlayerByCharacter(game, player.lovedCharacterId);
     const hated = getPlayerByCharacter(game, player.hatedCharacterId);
-    return `<p><strong>${escapeHtml(player.name)}</strong> · ♥ ${escapeHtml(loved?.name || '—')} · ☠ ${escapeHtml(hated?.name || '—')}</p>`;
+    return `<p><strong>${escapeHtml(player.name)}</strong> · ${iconMarkup('heart', 'ui-icon--sm')} ${escapeHtml(loved?.name || '—')} · ${iconMarkup('skull', 'ui-icon--sm')} ${escapeHtml(hated?.name || '—')}</p>`;
   }).join('')}`;
   document.getElementById('score-list').innerHTML = game.scores.map((score, index) => {
     const player = getPlayer(game, score.playerId);
@@ -1115,18 +1298,18 @@ function renderScore() {
 
 function renderRules() {
   const rules = [
-    ['◎', 'rulesGoalTitle', 'rulesGoal'], ['☀', 'rulesRoundTitle', 'rulesRound'], ['⚔', 'rulesFightTitle', 'rulesFight'], ['⚜', 'rulesCardsTitle', 'rulesCards'], ['✚', 'rulesStatusTitle', 'rulesStatus'], ['💧', 'rulesThirstTitle', 'rulesThirst'], ['≈', 'rulesOverboardTitle', 'rulesOverboard'], ['🏝', 'rulesScoringTitle', 'rulesScoring'],
+    ['compass', 'rulesGoalTitle', 'rulesGoal'], ['sun', 'rulesRoundTitle', 'rulesRound'], ['swords', 'rulesFightTitle', 'rulesFight'], ['cards', 'rulesCardsTitle', 'rulesCards'], ['shield', 'rulesStatusTitle', 'rulesStatus'], ['droplet', 'rulesThirstTitle', 'rulesThirst'], ['waves', 'rulesOverboardTitle', 'rulesOverboard'], ['trophy', 'rulesScoringTitle', 'rulesScoring'],
   ];
-  document.getElementById('rules-grid').innerHTML = rules.map(([icon, title, copy]) => `<article class="rule-card surface"><span aria-hidden="true">${icon}</span><h3>${t(title)}</h3><p>${t(copy)}</p></article>`).join('');
+  document.getElementById('rules-grid').innerHTML = rules.map(([icon, title, copy]) => `<article class="rule-card surface"><span aria-hidden="true">${iconMarkup(icon, 'ui-icon--lg')}</span><h3>${t(title)}</h3><p>${t(copy)}</p></article>`).join('');
   document.getElementById('quick-reference').innerHTML = `<h3>${t('rulesRoundTitle')}</h3><ol><li><strong>1 · ${t('quartermaster')}</strong><br>${settings.language === 'ru' ? 'Взять карту и передать остальные к корме.' : 'Take one card and pass the rest toward the stern.'}</li><li><strong>2 · ${t('actions')}</strong><br>${settings.language === 'ru' ? 'По одному действию от носа к корме.' : 'One action each from bow to stern.'}</li><li><strong>3 · ${t('navigation')}</strong><br>${settings.language === 'ru' ? 'Птицы → за бортом → жажда.' : 'Birds → overboard → thirst.'}</li></ol>`;
 }
 
 function renderTutorial() {
   const steps = [
-    ['♛', t('players'), t('tutorialIntro')], ['▣', t('quartermaster'), t('tutorialDraft')], ['⚓', t('actions'), t('tutorialAction')], ['⚔', t('fight'), t('tutorialFight')], ['🕊️', t('navigation'), t('tutorialNav')], ['🏝', t('score'), t('tutorialScore')],
+    ['users', t('players'), t('tutorialIntro')], ['layers', t('quartermaster'), t('tutorialDraft')], ['anchor', t('actions'), t('tutorialAction')], ['swords', t('fight'), t('tutorialFight')], ['compass', t('navigation'), t('tutorialNav')], ['trophy', t('score'), t('tutorialScore')],
   ];
   const [icon, title, copy] = steps[tutorialStep];
-  document.getElementById('tutorial-stage').innerHTML = `<div class="tutorial-stage__visual" aria-hidden="true">${icon}</div><h3>${title}</h3><p>${copy}</p>`;
+  document.getElementById('tutorial-stage').innerHTML = `<div class="tutorial-stage__visual" aria-hidden="true">${iconMarkup(icon, 'ui-icon--xl')}</div><h3>${title}</h3><p>${copy}</p>`;
   document.getElementById('tutorial-dots').innerHTML = steps.map((_, index) => `<i class="${index === tutorialStep ? 'active' : ''}"></i>`).join('');
   document.getElementById('tutorial-prev').disabled = tutorialStep === 0;
   document.getElementById('tutorial-next').textContent = tutorialStep === steps.length - 1 ? t('finish') : t('next');
@@ -1230,6 +1413,8 @@ document.addEventListener('click', (event) => {
   const pendingAction = event.target.closest('[data-pending-action]')?.dataset.pendingAction;
   if (pendingAction === 'cancel-row') return undo();
   if (pendingAction === 'confirm-row') return finishRow(true);
+  if (pendingAction === 'use-compass') return useCompassForNavigation();
+  if (pendingAction === 'fight-ready') return prepareFightAttacker();
   if (pendingAction === 'continue-fight') return continueAfterFight();
   if (pendingAction === 'finish-post') return finishPostAction();
   if (pendingAction === 'continue-navigation') return continueNavigation();
@@ -1254,7 +1439,7 @@ document.addEventListener('keydown', (event) => {
 document.querySelectorAll('[data-close-modal]').forEach((element) => element.addEventListener('click', closeModal));
 document.getElementById('theme-button').addEventListener('click', () => setSetting('theme', settings.theme === 'dark' ? 'light' : 'dark'));
 document.getElementById('language-button').addEventListener('click', () => setSetting('language', settings.language === 'ru' ? 'en' : 'ru'));
-document.getElementById('sound-button').addEventListener('click', () => setSetting('sound', !settings.sound));
+document.getElementById('sound-button').addEventListener('click', () => setAudioMaster(!(settings.sound || settings.music)));
 document.getElementById('home-button').addEventListener('click', () => showScreen('title'));
 document.getElementById('continue-button').addEventListener('click', restoreSavedGame);
 document.getElementById('discard-save-button').addEventListener('click', () => confirmModal(t('discardSave'), t('confirmRestart'), clearSavedGame, true));
@@ -1284,6 +1469,7 @@ document.getElementById('tutorial-next').addEventListener('click', () => {
 });
 document.getElementById('score-new-game-button').addEventListener('click', () => startFreshGame(true));
 document.getElementById('setting-sound').addEventListener('change', (event) => setSetting('sound', event.target.checked));
+document.getElementById('setting-music').addEventListener('change', (event) => setSetting('music', event.target.checked));
 document.getElementById('setting-vibration').addEventListener('change', (event) => setSetting('vibration', event.target.checked));
 document.getElementById('setting-motion').addEventListener('change', (event) => setSetting('motion', event.target.checked));
 document.getElementById('setting-large-text').addEventListener('change', (event) => setSetting('largeText', event.target.checked));
@@ -1308,7 +1494,19 @@ document.getElementById('install-button').addEventListener('click', async () => 
 window.addEventListener('beforeunload', (event) => {
   if (game?.status === 'active') { event.preventDefault(); event.returnValue = ''; }
 });
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') updateWakeLock(); });
+document.addEventListener('pointerdown', () => {
+  audioUnlocked = true;
+  getAudioContext();
+  startMusic();
+}, { once: true, capture: true });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    updateWakeLock();
+    startMusic();
+  } else {
+    stopMusic();
+  }
+});
 
 function startOcean() {
   const canvas = document.getElementById('ocean');

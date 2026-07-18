@@ -5,7 +5,7 @@ import {
   PROVISION_TEMPLATES,
   buildNavigationDeck,
   buildProvisionDeck,
-} from './data.js';
+} from './data.js?v=3.2.0-table2';
 
 export function createIdFactory(prefix = 'lb') {
   let serial = 0;
@@ -230,6 +230,16 @@ export function revealCard(game, playerId, cardUid) {
   const card = player?.hand.find((item) => item.uid === cardUid);
   if (!card || !player.alive || !player.conscious) return null;
   card.revealed = true;
+  if (card.id === 'parasol' && card.active == null) card.active = false;
+  return card;
+}
+
+export function deployParasol(game, playerId, cardUid) {
+  const player = getPlayer(game, playerId);
+  const card = player?.hand.find((item) => item.uid === cardUid && item.id === 'parasol');
+  if (!card || !player.alive || !player.conscious || !player.inBoat || card.active) return null;
+  card.revealed = true;
+  card.active = true;
   return card;
 }
 
@@ -332,7 +342,7 @@ export function resolveThirst(game, task, choice) {
     return { water: true };
   }
   if (choice === 'parasol') {
-    const parasol = player.hand.find((card) => card.id === 'parasol' && card.revealed);
+    const parasol = player.hand.find((card) => card.id === 'parasol' && card.revealed && card.active);
     if (!parasol || player.parasolDay === game.day) return { invalid: true };
     player.parasolDay = game.day;
     return { parasol: true };
@@ -432,6 +442,11 @@ export function validateGame(game) {
 export function hydrateGame(value) {
   const game = deepClone(value);
   if (!validateGame(game)) throw new Error('invalid-save');
+  game.players.forEach((player) => {
+    player.hand.forEach((card) => {
+      if (card.id === 'parasol' && card.revealed && card.active == null) card.active = true;
+    });
+  });
   game.updatedAt = Date.now();
   return game;
 }

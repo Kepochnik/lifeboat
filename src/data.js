@@ -1,31 +1,31 @@
 export const SAVE_VERSION = 4;
 
 export const CHARACTERS = [
-  { id: 'lauren', seat: 0, size: 4, survival: 8, icon: '♛', color: '#8d55c7', accent: '#d7b8ff', affinity: 'jewels' },
-  { id: 'stephen', seat: 1, size: 5, survival: 7, icon: '♞', color: '#477eaa', accent: '#b9dcff', affinity: 'painting' },
-  { id: 'captain', seat: 2, size: 7, survival: 5, icon: '⚓', color: '#35765f', accent: '#afe7d3', affinity: 'cash' },
-  { id: 'mate', seat: 3, size: 8, survival: 4, icon: '✦', color: '#9c4b32', accent: '#ffc4a8' },
-  { id: 'frenchy', seat: 4, size: 6, survival: 6, icon: '≈', color: '#9d781f', accent: '#ffe19a', swimmer: true },
-  { id: 'kid', seat: 5, size: 3, survival: 9, icon: '★', color: '#686b9e', accent: '#d6d8ff', silentSteal: true },
+  { id: 'lauren', seat: 0, size: 4, survival: 8, icon: 'LL', color: '#8d55c7', accent: '#d7b8ff', affinity: 'jewels' },
+  { id: 'stephen', seat: 1, size: 5, survival: 7, icon: 'SS', color: '#477eaa', accent: '#b9dcff', affinity: 'painting' },
+  { id: 'captain', seat: 2, size: 7, survival: 5, icon: 'C', color: '#35765f', accent: '#afe7d3', affinity: 'cash' },
+  { id: 'mate', seat: 3, size: 8, survival: 4, icon: 'M', color: '#9c4b32', accent: '#ffc4a8' },
+  { id: 'frenchy', seat: 4, size: 6, survival: 6, icon: 'F', color: '#9d781f', accent: '#ffe19a', swimmer: true },
+  { id: 'kid', seat: 5, size: 3, survival: 9, icon: 'K', color: '#686b9e', accent: '#d6d8ff', silentSteal: true },
 ];
 
 export const CHARACTER_BY_ID = Object.fromEntries(CHARACTERS.map((character) => [character.id, character]));
 
 export const PROVISION_TEMPLATES = {
-  water: { id: 'water', category: 'provision', icon: '💧', value: 0, consumable: true },
-  cash: { id: 'cash', category: 'treasure', icon: '🪙', value: 1 },
-  jewels: { id: 'jewels', category: 'treasure', icon: '💎', value: 0, setValue: true },
-  painting: { id: 'painting', category: 'treasure', icon: '🖼️', value: 3 },
-  flare: { id: 'flare', category: 'weapon', icon: '🚨', value: 0, power: 8, special: 'flare' },
-  oar: { id: 'oar', category: 'weapon', icon: '🪵', value: 0, power: 1 },
-  blackjack: { id: 'blackjack', category: 'weapon', icon: '♣', value: 0, power: 2 },
-  knife: { id: 'knife', category: 'weapon', icon: '🔪', value: 0, power: 3 },
-  hook: { id: 'hook', category: 'weapon', icon: '🪝', value: 0, power: 4 },
-  parasol: { id: 'parasol', category: 'protection', icon: '☂️', value: 0, special: 'parasol' },
-  life: { id: 'life', category: 'protection', icon: '🛟', value: 0 },
-  medkit: { id: 'medkit', category: 'special', icon: '🩹', value: 0, consumable: true, special: 'medkit' },
-  compass: { id: 'compass', category: 'gear', icon: '🧭', value: 0 },
-  chum: { id: 'chum', category: 'special', icon: '🦈', value: 0, special: 'chum' },
+  water: { id: 'water', category: 'provision', icon: 'H₂O', value: 0, consumable: true },
+  cash: { id: 'cash', category: 'treasure', icon: '$', value: 1 },
+  jewels: { id: 'jewels', category: 'treasure', icon: '◆', value: 0, setValue: true },
+  painting: { id: 'painting', category: 'treasure', icon: 'ART', value: 3 },
+  flare: { id: 'flare', category: 'weapon', icon: 'SOS', value: 0, power: 8, special: 'flare' },
+  oar: { id: 'oar', category: 'weapon', icon: 'OAR', value: 0, power: 1 },
+  blackjack: { id: 'blackjack', category: 'weapon', icon: '+2', value: 0, power: 2 },
+  knife: { id: 'knife', category: 'weapon', icon: '+3', value: 0, power: 3 },
+  hook: { id: 'hook', category: 'weapon', icon: '+4', value: 0, power: 4 },
+  parasol: { id: 'parasol', category: 'protection', icon: 'SHADE', value: 0, special: 'parasol' },
+  life: { id: 'life', category: 'protection', icon: 'LIFE', value: 0 },
+  medkit: { id: 'medkit', category: 'special', icon: 'MED', value: 0, consumable: true, special: 'medkit' },
+  compass: { id: 'compass', category: 'gear', icon: 'N', value: 0 },
+  chum: { id: 'chum', category: 'special', icon: 'CHUM', value: 0, special: 'chum' },
 };
 
 export const PROVISION_COUNTS = {

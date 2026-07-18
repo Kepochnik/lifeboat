@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#07131c">
+  <meta name="theme-color" content="#08171a">
   <meta name="description" content="Lifeboat — локальная карточная игра о выживании, тайных целях и предательстве.">
   <meta property="og:title" content="Lifeboat — За бортом">
   <meta property="og:description" content="Передавайте телефон, торгуйтесь, гребите и выживайте в одной шлюпке.">
@@ -11,17 +11,19 @@
   <title>Lifeboat — За бортом</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="preload" href="./assets/art/lifeboat.webp" as="image" type="image/webp">
+  <link rel="preload" href="./assets/art/tabletop-v2.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="./styles.css?v=3.2.0-table2">
 </head>
 <body>
   <a class="skip-link" href="#main">К содержимому</a>
   <canvas id="ocean" aria-hidden="true"></canvas>
 
   <header class="topbar" aria-label="Быстрые настройки">
-    <button class="icon-button" id="home-button" type="button" aria-label="Главное меню" title="Главное меню">⌂</button>
+    <button class="icon-button" id="home-button" type="button" aria-label="Главное меню" title="Главное меню"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#house"></use></svg></button>
     <div class="topbar__actions">
-      <button class="icon-button" id="sound-button" type="button" aria-label="Звук" title="Звук">♪</button>
-      <button class="icon-button" id="theme-button" type="button" aria-label="Сменить тему" title="Сменить тему">☾</button>
+      <button class="icon-button" id="sound-button" type="button" aria-label="Звук" title="Звук"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#volume-2"></use></svg></button>
+      <button class="icon-button" id="theme-button" type="button" aria-label="Сменить тему" title="Сменить тему"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#moon"></use></svg></button>
       <button class="lang-button" id="language-button" type="button" aria-label="Change language">EN</button>
     </div>
   </header>
@@ -30,35 +32,38 @@
     <section class="screen screen--active" id="screen-title" data-screen="title" aria-labelledby="title-heading">
       <div class="hero shell">
         <div class="hero__kicker" data-i18n="cardGame">Карточная игра о выживании и предательстве</div>
-        <div class="brand-mark" aria-hidden="true"><span>⚓</span></div>
+        <div class="brand-mark" aria-hidden="true"><svg class="ui-icon ui-icon--lg"><use href="./assets/ui-icons.svg#anchor"></use></svg></div>
         <h1 id="title-heading"><span>LIFEBOAT</span><small data-i18n="subtitle">ЗА БОРТОМ</small></h1>
         <p class="hero__lead" data-i18n="titleLead">Шлюпка. Шесть характеров. Один берег — и слишком мало доверия.</p>
 
         <div class="boat-silhouette" aria-hidden="true">
-          <i></i><i></i><i></i><i></i><i></i><i></i>
+          <img src="./assets/art/lifeboat.webp" alt="" width="1400" height="485" fetchpriority="high">
         </div>
 
-        <aside class="resume-card" id="resume-card" hidden>
-          <div><strong data-i18n="continue">Продолжить партию</strong><span id="resume-meta"></span></div>
-          <div class="resume-card__actions">
-            <button class="button button--gold" id="continue-button" type="button" data-i18n="restore">Восстановить</button>
-            <button class="button button--ghost" id="discard-save-button" type="button" data-i18n="discardSave">Удалить сохранение</button>
-          </div>
-        </aside>
+        <div class="hero__menu-panel">
+          <div class="menu-caption" aria-hidden="true"><span>PASS &amp; PLAY</span><i></i><b>01</b></div>
+          <aside class="resume-card" id="resume-card" hidden>
+            <div><strong data-i18n="continue">Продолжить партию</strong><span id="resume-meta"></span></div>
+            <div class="resume-card__actions">
+              <button class="button button--gold" id="continue-button" type="button" data-i18n="restore">Восстановить</button>
+              <button class="button button--ghost" id="discard-save-button" type="button" data-i18n="discardSave">Удалить сохранение</button>
+            </div>
+          </aside>
 
-        <nav class="menu" aria-label="Главное меню">
-          <button class="menu-button menu-button--primary" type="button" data-open-screen="setup"><span>⚓</span><b data-i18n="passPlay">Локальная партия</b><em>›</em></button>
-          <button class="menu-button" type="button" data-open-screen="tutorial"><span>◈</span><b data-i18n="tutorial">Обучение</b><em>›</em></button>
-          <button class="menu-button" type="button" data-open-screen="rules"><span>☷</span><b data-i18n="rules">Правила</b><em>›</em></button>
-          <button class="menu-button" type="button" data-open-screen="settings"><span>⚙</span><b data-i18n="settings">Настройки</b><em>›</em></button>
-        </nav>
+          <nav class="menu" aria-label="Главное меню">
+            <button class="menu-button menu-button--primary" type="button" data-open-screen="setup"><span><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#anchor"></use></svg></span><b data-i18n="passPlay">Локальная партия</b><em><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#arrow-right"></use></svg></em></button>
+            <button class="menu-button" type="button" data-open-screen="tutorial"><span><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#diamond"></use></svg></span><b data-i18n="tutorial">Обучение</b><em><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#arrow-right"></use></svg></em></button>
+            <button class="menu-button" type="button" data-open-screen="rules"><span><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#book-open"></use></svg></span><b data-i18n="rules">Правила</b><em><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#arrow-right"></use></svg></em></button>
+            <button class="menu-button" type="button" data-open-screen="settings"><span><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#gear"></use></svg></span><b data-i18n="settings">Настройки</b><em><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#arrow-right"></use></svg></em></button>
+          </nav>
+        </div>
       </div>
     </section>
 
     <section class="screen" id="screen-setup" data-screen="setup" aria-labelledby="setup-heading" hidden>
       <div class="shell panel-page">
         <header class="page-heading">
-          <span class="eyebrow">⚓ LIFEBOAT</span>
+          <span class="eyebrow">LIFEBOAT / CREW</span>
           <h2 id="setup-heading" data-i18n="players">Игроки</h2>
           <p data-i18n="privateScreen">Этот экран видит только текущий игрок</p>
         </header>
@@ -85,11 +90,11 @@
 
     <section class="screen screen--pass" id="screen-pass" data-screen="pass" aria-labelledby="pass-heading" hidden>
       <div class="pass-card">
-        <div class="pass-card__phone" aria-hidden="true">▦</div>
+        <div class="pass-card__phone" aria-hidden="true"><svg class="ui-icon ui-icon--xl"><use href="./assets/ui-icons.svg#smartphone"></use></svg></div>
         <span class="eyebrow" data-i18n="passPhone">Передай телефон</span>
         <h2 id="pass-heading"></h2>
         <p id="pass-message"></p>
-        <div class="privacy-note"><span>◉</span><span data-i18n="privateScreen">Этот экран видит только текущий игрок</span></div>
+        <div class="privacy-note"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#eye"></use></svg><span data-i18n="privateScreen">Этот экран видит только текущий игрок</span></div>
         <button class="button button--gold button--large" id="pass-ready-button" type="button" data-i18n="ready">Я готов</button>
       </div>
     </section>
@@ -102,10 +107,7 @@
           <div class="hud-stat hud-stat--birds"><small data-i18n="birds">Птицы</small><strong id="hud-birds">○○○○</strong></div>
         </header>
 
-        <section class="boat-board surface" aria-labelledby="boat-heading">
-          <div class="section-title"><h3 id="boat-heading" data-i18n="boat">Порядок в лодке</h3><span id="deck-status"></span></div>
-          <div class="boat-track" id="boat-track"></div>
-        </section>
+        <section class="turn-panel surface" id="turn-panel" aria-live="polite"></section>
 
         <section class="private-panel surface" id="private-panel" aria-labelledby="private-heading">
           <div class="section-title"><h3 id="private-heading" data-i18n="hand">Карты на руке</h3><span id="hand-count"></span></div>
@@ -113,7 +115,10 @@
           <div class="card-row" id="hand-row"></div>
         </section>
 
-        <section class="turn-panel surface" id="turn-panel" aria-live="polite"></section>
+        <section class="boat-board surface" aria-labelledby="boat-heading">
+          <div class="section-title"><h3 id="boat-heading" data-i18n="boat">Порядок в лодке</h3><span id="deck-status"></span></div>
+          <div class="boat-track" id="boat-track"></div>
+        </section>
 
         <section class="log-panel surface" aria-labelledby="log-heading">
           <div class="section-title"><h3 id="log-heading" data-i18n="shipLog">Судовой журнал</h3><button class="text-button" id="toggle-log-button" type="button" aria-expanded="true">−</button></div>
@@ -121,17 +126,17 @@
         </section>
 
         <footer class="game-tools">
-          <button type="button" id="trade-button">⇄ <span data-i18n="trade">Обмен</span></button>
-          <button type="button" id="undo-button">↶ <span data-i18n="undo">Отменить последнее действие</span></button>
-          <button type="button" data-open-screen="rules">☷ <span data-i18n="rules">Правила</span></button>
-          <button type="button" id="save-menu-button">⋯</button>
+          <button type="button" id="trade-button"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#repeat"></use></svg><span data-i18n="trade">Обмен</span></button>
+          <button type="button" id="undo-button"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#rotate-ccw"></use></svg><span data-i18n="undo">Отменить последнее действие</span></button>
+          <button type="button" data-open-screen="rules"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#book-open"></use></svg><span data-i18n="rules">Правила</span></button>
+          <button type="button" id="save-menu-button"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#ellipsis"></use></svg></button>
         </footer>
       </div>
     </section>
 
     <section class="screen" id="screen-score" data-screen="score" aria-labelledby="score-heading" hidden>
       <div class="shell panel-page score-page">
-        <div class="land-mark" aria-hidden="true">🏝</div>
+        <div class="land-mark" aria-hidden="true"><svg class="ui-icon ui-icon--xl"><use href="./assets/ui-icons.svg#trophy"></use></svg></div>
         <span class="eyebrow" data-i18n="land">Земля!</span>
         <h2 id="score-heading" data-i18n="score">Итоги путешествия</h2>
         <div id="secrets-reveal" class="surface secrets-reveal"></div>
@@ -164,11 +169,12 @@
 
     <section class="screen" id="screen-settings" data-screen="settings" aria-labelledby="settings-heading" hidden>
       <div class="shell panel-page settings-page">
-        <header class="page-heading"><span class="eyebrow">⚙ LIFEBOAT</span><h2 id="settings-heading" data-i18n="settings">Настройки</h2></header>
+        <header class="page-heading"><span class="eyebrow">LIFEBOAT / SYSTEM</span><h2 id="settings-heading" data-i18n="settings">Настройки</h2></header>
         <div class="settings-list">
           <div class="setting surface"><div><strong data-i18n="theme">Тема</strong><span data-i18n="theme">Тема</span></div><div class="segmented"><button type="button" data-theme-choice="dark" data-i18n="dark">Ночная</button><button type="button" data-theme-choice="light" data-i18n="light">Дневная</button></div></div>
           <div class="setting surface"><div><strong data-i18n="language">Язык</strong><span>Русский / English</span></div><div class="segmented"><button type="button" data-language-choice="ru">RU</button><button type="button" data-language-choice="en">EN</button></div></div>
           <label class="setting surface"><div><strong data-i18n="sound">Звук</strong><span>UI / SFX</span></div><input type="checkbox" id="setting-sound"><i class="switch"></i></label>
+          <label class="setting surface"><div><strong data-i18n="music">Фоновая мелодия</strong><span data-i18n="musicHint">Тихая музыка после первого касания</span></div><input type="checkbox" id="setting-music"><i class="switch"></i></label>
           <label class="setting surface"><div><strong data-i18n="vibration">Вибрация</strong><span>Haptic</span></div><input type="checkbox" id="setting-vibration"><i class="switch"></i></label>
           <label class="setting surface"><div><strong data-i18n="motion">Анимации</strong><span>Motion</span></div><input type="checkbox" id="setting-motion"><i class="switch"></i></label>
           <label class="setting surface"><div><strong data-i18n="textSize">Крупный текст</strong><span>Accessibility</span></div><input type="checkbox" id="setting-large-text"><i class="switch"></i></label>
@@ -183,7 +189,7 @@
     <div class="modal__backdrop" data-close-modal></div>
     <div class="modal__sheet" tabindex="-1">
       <div class="modal__handle" aria-hidden="true"></div>
-      <header><h2 id="modal-title"></h2><button class="icon-button" type="button" data-close-modal aria-label="Закрыть">×</button></header>
+      <header><h2 id="modal-title"></h2><button class="icon-button" type="button" data-close-modal aria-label="Закрыть"><svg class="ui-icon" aria-hidden="true"><use href="./assets/ui-icons.svg#x"></use></svg></button></header>
       <div class="modal__content" id="modal-content"></div>
       <footer id="modal-actions"></footer>
     </div>
@@ -191,6 +197,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <input id="import-input" type="file" accept="application/json" hidden>
-  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="./src/app.js?v=3.2.0-table2"></script>
 </body>
 </html>

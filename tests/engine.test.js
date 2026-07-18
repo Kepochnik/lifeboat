@@ -5,8 +5,10 @@ import {
   applyWound,
   buildThirstQueue,
   createGame,
+  deployParasol,
   hydrateGame,
   putOnBottom,
+  revealCard,
   resolveFight,
   resolveOverboard,
   resolveThirst,
@@ -118,6 +120,23 @@ test('named, rowing and fighting thirst are three separate requirements', () => 
   const wound = resolveThirst(game, tasks[2], 'wound');
   assert.equal(wound.wound, true);
   assert.equal(captain.wounds, 1);
+});
+
+test('a parasol blocks thirst only after its special action and only once per day', () => {
+  const game = gameWith();
+  const lauren = byCharacter(game, 'lauren');
+  const parasol = { uid: 'parasol-1', id: 'parasol', revealed: false };
+  lauren.hand = [parasol];
+  const task = { playerId: lauren.id, source: 'named' };
+
+  assert.equal(revealCard(game, lauren.id, parasol.uid)?.active, false);
+  assert.deepEqual(resolveThirst(game, task, 'parasol'), { invalid: true });
+  assert.equal(deployParasol(game, lauren.id, parasol.uid)?.active, true);
+  assert.deepEqual(resolveThirst(game, task, 'parasol'), { parasol: true });
+  assert.deepEqual(resolveThirst(game, task, 'parasol'), { invalid: true });
+
+  game.day += 1;
+  assert.deepEqual(resolveThirst(game, task, 'parasol'), { parasol: true });
 });
 
 test('Frenchy swims without a normal wound but still loses face-up gear', () => {
@@ -237,4 +256,13 @@ test('saved games validate and hydrate as independent objects', () => {
   const corrupted = structuredClone(original);
   corrupted.players[0].hand.push({ uid: 'unknown-1', id: 'unknown' });
   assert.equal(validateGame(corrupted), false);
+});
+
+test('older saves keep an already revealed parasol deployed', () => {
+  const original = gameWith();
+  const lauren = byCharacter(original, 'lauren');
+  lauren.hand = [{ uid: 'parasol-old', id: 'parasol', revealed: true }];
+
+  const hydrated = hydrateGame(original);
+  assert.equal(byCharacter(hydrated, 'lauren').hand[0].active, true);
 });

@@ -1,5 +1,39 @@
 # Changelog
 
+## 3.2.0 — 2026-07-18
+
+### Mobile tabletop
+
+- Turned the game screen into a tactile felt-and-walnut table with paper cards,
+  wooden action tiles, stitched trays and a centered swipeable boat.
+- Reordered the mobile play flow so the current turn and private hand appear
+  before the shared boat, with sticky day/phase status and larger touch targets.
+- Added a quiet procedural nautical melody with an independent setting,
+  automatic pause in the background and no audio before the first interaction.
+
+### Rules fidelity
+
+- Let the Kid choose between an uncontested random hidden theft and a normal
+  attempt to steal a visible card.
+- Made the Parasol protect against thirst only after spending a special action.
+- Let a hidden Compass be revealed during navigation to add a card choice.
+- Split revealing the Flare Gun as a weapon from firing its special action.
+- Added an attacker preparation handoff so weapons may be revealed after a
+  target chooses to fight, before neutral players pick sides.
+- Expanded the in-game rules and tutorial to explain these timings.
+
+## 3.1.0 — 2026-07-18
+
+### Visual redesign
+
+- Replaced the gold-heavy dashboard styling with a tactile nautical board-game direction.
+- Rebuilt the title screen as a responsive editorial layout with a dedicated game menu panel.
+- Expanded the game board to use wide screens with a two-column hand and turn layout.
+- Redesigned character and provision cards as physical paper components with clearer hierarchy.
+- Added six original painted character portraits, an illustrated six-seat lifeboat and a custom full-color game icon set.
+- Improved the boat, action controls, log, modal sheets and mobile bottom navigation.
+- Preserved the existing game engine, accessibility settings and bilingual interface.
+
 ## 3.0.2 — 2026-07-18
 
 ### Gameplay
