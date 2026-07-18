@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.1.0 — 2026-07-18
+
+### Visual redesign
+
+- Replaced the gold-heavy dashboard styling with a tactile nautical board-game direction.
+- Rebuilt the title screen as a responsive editorial layout with a dedicated game menu panel.
+- Expanded the game board to use wide screens with a two-column hand and turn layout.
+- Redesigned character and provision cards as physical paper components with clearer hierarchy.
+- Improved the boat, action controls, log, modal sheets and mobile bottom navigation.
+- Preserved the existing game engine, accessibility settings and bilingual interface.
+
 ## 3.0.2 — 2026-07-18
 
 ### Gameplay

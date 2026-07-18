@@ -5,7 +5,7 @@ import {
   PROVISION_TEMPLATES,
   buildNavigationDeck,
   buildProvisionDeck,
-} from './data.js';
+} from './data.js?v=3.1.0-r2';
 
 export function createIdFactory(prefix = 'lb') {
   let serial = 0;

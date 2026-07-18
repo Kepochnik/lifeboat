@@ -1,5 +1,5 @@
-import { CHARACTERS, CHARACTER_BY_ID, PHASES } from './data.js';
-import { createTranslator, getCardText, getCharacterText } from './i18n.js';
+import { CHARACTERS, CHARACTER_BY_ID, PHASES, PROVISION_TEMPLATES } from './data.js?v=3.1.0-r2';
+import { createTranslator, getCardText, getCharacterText } from './i18n.js?v=3.1.0-r2';
 import {
   activePlayers,
   addLog,
@@ -27,7 +27,7 @@ import {
   swapPositions,
   takeRandomHidden,
   validateGame,
-} from './engine.js';
+} from './engine.js?v=3.1.0-r2';
 
 const SETTINGS_KEY = 'lifeboat-settings-v3';
 const SAVE_KEY = 'lifeboat-game-v4';
@@ -76,6 +76,14 @@ function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
 }
 
+function iconMarkup(name, modifier = '') {
+  return `<svg class="ui-icon${modifier ? ` ${modifier}` : ''}" aria-hidden="true"><use href="./assets/ui-icons.svg#${name}"></use></svg>`;
+}
+
+function cardToken(card) {
+  return PROVISION_TEMPLATES[card.id]?.icon || card.icon || '—';
+}
+
 function saveSettings() {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* storage is optional */ }
 }
@@ -93,9 +101,9 @@ function applySettings() {
   document.documentElement.dataset.theme = settings.theme;
   document.documentElement.classList.toggle('reduce-motion', !settings.motion);
   document.documentElement.classList.toggle('large-text', settings.largeText);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', settings.theme === 'dark' ? '#07131c' : '#e8ddc9');
-  document.getElementById('theme-button').textContent = settings.theme === 'dark' ? '☾' : '☀';
-  document.getElementById('sound-button').textContent = settings.sound ? '♪' : '∅';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', settings.theme === 'dark' ? '#08171a' : '#d5c6a9');
+  document.getElementById('theme-button').innerHTML = iconMarkup(settings.theme === 'dark' ? 'moon' : 'sun');
+  document.getElementById('sound-button').innerHTML = iconMarkup(settings.sound ? 'volume-2' : 'volume-x');
   document.getElementById('language-button').textContent = settings.language === 'ru' ? 'EN' : 'RU';
   document.getElementById('home-button').setAttribute('aria-label', t('home'));
   document.getElementById('home-button').title = t('home');
@@ -373,7 +381,12 @@ function renderBoat(current) {
     const character = CHARACTER_BY_ID[player.characterId];
     const text = getCharacterText(player.characterId, settings.language);
     const status = statusFor(player);
-    const markers = `${player.rowed ? '🚣' : ''}${player.fought ? '⚔' : ''}${player.hand.some((card) => card.id === 'life' && card.revealed) ? '🛟' : ''}${player.hand.some((card) => card.id === 'parasol' && card.revealed) ? '☂' : ''}`;
+    const markers = [
+      player.rowed ? '<span class="mini-marker">R</span>' : '',
+      player.fought ? '<span class="mini-marker">F</span>' : '',
+      player.hand.some((card) => card.id === 'life' && card.revealed) ? '<span class="mini-marker">L</span>' : '',
+      player.hand.some((card) => card.id === 'parasol' && card.revealed) ? '<span class="mini-marker">S</span>' : '',
+    ].join('');
     return `<article class="player-card ${player.id === current?.id ? 'current' : ''} ${!player.inBoat ? 'lost' : ''}" style="--player-color:${character.color}" aria-label="${escapeHtml(player.name)}, ${escapeHtml(status.label)}">
       <div class="player-card__icon" aria-hidden="true">${character.icon}</div>
       <strong>${escapeHtml(player.name)}</strong><small>${escapeHtml(text[0])}</small>
@@ -381,7 +394,7 @@ function renderBoat(current) {
       <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span><div class="mini-markers" aria-hidden="true">${markers}</div>
     </article>`;
   }).join('');
-  document.getElementById('deck-status').textContent = `▣ ${game.provisions.length} · ◫ ${game.navigation.length} · 🚣 ${game.rowStack.length}`;
+  document.getElementById('deck-status').textContent = `P ${game.provisions.length} · N ${game.navigation.length} · R ${game.rowStack.length}`;
 }
 
 function categoryColor(category) {
@@ -395,24 +408,24 @@ function cardMarkup(card, { selectable = false, selected = false, control = '', 
   const accessible = hidden ? t('hidden') : `${name}. ${description}`;
   return `<article class="${classes}" style="--card-color:${categoryColor(card.category)}" ${selectable ? `role="button" tabindex="0" ${control}` : ''} aria-label="${escapeHtml(accessible)}">
     <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span>
-    <span class="game-card__icon" aria-hidden="true">${hidden ? '⚜' : card.icon}</span>
+    <span class="game-card__icon" aria-hidden="true">${hidden ? 'LB' : escapeHtml(cardToken(card))}</span>
     <strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong>
     <small>${hidden ? t('hidden') : escapeHtml(description)}</small>
   </article>`;
 }
 
 function navigationCardMarkup(card, { selectable = false, selected = false, control = '' } = {}) {
-  const bird = card.bird > 0 ? '🕊️' : card.bird < 0 ? '🌫️' : '🌊';
+  const bird = card.bird > 0 ? '+1' : card.bird < 0 ? '−1' : '0';
   const overboardLabel = card.overboard === 'all'
     ? t('everyone')
     : card.overboard === 'allbut'
       ? t('everyone')
       : getCharacterText(card.overboard, settings.language)?.[0] || '';
   const effects = [
-    card.overboard ? `🌊 ${overboardLabel}` : '',
-    card.thirsty?.length ? `☀ ${card.thirsty.length}` : '',
-    card.row ? '🚣' : '',
-    card.fight ? '⚔' : '',
+    card.overboard ? `${t('overboard')}: ${overboardLabel}` : '',
+    card.thirsty?.length ? `${t('thirst')}: ${card.thirsty.length}` : '',
+    card.row ? t('row') : '',
+    card.fight ? t('fight') : '',
   ].filter(Boolean).join(' · ') || t('navCalm');
   return `<article class="game-card nav-card ${selectable ? 'selectable' : ''} ${selected ? 'selected' : ''}" style="--card-color:#16495c" ${selectable ? `role="button" tabindex="0" aria-pressed="${selected}" ${control}` : ''}>
     <span class="game-card__type">${t('navigation')}</span><span class="game-card__icon" aria-hidden="true">${bird}</span>
@@ -426,7 +439,7 @@ function renderPrivatePanel(current) {
   panel.hidden = false;
   const loved = getPlayerByCharacter(game, current.lovedCharacterId);
   const hated = getPlayerByCharacter(game, current.hatedCharacterId);
-  document.getElementById('secret-strip').innerHTML = `<div class="secret secret--love"><small>♥ ${t('friend')}</small><strong>${escapeHtml(loved?.name || '—')}</strong></div><div class="secret secret--hate"><small>☠ ${t('enemy')}</small><strong>${escapeHtml(hated?.name || '—')}</strong></div>`;
+  document.getElementById('secret-strip').innerHTML = `<div class="secret secret--love"><small>${iconMarkup('heart', 'ui-icon--sm')} ${t('friend')}</small><strong>${escapeHtml(loved?.name || '—')}</strong></div><div class="secret secret--hate"><small>${iconMarkup('skull', 'ui-icon--sm')} ${t('enemy')}</small><strong>${escapeHtml(hated?.name || '—')}</strong></div>`;
   document.getElementById('hand-count').textContent = String(current.hand.length);
   const row = document.getElementById('hand-row');
   if (!current.hand.length) { row.innerHTML = `<p>${t('noCards')}</p>`; return; }
@@ -439,7 +452,7 @@ function renderPrivatePanel(current) {
     const canReveal = ownsPrivateScreen;
     const label = hidden ? (special && canUseSpecial ? t('specialAction') : canReveal ? t('reveal') : '') : (special && canUseSpecial ? t('specialAction') : '');
     return `<article class="game-card ${hidden ? 'hidden-card' : ''}" style="--card-color:${categoryColor(card.category)}" aria-label="${escapeHtml(hidden ? t('hidden') : `${name}. ${description}`)}">
-      <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span><span class="game-card__icon" aria-hidden="true">${hidden ? '⚜' : card.icon}</span><strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong><small>${hidden ? t('hidden') : escapeHtml(description)}</small>
+      <span class="game-card__type">${hidden ? t('hidden') : escapeHtml(card.category)}</span><span class="game-card__icon" aria-hidden="true">${hidden ? 'LB' : escapeHtml(cardToken(card))}</span><strong>${hidden ? 'LIFEBOAT' : escapeHtml(name)}</strong><small>${hidden ? t('hidden') : escapeHtml(description)}</small>
       ${label ? `<button type="button" data-hand-action="${special && canUseSpecial ? 'special' : 'reveal'}" data-card-uid="${card.uid}">${escapeHtml(label)}</button>` : ''}
     </article>`;
   }).join('');
@@ -467,10 +480,10 @@ function renderTurnPanel(current) {
 function renderActionChoice(panel, current) {
   if (!current?.alive || !current?.conscious) return;
   panel.innerHTML = `<div class="turn-heading"><span>${t('actions')}</span><h3>${t('chooseAction')}</h3></div><div class="action-grid">
-    <button class="action-button" type="button" data-game-action="rest" style="--action-tint:rgba(55,67,96,.7)"><span>☾</span><strong>${t('rest')}</strong><small>${t('restHint')}</small></button>
-    <button class="action-button" type="button" data-game-action="row" style="--action-tint:rgba(20,91,111,.7)"><span>≈</span><strong>${t('row')}</strong><small>${t('rowHint')}</small></button>
-    <button class="action-button" type="button" data-game-action="swap" style="--action-tint:rgba(76,47,103,.72)"><span>⇄</span><strong>${t('swap')}</strong><small>${t('swapHint')}</small></button>
-    <button class="action-button" type="button" data-game-action="mug" style="--action-tint:rgba(108,45,36,.75)"><span>✊</span><strong>${t('mug')}</strong><small>${t('mugHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="rest" style="--action-tint:rgba(55,67,96,.7)"><span>${iconMarkup('moon')}</span><strong>${t('rest')}</strong><small>${t('restHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="row" style="--action-tint:rgba(20,91,111,.7)"><span>${iconMarkup('waves')}</span><strong>${t('row')}</strong><small>${t('rowHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="swap" style="--action-tint:rgba(76,47,103,.72)"><span>${iconMarkup('arrow-left-right')}</span><strong>${t('swap')}</strong><small>${t('swapHint')}</small></button>
+    <button class="action-button" type="button" data-game-action="mug" style="--action-tint:rgba(108,45,36,.75)"><span>${iconMarkup('swords')}</span><strong>${t('mug')}</strong><small>${t('mugHint')}</small></button>
   </div>`;
 }
 
@@ -503,7 +516,7 @@ function renderFightSupport(panel) {
 function fightBoardMarkup(attacker, defender, result = null) {
   const aStrength = result?.attackerStrength ?? playerStrength(attacker);
   const dStrength = result?.defenderStrength ?? playerStrength(defender);
-  return `<div class="fight-board"><div class="fight-side"><small>${t('attacker')}</small><strong>${escapeHtml(attacker.name)}</strong><b>${aStrength}</b></div><div class="fight-versus">⚔</div><div class="fight-side"><small>${t('defender')}</small><strong>${escapeHtml(defender.name)}</strong><b>${dStrength}</b></div></div>`;
+  return `<div class="fight-board"><div class="fight-side"><small>${t('attacker')}</small><strong>${escapeHtml(attacker.name)}</strong><b>${aStrength}</b></div><div class="fight-versus">${iconMarkup('swords')}</div><div class="fight-side"><small>${t('defender')}</small><strong>${escapeHtml(defender.name)}</strong><b>${dStrength}</b></div></div>`;
 }
 
 function renderFightResult(panel) {
@@ -519,7 +532,7 @@ function renderMugReward(panel) {
   const target = getPlayer(game, pending.targetId);
   const openCards = target.hand.filter((card) => card.revealed);
   const hidden = target.hand.filter((card) => !card.revealed);
-  panel.innerHTML = `<div class="turn-heading"><span>${t('mug')}</span><h3>${t('chooseMugReward')}</h3></div><div class="card-row">${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-mug-card="${card.uid}"` })).join('')}${hidden.length ? `<button class="game-card selectable hidden-card" type="button" data-mug-hidden><span class="game-card__type">${t('hidden')}</span><span class="game-card__icon">⚜</span><strong>${t('randomHidden')}</strong><small>${hidden.length}</small></button>` : ''}</div>`;
+  panel.innerHTML = `<div class="turn-heading"><span>${t('mug')}</span><h3>${t('chooseMugReward')}</h3></div><div class="card-row">${openCards.map((card) => cardMarkup(card, { selectable: true, hiddenAllowed: false, control: `data-mug-card="${card.uid}"` })).join('')}${hidden.length ? `<button class="game-card selectable hidden-card" type="button" data-mug-hidden><span class="game-card__type">${t('hidden')}</span><span class="game-card__icon">LB</span><strong>${t('randomHidden')}</strong><small>${hidden.length}</small></button>` : ''}</div>`;
 }
 
 function renderTradeReturn(panel) {
@@ -544,7 +557,7 @@ function renderOverboardPrep(panel) {
   });
   const canThrowChum = helper.hand.some((card) => card.id === 'chum');
   const targets = pending.targetIds.map((id) => getPlayer(game, id)?.name).filter(Boolean).join(', ');
-  panel.innerHTML = `<div class="turn-heading"><span>${t('overboard')}</span><h3>${t('overboardPrep')}</h3><p>${escapeHtml(targets)}</p></div><div class="button-row">${canThrowLife ? `<button class="button button--good" type="button" data-overboard-prep="life">${t('throwPreserver')}</button>` : ''}${canThrowChum ? `<button class="button button--danger" type="button" data-overboard-prep="chum">${t('throwChum')}</button>` : ''}<button class="button button--ghost" type="button" data-overboard-prep="continue">${t('keepCards')}</button></div>${pending.sharks ? `<p class="modal-copy">🦈 ${t('sharksAttack')} × ${pending.sharks}</p>` : ''}`;
+  panel.innerHTML = `<div class="turn-heading"><span>${t('overboard')}</span><h3>${t('overboardPrep')}</h3><p>${escapeHtml(targets)}</p></div><div class="button-row">${canThrowLife ? `<button class="button button--good" type="button" data-overboard-prep="life">${t('throwPreserver')}</button>` : ''}${canThrowChum ? `<button class="button button--danger" type="button" data-overboard-prep="chum">${t('throwChum')}</button>` : ''}<button class="button button--ghost" type="button" data-overboard-prep="continue">${t('keepCards')}</button></div>${pending.sharks ? `<p class="modal-copy">${t('sharksAttack')} × ${pending.sharks}</p>` : ''}`;
 }
 
 function renderNavigationChoice(panel) {
@@ -556,8 +569,13 @@ function renderNavigationResult(panel) {
   const pending = game.pending;
   const lines = pending.outcomes.map((outcome) => {
     const player = getPlayer(game, outcome.playerId);
-    if (outcome.lost) return `🌊 ${escapeHtml(player.name)} — ${t('statusLost')}`;
-    return `🌊 ${escapeHtml(player.name)}${outcome.protected ? ' · 🛟' : ''}${outcome.swimmer ? ' · ≈' : ''}${outcome.shark ? ' · 🦈' : ''}`;
+    if (outcome.lost) return `${escapeHtml(player.name)} — ${t('statusLost')}`;
+    const details = [
+      outcome.protected ? t('throwPreserver') : '',
+      outcome.swimmer ? t('survived') : '',
+      outcome.shark ? t('sharksAttack') : '',
+    ].filter(Boolean).join(' · ');
+    return `${escapeHtml(player.name)}${details ? ` · ${details}` : ''}`;
   });
   panel.innerHTML = `<div class="turn-heading"><span>${t('navigation')}</span><h3>${pending.card.bird > 0 ? t('birdSeen') : pending.card.bird < 0 ? t('birdLost') : t('navCalm')}</h3><p>${lines.join('<br>') || t('navCalm')}</p></div>${navigationCardMarkup(pending.card)}<button class="button button--gold" type="button" data-pending-action="continue-navigation">${t('next')}</button>`;
 }
@@ -1105,7 +1123,7 @@ function renderScore() {
   reveal.innerHTML = `<h3>${t('secrets')}</h3>${game.players.map((player) => {
     const loved = getPlayerByCharacter(game, player.lovedCharacterId);
     const hated = getPlayerByCharacter(game, player.hatedCharacterId);
-    return `<p><strong>${escapeHtml(player.name)}</strong> · ♥ ${escapeHtml(loved?.name || '—')} · ☠ ${escapeHtml(hated?.name || '—')}</p>`;
+    return `<p><strong>${escapeHtml(player.name)}</strong> · ${iconMarkup('heart', 'ui-icon--sm')} ${escapeHtml(loved?.name || '—')} · ${iconMarkup('skull', 'ui-icon--sm')} ${escapeHtml(hated?.name || '—')}</p>`;
   }).join('')}`;
   document.getElementById('score-list').innerHTML = game.scores.map((score, index) => {
     const player = getPlayer(game, score.playerId);
@@ -1115,18 +1133,18 @@ function renderScore() {
 
 function renderRules() {
   const rules = [
-    ['◎', 'rulesGoalTitle', 'rulesGoal'], ['☀', 'rulesRoundTitle', 'rulesRound'], ['⚔', 'rulesFightTitle', 'rulesFight'], ['⚜', 'rulesCardsTitle', 'rulesCards'], ['✚', 'rulesStatusTitle', 'rulesStatus'], ['💧', 'rulesThirstTitle', 'rulesThirst'], ['≈', 'rulesOverboardTitle', 'rulesOverboard'], ['🏝', 'rulesScoringTitle', 'rulesScoring'],
+    ['compass', 'rulesGoalTitle', 'rulesGoal'], ['sun', 'rulesRoundTitle', 'rulesRound'], ['swords', 'rulesFightTitle', 'rulesFight'], ['cards', 'rulesCardsTitle', 'rulesCards'], ['shield', 'rulesStatusTitle', 'rulesStatus'], ['droplet', 'rulesThirstTitle', 'rulesThirst'], ['waves', 'rulesOverboardTitle', 'rulesOverboard'], ['trophy', 'rulesScoringTitle', 'rulesScoring'],
   ];
-  document.getElementById('rules-grid').innerHTML = rules.map(([icon, title, copy]) => `<article class="rule-card surface"><span aria-hidden="true">${icon}</span><h3>${t(title)}</h3><p>${t(copy)}</p></article>`).join('');
+  document.getElementById('rules-grid').innerHTML = rules.map(([icon, title, copy]) => `<article class="rule-card surface"><span aria-hidden="true">${iconMarkup(icon, 'ui-icon--lg')}</span><h3>${t(title)}</h3><p>${t(copy)}</p></article>`).join('');
   document.getElementById('quick-reference').innerHTML = `<h3>${t('rulesRoundTitle')}</h3><ol><li><strong>1 · ${t('quartermaster')}</strong><br>${settings.language === 'ru' ? 'Взять карту и передать остальные к корме.' : 'Take one card and pass the rest toward the stern.'}</li><li><strong>2 · ${t('actions')}</strong><br>${settings.language === 'ru' ? 'По одному действию от носа к корме.' : 'One action each from bow to stern.'}</li><li><strong>3 · ${t('navigation')}</strong><br>${settings.language === 'ru' ? 'Птицы → за бортом → жажда.' : 'Birds → overboard → thirst.'}</li></ol>`;
 }
 
 function renderTutorial() {
   const steps = [
-    ['♛', t('players'), t('tutorialIntro')], ['▣', t('quartermaster'), t('tutorialDraft')], ['⚓', t('actions'), t('tutorialAction')], ['⚔', t('fight'), t('tutorialFight')], ['🕊️', t('navigation'), t('tutorialNav')], ['🏝', t('score'), t('tutorialScore')],
+    ['users', t('players'), t('tutorialIntro')], ['layers', t('quartermaster'), t('tutorialDraft')], ['anchor', t('actions'), t('tutorialAction')], ['swords', t('fight'), t('tutorialFight')], ['compass', t('navigation'), t('tutorialNav')], ['trophy', t('score'), t('tutorialScore')],
   ];
   const [icon, title, copy] = steps[tutorialStep];
-  document.getElementById('tutorial-stage').innerHTML = `<div class="tutorial-stage__visual" aria-hidden="true">${icon}</div><h3>${title}</h3><p>${copy}</p>`;
+  document.getElementById('tutorial-stage').innerHTML = `<div class="tutorial-stage__visual" aria-hidden="true">${iconMarkup(icon, 'ui-icon--xl')}</div><h3>${title}</h3><p>${copy}</p>`;
   document.getElementById('tutorial-dots').innerHTML = steps.map((_, index) => `<i class="${index === tutorialStep ? 'active' : ''}"></i>`).join('');
   document.getElementById('tutorial-prev').disabled = tutorialStep === 0;
   document.getElementById('tutorial-next').textContent = tutorialStep === steps.length - 1 ? t('finish') : t('next');
