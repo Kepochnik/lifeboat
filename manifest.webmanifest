@@ -1,0 +1,22 @@
+{
+  "name": "Lifeboat — За бортом",
+  "short_name": "Lifeboat",
+  "id": "./",
+  "description": "Локальная карточная игра о выживании, тайных целях и предательстве.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07131c",
+  "theme_color": "#07131c",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
